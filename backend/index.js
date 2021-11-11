@@ -1,16 +1,7 @@
-const mysql = require('mysql');
-const db = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "noobnote"
-});
+const http = require('http');
+const app = require('./app');
 
-db.connect((err) =>{
-    if(err) throw err;
-    console.log("connecté à la base de données");
-    db.query("SELECT * FROM users;", (err, result)=>{
-        if(err) throw err;
-        console.log(result);
-    })
-});
+app.set('port', 3000);
+let server = http.createServer(app);
+
+server.listen(3000);
