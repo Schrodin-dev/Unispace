@@ -1,1 +1,22 @@
-<p>menu works!</p>
+<div id="bandeau">
+  <p>nom - prénom (classeGroupe)</p>
+  <!--<img src="assets/img/disconnect.png" id="disconnect">-->
+  <p id="disconnect">disconnectBtn</p>
+
+  <img src="assets/img/favicon.png" id="logo">
+</div>
+
+<nav *ngIf="auth.isLogin()">
+  <div routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+    <a routerLink="/">accueil</a>
+  </div>
+  <div routerLinkActive="active">
+    <a routerLink="/agenda">cahier de texte</a>
+  </div>
+  <div routerLinkActive="active">
+    <a routerLink="/notes">notes</a>
+  </div>
+  <div routerLinkActive="active">
+    <a routerLink="/edt">emploi du temps</a>
+  </div>
+</nav>

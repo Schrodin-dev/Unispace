@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: glacial_indifference-regular;
+  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Regular.otf");
+}
+@font-face {
+  font-family: glacial_indifference-bold;
+  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Bold.otf");
+}
+
+@font-face {
+  font-family: glacial_indifference-italic;
+  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Italic.otf");
+}
+
+body{
+  margin:0;
+}
+
+p, li, a, h4, h5, h6{
+  font-family: glacial_indifference-regular, sans-serif;
+}
+
+h1, h2, h3{
+  font-family: glacial_indifference-Bold, sans-serif;
+}

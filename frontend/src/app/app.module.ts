@@ -9,6 +9,23 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { FooterComponent } from './footer/footer.component';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { EditAccountComponent } from './edit-account/edit-account.component';
+import { AuthService } from './services/auth.service';
+import {FormsModule} from "@angular/forms";
+import { RegisterComponentComponent } from './register-component/register-component.component';
+import {RouterModule, Routes} from "@angular/router";
+import {AuthGuard} from "./services/auth-guard.service";
+import { NotesComponent } from './notes/notes.component';
+import { AgendaComponent } from './agenda/agenda.component';
+import { EdtComponent } from './edt/edt.component'
+
+const appRoutes:Routes = [
+  { path: '', canActivate: [AuthGuard], component: MainPageComponent},
+  { path: 'notes', canActivate: [AuthGuard], component: NotesComponent },
+  { path: 'agenda', canActivate: [AuthGuard], component: AgendaComponent },
+  { path: 'edt', canActivate: [AuthGuard], component: EdtComponent },
+  { path:'login', component: LoginPageComponent},
+  { path:'register', component: RegisterComponentComponent}
+]
 
 @NgModule({
   declarations: [
@@ -17,14 +34,23 @@ import { EditAccountComponent } from './edit-account/edit-account.component';
     MainPageComponent,
     FooterComponent,
     LoginPageComponent,
-    EditAccountComponent
+    EditAccountComponent,
+    RegisterComponentComponent,
+    NotesComponent,
+    AgendaComponent,
+    EdtComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule,
+    RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AuthGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -4,6 +4,10 @@ const bodyParser = require('body-parser');
 const app = express();
 
 const userRoutes = require('./routes/user');
+const notesRoutes = require('./routes/notes');
+const edtRoutes = require('./routes/edt');
+const agendaRoutes = require('./routes/agenda');
+const auth = require('./middleware/auth');
 
 const db = mysql.createConnection({
     host: "localhost",
@@ -28,5 +32,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use('/users', userRoutes);
+app.use('/notes', auth, notesRoutes);
+app.use('/edt', auth, edtRoutes);
+app.use('/agenda', auth, agendaRoutes);
 
 module.exports = app;

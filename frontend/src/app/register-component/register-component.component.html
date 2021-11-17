@@ -1,0 +1,34 @@
+<form (ngSubmit)="onRegister(f)" #f="ngForm">
+  <div id="fields">
+    <div>
+      <label for="nom">nom : </label>
+      <input type="text" name="nom" id="nom" ngModel required>
+    </div>
+    <div>
+      <label for="prenom">prénom : </label>
+      <input type="text" name="prenom" id="prenom" ngModel required>
+    </div>
+    <div>
+      <label for="email">email : </label>
+      <input type="email" name="email" id="email" ngModel required>
+    </div>
+    <div>
+      <p>Sélectionnez votre classe : </p>
+      <input type="radio" name="classe" id="S3" checked required/>
+      <label for="S3">S3</label>
+    </div>
+    <div>
+      <p>Sélectionnez votre groupe : </p>
+      <input type="radio" name="groupe" id="g1" value="1" ngModel required/>
+      <label for="g1">groupe 1</label>
+      <input type="radio" name="groupe" id="g2" value="2" ngModel required/>
+      <label for="g2">groupe 2</label>
+    </div>
+    <div>
+      <label for="password" for="password">Mot de passe : </label>
+      <input type="password" name="password" id="password" ngModel required>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="f.invalid">s'inscrire</button>
+</form>

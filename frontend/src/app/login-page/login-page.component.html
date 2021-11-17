@@ -1,1 +1,15 @@
-<p>login-page works!</p>
+<!-- login form -->
+<form (ngSubmit)="onLogin(f)" #f="ngForm">
+  <div id="fields">
+    <div>
+      <label for="email">email : </label>
+      <input type="email" name="email" id="email" ngModel required>
+    </div>
+    <div>
+      <label for="password" for="password">Mot de passe : </label>
+      <input type="password" name="password" id="password" ngModel required>
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="f.invalid">Se connecter</button>
+</form>
