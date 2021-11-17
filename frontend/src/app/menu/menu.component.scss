@@ -1,4 +1,4 @@
-nav{
+#mainMenu{
   display:flex;
   height:45px;
   width:100%;
@@ -7,7 +7,7 @@ nav{
   div{
     display:flex;
     align-items: center;
-    height:100%;
+    height:calc(100% - 5px);
 
     a{
       margin: 0 15px;
@@ -17,22 +17,57 @@ nav{
   }
 }
 
-.active{
-  background-color:white;
+#subMenu{
+  display:flex;
+  height:30px;
+  width:100%;
+  background-color: #c2c2c2;
+
+  div{
+    display:flex;
+    align-items: center;
+    height:calc(100% - 5px);
+
+    a{
+      margin: 0 15px;
+      color: #000000;
+      text-decoration: none;
+    }
+  }
+}
+
+.mainActive, .subActive{
+
   position:relative;
   cursor:pointer;
+  padding-bottom:5px;
 
   &::before{
     position:absolute;
-    bottom:0;
+    bottom:0px;
     content:"";
     width:100%;
     height:5px;
     background-color:lightseagreen;
   }
   a{
-    color:black !important;
     user-select: none;
+  }
+}
+
+.mainActive{
+  background-color:white;
+
+  a{
+    color:black !important;
+  }
+}
+
+.subActive{
+  background-color: #e7e7e7;
+
+  a{
+    color:lightseagreen !important;
   }
 }
 

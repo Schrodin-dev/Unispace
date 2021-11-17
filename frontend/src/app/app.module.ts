@@ -17,6 +17,7 @@ import {AuthGuard} from "./services/auth-guard.service";
 import { NotesComponent } from './notes/notes.component';
 import { AgendaComponent } from './agenda/agenda.component';
 import { EdtComponent } from './edt/edt.component'
+import {RequestsService} from "./services/requests.service";
 
 const appRoutes:Routes = [
   { path: '', canActivate: [AuthGuard], component: MainPageComponent},
@@ -49,7 +50,8 @@ const appRoutes:Routes = [
   ],
   providers: [
     AuthService,
-    AuthGuard
+    AuthGuard,
+    RequestsService
   ],
   bootstrap: [AppComponent]
 })

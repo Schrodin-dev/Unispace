@@ -1,22 +1,31 @@
-<div id="bandeau">
-  <p>nom - prénom (classeGroupe)</p>
+<div id="bandeau" *ngIf="path != '/login' && path != '/register'">
+  <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.classe}}_{{usersInfos.groupe}}</p>
   <!--<img src="assets/img/disconnect.png" id="disconnect">-->
   <p id="disconnect">disconnectBtn</p>
 
   <img src="assets/img/favicon.png" id="logo">
 </div>
 
-<nav *ngIf="auth.isLogin()">
-  <div routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+<nav id="mainMenu" *ngIf="path != '/login' && path != '/register'">
+  <div routerLinkActive="mainActive" [routerLinkActiveOptions]="{exact:true}">
     <a routerLink="/">accueil</a>
   </div>
-  <div routerLinkActive="active">
-    <a routerLink="/agenda">cahier de texte</a>
+  <div routerLinkActive="mainActive">
+    <a routerLink="/params">Mes données</a>
   </div>
-  <div routerLinkActive="active">
-    <a routerLink="/notes">notes</a>
+  <div routerLinkActive="mainActive">
+    <a routerLink="/agenda">Cahier de texte</a>
   </div>
-  <div routerLinkActive="active">
-    <a routerLink="/edt">emploi du temps</a>
+  <div routerLinkActive="mainActive">
+    <a routerLink="/notes">Notes</a>
+  </div>
+  <div routerLinkActive="mainActive">
+    <a routerLink="/edt">Emploi du temps</a>
+  </div>
+</nav>
+
+<nav id="subMenu" *ngIf="path != '/login' && path != '/register'">
+  <div routerLinkActive="subActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+    <a [routerLink]= routes.path>{{routes.name}}</a>
   </div>
 </nav>

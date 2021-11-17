@@ -46,7 +46,7 @@ exports.register = (req, res, next) => {
 }
 
 exports.login = (req, res, next) => {
-    db.query("SELECT * FROM users;", (err, users)=>{
+    db.query("SELECT email, password FROM users;", (err, users)=>{
         if(err) throw err;
 
         let userFound = false;
@@ -67,6 +67,27 @@ exports.login = (req, res, next) => {
                         })
                     })
                     .catch(error => res.status(500).json({ error }));
+                userFound = true;
+            }
+        }
+        if(!userFound) res.status(500).json({ error: 'Email invalide.'});
+    });
+}
+
+exports.userInfos = (req, res, next) => {
+    db.query("SELECT nom, prenom, email, classe, groupe FROM users;", (err, users)=>{
+        if(err) throw err;
+
+        let userFound = false;
+        for(let user of users){
+            if(req.body.email === user.email){
+                res.status(200).json({
+                    nom: user.nom,
+                    prenom: user.prenom,
+                    email: user.email,
+                    classe: user.classe,
+                    groupe: user.groupe
+                })
                 userFound = true;
             }
         }

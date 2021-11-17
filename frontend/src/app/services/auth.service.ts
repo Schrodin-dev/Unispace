@@ -61,12 +61,12 @@ export class AuthService{
   }
 
   getToken(){
-    console.log(sessionStorage.getItem("token"));
+    //console.log(sessionStorage.getItem("token"));
     return sessionStorage.getItem("token");
   }
 
   isLogin(){
-    console.log(sessionStorage.getItem("token"));
+    //console.log(sessionStorage.getItem("token"));
     if(sessionStorage.getItem("token") === null) return false;
     return true;
   }
