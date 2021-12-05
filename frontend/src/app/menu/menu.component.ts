@@ -82,6 +82,14 @@ export class MenuComponent implements OnInit {
       if(url instanceof NavigationEnd){
         console.log(router.url);
         this.path = router.url;
+        if(this.usersInfos.nom == ''){
+          this.requestService.userInfos();
+          this.usersInfosSubscription = this.requestService.userInfosContentSubject.subscribe(
+            (res:any) => {
+              this.usersInfos = res;
+            }
+          )
+        }
         for(let routes of this.submenuRoutes){
           if(routes.rootPath === this.path){
             this.currentSubmenuRoutes = routes.childs;

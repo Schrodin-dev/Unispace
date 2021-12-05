@@ -5,27 +5,32 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MenuComponent } from './menu/menu.component';
-import { MainPageComponent } from './main-page/main-page.component';
+import { MainPageComponent } from './mainpageComponents/main-page/main-page.component';
 import { FooterComponent } from './footer/footer.component';
-import { LoginPageComponent } from './login-page/login-page.component';
-import { EditAccountComponent } from './edit-account/edit-account.component';
+import { LoginPageComponent } from './login&register/login-page/login-page.component';
 import { AuthService } from './services/auth.service';
 import {FormsModule} from "@angular/forms";
-import { RegisterComponentComponent } from './register-component/register-component.component';
+import { RegisterComponentComponent } from './login&register/register-component/register-component.component';
 import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "./services/auth-guard.service";
-import { NotesComponent } from './notes/notes.component';
-import { AgendaComponent } from './agenda/agenda.component';
-import { EdtComponent } from './edt/edt.component'
 import {RequestsService} from "./services/requests.service";
+import { MesDonneesComponent } from './params/mes-donnees/mes-donnees.component';
+import { ContentComponent } from './agenda/content/content.component';
+import { TodoComponent } from './agenda/todo/todo.component';
+import { DetailComponent } from './notes/detail/detail.component';
+import { GraphesComponent } from './notes/graphes/graphes.component';
+import { MainEdtComponent } from './edt/main-edt/main-edt.component';
 
 const appRoutes:Routes = [
   { path: '', canActivate: [AuthGuard], component: MainPageComponent},
-  { path: 'notes', canActivate: [AuthGuard], component: NotesComponent },
-  { path: 'agenda', canActivate: [AuthGuard], component: AgendaComponent },
-  { path: 'edt', canActivate: [AuthGuard], component: EdtComponent },
   { path:'login', component: LoginPageComponent},
-  { path:'register', component: RegisterComponentComponent}
+  { path:'register', component: RegisterComponentComponent},
+  { path:'params', canActivate: [AuthGuard], component: MesDonneesComponent},
+  { path:'agenda/content', canActivate: [AuthGuard], component: ContentComponent},
+  { path:'agenda/todo', canActivate: [AuthGuard], component: TodoComponent},
+  { path:'notes/detail', canActivate: [AuthGuard], component: DetailComponent},
+  { path:'notes/graphes', canActivate: [AuthGuard], component: GraphesComponent},
+  { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent}
 ]
 
 @NgModule({
@@ -35,11 +40,13 @@ const appRoutes:Routes = [
     MainPageComponent,
     FooterComponent,
     LoginPageComponent,
-    EditAccountComponent,
     RegisterComponentComponent,
-    NotesComponent,
-    AgendaComponent,
-    EdtComponent
+    MesDonneesComponent,
+    ContentComponent,
+    TodoComponent,
+    DetailComponent,
+    GraphesComponent,
+    MainEdtComponent,
   ],
   imports: [
     BrowserModule,
