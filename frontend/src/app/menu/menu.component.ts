@@ -56,12 +56,8 @@ export class MenuComponent implements OnInit {
       rootPath: "/notes",
       childs: [
         {
-          path: "/detail",
+          path: "notes/detail",
           name: "Mes notes"
-        },
-        {
-          path: "/graphes",
-          name: "Graphes"
         }
       ]
     },
@@ -71,6 +67,23 @@ export class MenuComponent implements OnInit {
         {
           path: "/edt",
           name: "Mon emploi du temps"
+        }
+      ]
+    },
+    {
+      rootPath: "/admin",
+      childs: [
+        {
+          path: "admin/gestionClasse",
+          name: "Gestion Classe"
+        },
+        {
+          path: "admin/gestionUE",
+          name: "Gestion U.E."
+        },
+        {
+          path: "admin/annonce",
+          name: "Faire une annonce"
         }
       ]
     }
