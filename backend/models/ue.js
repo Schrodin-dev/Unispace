@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   UE.init({
     idUE: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     nomUE: {
       type: DataTypes.STRING,

@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   theme.init({
     idTheme: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     imageTheme: {
       type: DataTypes.BLOB,

@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   travailAFaire.init({
     idTravailAFaire: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     dateTravailAFaire: {
       type: DataTypes.DATE,

@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   ressource.init({
     idRessource: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     nomRessource: {
       type: DataTypes.STRING(256),

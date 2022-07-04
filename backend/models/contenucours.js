@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   contenuCours.init({
     idContenuCours: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     dateContenuCours: {
       type: DataTypes.DATE,

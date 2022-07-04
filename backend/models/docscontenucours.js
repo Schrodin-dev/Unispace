@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   docsContenuCours.init({
     idDoc: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     doc: {
       type:DataTypes.BLOB,

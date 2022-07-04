@@ -16,7 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   devoir.init({
     idDevoir: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      autoIncrement: true
     },
     coeffDevoir: {
       type: DataTypes.FLOAT,
