@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BLOB,
       allowNull: false
     },
+    sourceTheme: {
+      type: DataTypes.STRING(512),
+      allowNull: false
+    },
     couleurPrincipaleTheme: {
       type: DataTypes.STRING(6),
       allowNull: false
