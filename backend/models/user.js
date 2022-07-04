@@ -15,17 +15,44 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     user.init({
-        emailUser: DataTypes.STRING,
-        nomUser: DataTypes.STRING,
-        prenomUser: DataTypes.STRING,
-        droitsUser: DataTypes.INTEGER,
-        mdpUser: DataTypes.STRING,
-        accepteRecevoirAnnonces: DataTypes.BOOLEAN,
-        idTheme: DataTypes.INTEGER,
-        nomGroupe: DataTypes.STRING
+        emailUser: {
+            type: DataTypes.STRING,
+            primaryKey: true
+        },
+        nomUser: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        prenomUser: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        droitsUser: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            default: 0
+        },
+        mdpUser: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        accepteRecevoirAnnonces: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            default: true
+        },
+        idTheme: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            default: 0
+        },
+        nomGroupe: {
+            type: DataTypes.STRING
+        }
     }, {
         sequelize,
         modelName: 'user',
+        freezeTableName: true
     });
     return user;
 };
