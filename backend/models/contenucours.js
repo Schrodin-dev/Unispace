@@ -29,7 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     nomCours: {
       type:DataTypes.STRING(100),
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./cours'),
+        key: 'nomCours'
+      }
     }
   }, {
     sequelize,

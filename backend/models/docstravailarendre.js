@@ -25,7 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     idTravailAFaire: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+
+      references:{
+        model: require('travailafaire'),
+        key: 'idTravailAFaire'
+      }
     }
   }, {
     sequelize,

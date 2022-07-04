@@ -16,11 +16,21 @@ module.exports = (sequelize, DataTypes) => {
   doitFaire.init({
     nomGroupe: {
       type: DataTypes.STRING(2),
-      primaryKey: true
+      primaryKey: true,
+
+      references: {
+        model: require('./groupe'),
+        key: 'nomGroupe'
+      }
     },
     idTravailAFaire: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+
+      references: {
+        model: require('./travailafaire'),
+        key: 'idTravailAFaire'
+      }
     }
   }, {
     sequelize,

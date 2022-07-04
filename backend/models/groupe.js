@@ -23,7 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     nomClasse: {
-      type: DataTypes.STRING(2)
+      type: DataTypes.STRING(2),
+
+      references: {
+        model: require('./classe'),
+        key: 'nomClasse'
+      }
     }
   }, {
     sequelize,

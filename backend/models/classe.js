@@ -20,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     anneeUniv: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./anneeuniv'),
+        key: 'nomAnneeUniv'
+      }
     }
   }, {
     sequelize,

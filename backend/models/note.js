@@ -16,11 +16,21 @@ module.exports = (sequelize, DataTypes) => {
   note.init({
     emailUser: {
       type: DataTypes.STRING(128),
-      primaryKey: true
+      primaryKey: true,
+
+      references: {
+        model: require('./user'),
+        key: 'emailUser'
+      }
     },
     idDevoir: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+
+      references: {
+        model: require('./devoir'),
+        key: 'idDevoir'
+      }
     },
     noteDevoir: {
       type: DataTypes.FLOAT,

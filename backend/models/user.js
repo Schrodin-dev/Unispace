@@ -46,7 +46,12 @@ module.exports = (sequelize, DataTypes) => {
             default: 0
         },
         nomGroupe: {
-            type: DataTypes.STRING(2)
+            type: DataTypes.STRING(2),
+
+            references: {
+                model: require('./groupe'),
+                key: 'nomGroupe'
+            }
         }
     }, {
         sequelize,

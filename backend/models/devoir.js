@@ -29,7 +29,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     idRessource: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./ressource'),
+        key: 'idRessource'
+      }
     }
   }, {
     sequelize,

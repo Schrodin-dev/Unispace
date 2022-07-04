@@ -29,11 +29,21 @@ module.exports = (sequelize, DataTypes) => {
     },
     idUE: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./ue'),
+        key: 'idUE'
+      }
     },
     nomAnneeUniv: {
       type: DataTypes.STRING(2),
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./anneeuniv'),
+        key: 'nomAnneeUniv'
+      }
     }
   }, {
     sequelize,

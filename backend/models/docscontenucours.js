@@ -25,7 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     idContenuCours: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+
+      references: {
+        model: require('./contenucours'),
+        key: 'idContenuCours'
+      }
     }
   }, {
     sequelize,
