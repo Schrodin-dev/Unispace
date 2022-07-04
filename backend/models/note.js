@@ -14,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   note.init({
-    emailUser: DataTypes.STRING,
-    idDevoir: DataTypes.INTEGER,
-    noteDevoir: DataTypes.FLOAT
+    emailUser: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    idDevoir: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    noteDevoir: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'note',

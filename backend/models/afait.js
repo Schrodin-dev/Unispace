@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   aFait.init({
-    nomGroupe: DataTypes.STRING,
-    idContenuCours: DataTypes.INTEGER
+    nomGroupe: {
+      type:DataTypes.STRING,
+      primaryKey: true
+    },
+    idContenuCours: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    }
   }, {
     sequelize,
     modelName: 'aFait',

@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   cours.init({
-    nomCours: DataTypes.STRING,
-    couleurCours: DataTypes.STRING
+    nomCours: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    couleurCours: {
+      type:DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'cours',

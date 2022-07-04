@@ -14,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UE.init({
-    idUE: DataTypes.INTEGER,
-    nomUE: DataTypes.STRING,
-    coeffUE: DataTypes.FLOAT
+    idUE: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    nomUE: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    coeffUE: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'UE',

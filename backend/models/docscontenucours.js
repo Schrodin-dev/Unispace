@@ -14,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   docsContenuCours.init({
-    idDoc: DataTypes.INTEGER,
-    doc: DataTypes.BLOB,
-    idContenuCours: DataTypes.INTEGER
+    idDoc: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    doc: {
+      type:DataTypes.BLOB,
+      allowNull: false
+    },
+    idContenuCours: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'docsContenuCours',

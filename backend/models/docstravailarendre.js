@@ -14,9 +14,18 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   docsTravailARendre.init({
-    idDoc: DataTypes.INTEGER,
-    doc: DataTypes.BLOB,
-    idTravailAFaire: DataTypes.INTEGER
+    idDoc: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    doc: {
+      type: DataTypes.BLOB,
+      allowNull: false
+    },
+    idTravailAFaire: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'docsTravailARendre',

@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   classe.init({
-    nomClasse: DataTypes.STRING,
-    anneeUniv: DataTypes.INTEGER
+    nomClasse: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    anneeUniv: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'classe',

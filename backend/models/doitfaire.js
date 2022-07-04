@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   doitFaire.init({
-    nomGroupe: DataTypes.STRING,
-    idTravailAFaire: DataTypes.INTEGER
+    nomGroupe: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    idTravailAFaire: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    }
   }, {
     sequelize,
     modelName: 'doitFaire',

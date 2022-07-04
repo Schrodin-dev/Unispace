@@ -14,7 +14,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   anneeUniv.init({
-    nomAnneeUniv: DataTypes.INTEGER
+    nomAnneeUniv: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    }
   }, {
     sequelize,
     modelName: 'anneeUniv',

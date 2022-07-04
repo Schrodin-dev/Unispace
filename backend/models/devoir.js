@@ -14,10 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   devoir.init({
-    idDevoir: DataTypes.INTEGER,
-    coeffDevoir: DataTypes.FLOAT,
-    nomDevoir: DataTypes.STRING,
-    idRessource: DataTypes.INTEGER
+    idDevoir: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    coeffDevoir: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    nomDevoir: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    idRessource: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'devoir',

@@ -14,10 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   contenuCours.init({
-    idContenuCours: DataTypes.INTEGER,
-    dateContenuCours: DataTypes.DATE,
-    descContenuCours: DataTypes.STRING,
-    nomCours: DataTypes.STRING
+    idContenuCours: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    dateContenuCours: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    descContenuCours: {
+      type:DataTypes.STRING,
+      allowNull: false
+    },
+    nomCours: {
+      type:DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'contenuCours',

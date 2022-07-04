@@ -14,10 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   travailAFaire.init({
-    idTravailAFaire: DataTypes.INTEGER,
-    dateTravailAFaire: DataTypes.DATE,
-    descTravailAFaire: DataTypes.STRING,
-    estNote: DataTypes.BOOLEAN
+    idTravailAFaire: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    dateTravailAFaire: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    descTravailAFaire: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    estNote: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'travailAFaire',

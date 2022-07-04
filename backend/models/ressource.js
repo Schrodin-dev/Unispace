@@ -14,11 +14,26 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   ressource.init({
-    idRessource: DataTypes.INTEGER,
-    nomRessource: DataTypes.STRING,
-    coeffRessource: DataTypes.FLOAT,
-    idUE: DataTypes.INTEGER,
-    nomAnneeUniv: DataTypes.STRING
+    idRessource: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    nomRessource: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    coeffRessource: {
+      type: DataTypes.FLOAT,
+      allowNull: false
+    },
+    idUE: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    nomAnneeUniv: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'ressource',

@@ -14,10 +14,22 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   theme.init({
-    idTheme: DataTypes.INTEGER,
-    imageTheme: DataTypes.BLOB,
-    couleurPrincipaleTheme: DataTypes.STRING,
-    couleurFond: DataTypes.STRING
+    idTheme: {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
+    imageTheme: {
+      type: DataTypes.BLOB,
+      allowNull: false
+    },
+    couleurPrincipaleTheme: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    couleurFond: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'theme',

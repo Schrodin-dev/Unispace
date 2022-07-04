@@ -14,9 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   groupe.init({
-    nomGroupe: DataTypes.STRING,
-    lienICalGroupe: DataTypes.STRING,
-    nomClasse: DataTypes.STRING
+    nomGroupe: {
+      type: DataTypes.STRING,
+      primaryKey: true
+    },
+    lienICalGroupe: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    nomClasse: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'groupe',
