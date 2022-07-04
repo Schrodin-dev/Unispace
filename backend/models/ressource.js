@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'ressource',
+    freezeTableName: true
   });
   return ressource;
 };

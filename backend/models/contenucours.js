@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'contenuCours',
+    freezeTableName: true
   });
   return contenuCours;
 };

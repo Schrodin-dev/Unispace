@@ -33,6 +33,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'theme',
+    freezeTableName: true
   });
   return theme;
 };
