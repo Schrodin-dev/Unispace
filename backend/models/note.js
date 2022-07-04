@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   note.init({
     emailUser: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(128),
       primaryKey: true
     },
     idDevoir: {

@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     couleurPrincipaleTheme: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(6),
       allowNull: false
     },
     couleurFond: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(6),
       allowNull: false
     }
   }, {

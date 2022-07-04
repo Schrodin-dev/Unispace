@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   aFait.init({
     nomGroupe: {
-      type:DataTypes.STRING,
+      type:DataTypes.STRING(2),
       primaryKey: true
     },
     idContenuCours: {

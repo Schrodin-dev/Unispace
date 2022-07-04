@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     nomRessource: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(256),
       allowNull: false
     },
     coeffRessource: {
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     nomAnneeUniv: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(2),
       allowNull: false
     }
   }, {

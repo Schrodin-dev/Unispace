@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   classe.init({
     nomClasse: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(2),
       primaryKey: true
     },
     anneeUniv: {

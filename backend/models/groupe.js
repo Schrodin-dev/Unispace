@@ -15,15 +15,15 @@ module.exports = (sequelize, DataTypes) => {
   }
   groupe.init({
     nomGroupe: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(2),
       primaryKey: true
     },
     lienICalGroupe: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(512),
       allowNull: false
     },
     nomClasse: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING(2)
     }
   }, {
     sequelize,

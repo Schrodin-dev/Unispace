@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     descContenuCours: {
-      type:DataTypes.STRING,
+      type:DataTypes.TEXT,
       allowNull: false
     },
     nomCours: {
-      type:DataTypes.STRING,
+      type:DataTypes.STRING(100),
       allowNull: false
     }
   }, {

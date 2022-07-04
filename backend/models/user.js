@@ -11,29 +11,28 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.User.hasMany(models.);
         }
     }
     user.init({
         emailUser: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(128),
             primaryKey: true
         },
         nomUser: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(40),
             allowNull: false
         },
         prenomUser: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(40),
             allowNull: false
         },
         droitsUser: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER(1),
             allowNull: false,
             default: 0
         },
         mdpUser: {
-            type: DataTypes.STRING,
+            type: DataTypes.STRING(128),
             allowNull: false
         },
         accepteRecevoirAnnonces: {
@@ -47,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
             default: 0
         },
         nomGroupe: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING(2)
         }
     }, {
         sequelize,
