@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
 
       references: {
-        model : require('./groupe'),
+        model : 'groupe',
         key: 'nomGroupe'
       }
     },

@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(2),
 
             references: {
-                model: require('./groupe'),
+                model: 'groupe',
                 key: 'nomGroupe'
             }
         }

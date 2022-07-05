@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references: {
-        model: require('./ue'),
+        model: 'ue',
         key: 'idUE'
       }
     },
@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references: {
-        model: require('./anneeuniv'),
+        model: 'anneeuniv',
         key: 'nomAnneeUniv'
       }
     }

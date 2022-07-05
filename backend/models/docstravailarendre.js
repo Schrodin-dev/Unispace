@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+
     }
   }
   docsTravailARendre.init({
@@ -28,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references:{
-        model: require('travailafaire'),
+        model: 'travailafaire',
         key: 'idTravailAFaire'
       }
     }

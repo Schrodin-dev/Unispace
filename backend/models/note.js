@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
 
       references: {
-        model: require('./user'),
+        model: 'user',
         key: 'emailUser'
       }
     },
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
 
       references: {
-        model: require('./devoir'),
+        model: 'devoir',
         key: 'idDevoir'
       }
     },

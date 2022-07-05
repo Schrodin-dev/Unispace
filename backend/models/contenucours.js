@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references: {
-        model: require('./cours'),
+        model: 'cours',
         key: 'nomCours'
       }
     }

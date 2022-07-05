@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references: {
-        model: require('./anneeuniv'),
+        model: 'anneeuniv',
         key: 'nomAnneeUniv'
       }
     }
