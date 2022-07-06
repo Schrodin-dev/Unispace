@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
 
       references:{
-        model: 'travailafaire',
+        model: 'travailAFaire',
         key: 'idTravailAFaire'
       }
     }

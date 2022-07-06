@@ -37,11 +37,11 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     nomAnneeUniv: {
-      type: DataTypes.STRING(2),
+      type: DataTypes.INTEGER,
       allowNull: false,
 
       references: {
-        model: 'anneeuniv',
+        model: 'anneeUniv',
         key: 'nomAnneeUniv'
       }
     }

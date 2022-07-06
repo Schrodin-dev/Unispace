@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
 
       references: {
-        model: 'travailafaire',
+        model: 'travailAFaire',
         key: 'idTravailAFaire'
       }
     }

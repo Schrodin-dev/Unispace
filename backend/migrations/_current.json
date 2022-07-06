@@ -1,0 +1,599 @@
+{
+    "tables": {
+        "aFait": {
+            "tableName": "aFait",
+            "schema": {
+                "nomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "idContenuCours": {
+                    "primaryKey": true,
+                    "field": "idContenuCours",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "anneeUniv": {
+            "tableName": "anneeUniv",
+            "schema": {
+                "nomAnneeUniv": {
+                    "primaryKey": true,
+                    "field": "nomAnneeUniv",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "classe": {
+            "tableName": "classe",
+            "schema": {
+                "nomClasse": {
+                    "primaryKey": true,
+                    "field": "nomClasse",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "anneeUniv": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "anneeUniv",
+                        "key": "nomAnneeUniv"
+                    },
+                    "field": "anneeUniv",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "contenuCours": {
+            "tableName": "contenuCours",
+            "schema": {
+                "idContenuCours": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idContenuCours",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "dateContenuCours": {
+                    "allowNull": false,
+                    "field": "dateContenuCours",
+                    "seqType": "Sequelize.DATE"
+                },
+                "descContenuCours": {
+                    "allowNull": false,
+                    "field": "descContenuCours",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "nomCours": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "cours",
+                        "key": "nomCours"
+                    },
+                    "field": "nomCours",
+                    "seqType": "Sequelize.STRING(100)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "cours": {
+            "tableName": "cours",
+            "schema": {
+                "nomCours": {
+                    "primaryKey": true,
+                    "field": "nomCours",
+                    "seqType": "Sequelize.STRING(100)"
+                },
+                "couleurCours": {
+                    "allowNull": false,
+                    "field": "couleurCours",
+                    "seqType": "Sequelize.STRING(6)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "devoir": {
+            "tableName": "devoir",
+            "schema": {
+                "idDevoir": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idDevoir",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "coeffDevoir": {
+                    "allowNull": false,
+                    "field": "coeffDevoir",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "nomDevoir": {
+                    "allowNull": false,
+                    "field": "nomDevoir",
+                    "seqType": "Sequelize.STRING"
+                },
+                "idRessource": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "ressource",
+                        "key": "idRessource"
+                    },
+                    "field": "idRessource",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "docsContenuCours": {
+            "tableName": "docsContenuCours",
+            "schema": {
+                "idDoc": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idDoc",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "doc": {
+                    "allowNull": false,
+                    "field": "doc",
+                    "seqType": "Sequelize.BLOB"
+                },
+                "idContenuCours": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "contenuCours",
+                        "key": "idContenuCours"
+                    },
+                    "field": "idContenuCours",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "docsTravailARendre": {
+            "tableName": "docsTravailARendre",
+            "schema": {
+                "idDoc": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idDoc",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "doc": {
+                    "allowNull": false,
+                    "field": "doc",
+                    "seqType": "Sequelize.BLOB"
+                },
+                "idTravailAFaire": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "travailAFaire",
+                        "key": "idTravailAFaire"
+                    },
+                    "field": "idTravailAFaire",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "doitFaire": {
+            "tableName": "doitFaire",
+            "schema": {
+                "nomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "idTravailAFaire": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "travailAFaire",
+                        "key": "idTravailAFaire"
+                    },
+                    "field": "idTravailAFaire",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "groupe": {
+            "tableName": "groupe",
+            "schema": {
+                "nomGroupe": {
+                    "primaryKey": true,
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "lienICalGroupe": {
+                    "allowNull": false,
+                    "field": "lienICalGroupe",
+                    "seqType": "Sequelize.STRING(512)"
+                },
+                "nomClasse": {
+                    "references": {
+                        "model": "classe",
+                        "key": "nomClasse"
+                    },
+                    "field": "nomClasse",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "note": {
+            "tableName": "note",
+            "schema": {
+                "emailUser": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "user",
+                        "key": "emailUser"
+                    },
+                    "field": "emailUser",
+                    "seqType": "Sequelize.STRING(128)"
+                },
+                "idDevoir": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "devoir",
+                        "key": "idDevoir"
+                    },
+                    "field": "idDevoir",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "noteDevoir": {
+                    "allowNull": false,
+                    "field": "noteDevoir",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "ressource": {
+            "tableName": "ressource",
+            "schema": {
+                "idRessource": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idRessource",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nomRessource": {
+                    "allowNull": false,
+                    "field": "nomRessource",
+                    "seqType": "Sequelize.STRING(256)"
+                },
+                "coeffRessource": {
+                    "allowNull": false,
+                    "field": "coeffRessource",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "idUE": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "ue",
+                        "key": "idUE"
+                    },
+                    "field": "idUE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nomAnneeUniv": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "anneeUniv",
+                        "key": "nomAnneeUniv"
+                    },
+                    "field": "nomAnneeUniv",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "theme": {
+            "tableName": "theme",
+            "schema": {
+                "idTheme": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idTheme",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "imageTheme": {
+                    "allowNull": false,
+                    "field": "imageTheme",
+                    "seqType": "Sequelize.BLOB"
+                },
+                "sourceTheme": {
+                    "allowNull": false,
+                    "field": "sourceTheme",
+                    "seqType": "Sequelize.STRING(512)"
+                },
+                "couleurPrincipaleTheme": {
+                    "allowNull": false,
+                    "field": "couleurPrincipaleTheme",
+                    "seqType": "Sequelize.STRING(6)"
+                },
+                "couleurFond": {
+                    "allowNull": false,
+                    "field": "couleurFond",
+                    "seqType": "Sequelize.STRING(6)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "travailAFaire": {
+            "tableName": "travailAFaire",
+            "schema": {
+                "idTravailAFaire": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idTravailAFaire",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "dateTravailAFaire": {
+                    "allowNull": false,
+                    "field": "dateTravailAFaire",
+                    "seqType": "Sequelize.DATE"
+                },
+                "descTravailAFaire": {
+                    "allowNull": false,
+                    "field": "descTravailAFaire",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "estNote": {
+                    "allowNull": false,
+                    "field": "estNote",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "UE": {
+            "tableName": "UE",
+            "schema": {
+                "idUE": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idUE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nomUE": {
+                    "allowNull": false,
+                    "field": "nomUE",
+                    "seqType": "Sequelize.STRING"
+                },
+                "coeffUE": {
+                    "allowNull": false,
+                    "field": "coeffUE",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "user": {
+            "tableName": "user",
+            "schema": {
+                "emailUser": {
+                    "primaryKey": true,
+                    "field": "emailUser",
+                    "seqType": "Sequelize.STRING(128)"
+                },
+                "nomUser": {
+                    "allowNull": false,
+                    "field": "nomUser",
+                    "seqType": "Sequelize.STRING(40)"
+                },
+                "prenomUser": {
+                    "allowNull": false,
+                    "field": "prenomUser",
+                    "seqType": "Sequelize.STRING(40)"
+                },
+                "droitsUser": {
+                    "allowNull": false,
+                    "default": 0,
+                    "field": "droitsUser",
+                    "seqType": "Sequelize.INTEGER(1)"
+                },
+                "mdpUser": {
+                    "allowNull": false,
+                    "field": "mdpUser",
+                    "seqType": "Sequelize.STRING(128)"
+                },
+                "accepteRecevoirAnnonces": {
+                    "allowNull": false,
+                    "default": true,
+                    "field": "accepteRecevoirAnnonces",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "idTheme": {
+                    "allowNull": false,
+                    "default": 0,
+                    "field": "idTheme",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nomGroupe": {
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(2)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "path": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current.json",
+    "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current_bak.json",
+    "exists": false,
+    "revision": 1
+}
