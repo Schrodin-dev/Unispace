@@ -21,11 +21,24 @@ module.exports = (sequelize, DataTypes) => {
     },
     coeffDevoir: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min(value) {
+          if (value <= 0) {
+            throw new Error('le coefficient doit être supérieur à 0.');
+          }
+        },
+        max: 100
+      }
     },
     nomDevoir: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    noteMaxDevoir: {
+      type: DataTypes.INTEGER,
+      allowNull:false,
+      defaultValue: 20
     },
     idRessource: {
       type: DataTypes.INTEGER,

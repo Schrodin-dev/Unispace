@@ -55,6 +55,10 @@ module.exports = (sequelize, DataTypes) => {
                         this.setDataValue('droitsUser', 2);
                     break;
                 }
+            },
+            validate: {
+                min: 0,
+                max: 2
             }
         },
         mdpUser: {

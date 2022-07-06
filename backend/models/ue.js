@@ -25,7 +25,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     coeffUE: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min(value){
+          if(value <= 0){
+            throw new Error('le coefficient doit être supérieur à 0.');
+          }
+        },
+        max: 100
+      }
     }
   }, {
     sequelize,

@@ -16,7 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   anneeUniv.init({
     nomAnneeUniv: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+      validate: {
+        min: 1,
+        max: 3
+      }
     }
   }, {
     sequelize,

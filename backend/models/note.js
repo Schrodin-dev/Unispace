@@ -34,7 +34,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     noteDevoir: {
       type: DataTypes.FLOAT,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        min:0
+      }
     }
   }, {
     sequelize,

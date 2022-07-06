@@ -167,6 +167,14 @@
                     "field": "nomDevoir",
                     "seqType": "Sequelize.STRING"
                 },
+                "noteMaxDevoir": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 20
+                    },
+                    "field": "noteMaxDevoir",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "idRessource": {
                     "allowNull": false,
                     "references": {
@@ -595,5 +603,5 @@
     "path": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }
