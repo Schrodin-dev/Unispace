@@ -29,7 +29,33 @@ module.exports = (sequelize, DataTypes) => {
         droitsUser: {
             type: DataTypes.INTEGER(1),
             allowNull: false,
-            default: 0
+            default: 0,
+            get(){
+                switch(this.getDataValue('droitsUser')){
+                    case 0:
+                        return 'élève';
+                    break;
+                    case 1:
+                        return 'délégué';
+                    break;
+                    case 2:
+                        return 'admin';
+                    break;
+                }
+            },
+            set(value){
+                switch(value){
+                    case 'élève':
+                        this.setDataValue('droitsUser', 0);
+                    break;
+                    case 'délégué':
+                        this.setDataValue('droitsUser', 1);
+                    break;
+                    case 'admin':
+                        this.setDataValue('droitsUser', 2);
+                    break;
+                }
+            }
         },
         mdpUser: {
             type: DataTypes.STRING(128),
