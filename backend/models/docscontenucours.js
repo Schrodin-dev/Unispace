@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    doc: {
-      type:DataTypes.BLOB,
+    lienDoc: {
+      type:DataTypes.TEXT,
       allowNull: false
     },
     idContenuCours: {

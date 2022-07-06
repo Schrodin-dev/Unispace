@@ -198,10 +198,10 @@
                     "field": "idDoc",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "doc": {
+                "lienDoc": {
                     "allowNull": false,
-                    "field": "doc",
-                    "seqType": "Sequelize.BLOB"
+                    "field": "lienDoc",
+                    "seqType": "Sequelize.TEXT"
                 },
                 "idContenuCours": {
                     "allowNull": false,
@@ -234,10 +234,10 @@
                     "field": "idDoc",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "doc": {
+                "lienDoc": {
                     "allowNull": false,
-                    "field": "doc",
-                    "seqType": "Sequelize.BLOB"
+                    "field": "lienDoc",
+                    "seqType": "Sequelize.TEXT"
                 },
                 "idTravailAFaire": {
                     "allowNull": false,
@@ -594,6 +594,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current_bak.json",
-    "exists": false,
-    "revision": 1
+    "exists": true,
+    "revision": 2
 }
