@@ -48,7 +48,8 @@ exports.login = (req, res, next) => {
                             {
                                 userEmail : user.email,
                                 userGroupe: user.userGroupe,
-                                userClasse: user.userClasse
+                                userClasse: user.userClasse,
+                                droitsUser: user.droitsUser
                             },
                             'tokenMagique',//TODO: remplacer le token en production par un truc bien long comme il faut :)
                             {expiresIn: '24h'}

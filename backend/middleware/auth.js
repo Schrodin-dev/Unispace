@@ -7,11 +7,13 @@ module.exports = (req, res, next) => {
         const userEmail = decodeToken.userEmail;
         const userGroupe = decodeToken.userGroupe;
         const userClasse = decodeToken.userClasse;
+        const droitsUser = decodeToken.droitsUser;
 
         req.auth = {
             userEmail: userEmail,
             userGroupe: userGroupe,
-            userClasse: userClasse
+            userClasse: userClasse,
+            droitsUser: droitsUser
         };
 
         next();
