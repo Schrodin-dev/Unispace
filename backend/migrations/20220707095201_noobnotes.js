@@ -24,8 +24,8 @@ const Sequelize = require("sequelize");
 
 const info = {
   revision: 1,
-  name: "test",
-  created: "2022-07-06T06:42:21.895Z",
+  name: "noobnotes",
+  created: "2022-07-07T09:52:01.988Z",
   comment: "",
 };
 
@@ -231,7 +231,7 @@ const migrationCommands = (transaction) => [
       "groupe",
       {
         nomGroupe: {
-          type: Sequelize.STRING(2),
+          type: Sequelize.STRING(4),
           field: "nomGroupe",
           primaryKey: true,
         },
@@ -358,7 +358,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
           primaryKey: true,
         },
-        doc: { type: Sequelize.BLOB, field: "doc", allowNull: false },
+        lienDoc: { type: Sequelize.TEXT, field: "lienDoc", allowNull: false },
         idContenuCours: {
           type: Sequelize.INTEGER,
           field: "idContenuCours",
@@ -390,7 +390,7 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
           primaryKey: true,
         },
-        doc: { type: Sequelize.BLOB, field: "doc", allowNull: false },
+        lienDoc: { type: Sequelize.TEXT, field: "lienDoc", allowNull: false },
         idTravailAFaire: {
           type: Sequelize.INTEGER,
           field: "idTravailAFaire",
@@ -417,7 +417,7 @@ const migrationCommands = (transaction) => [
       "aFait",
       {
         nomGroupe: {
-          type: Sequelize.STRING(2),
+          type: Sequelize.STRING(4),
           field: "nomGroupe",
           references: { model: "groupe", key: "nomGroupe" },
           primaryKey: true,
@@ -447,7 +447,7 @@ const migrationCommands = (transaction) => [
       "doitFaire",
       {
         nomGroupe: {
-          type: Sequelize.STRING(2),
+          type: Sequelize.STRING(4),
           field: "nomGroupe",
           references: { model: "groupe", key: "nomGroupe" },
           primaryKey: true,
@@ -495,7 +495,7 @@ const migrationCommands = (transaction) => [
         droitsUser: {
           type: Sequelize.INTEGER(1),
           field: "droitsUser",
-          default: 0,
+          defaultValue: 0,
           allowNull: false,
         },
         mdpUser: {
@@ -506,13 +506,13 @@ const migrationCommands = (transaction) => [
         accepteRecevoirAnnonces: {
           type: Sequelize.BOOLEAN,
           field: "accepteRecevoirAnnonces",
-          default: true,
+          defaultValue: true,
           allowNull: false,
         },
         idTheme: {
           type: Sequelize.INTEGER,
           field: "idTheme",
-          default: 0,
+          defaultValue: 0,
           allowNull: false,
         },
         nomGroupe: {
@@ -553,6 +553,12 @@ const migrationCommands = (transaction) => [
         nomDevoir: {
           type: Sequelize.STRING,
           field: "nomDevoir",
+          allowNull: false,
+        },
+        noteMaxDevoir: {
+          type: Sequelize.INTEGER,
+          field: "noteMaxDevoir",
+          defaultValue: 20,
           allowNull: false,
         },
         idRessource: {

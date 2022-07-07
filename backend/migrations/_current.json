@@ -10,7 +10,7 @@
                         "key": "nomGroupe"
                     },
                     "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(2)"
+                    "seqType": "Sequelize.STRING(4)"
                 },
                 "idContenuCours": {
                     "primaryKey": true,
@@ -279,7 +279,7 @@
                         "key": "nomGroupe"
                     },
                     "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(2)"
+                    "seqType": "Sequelize.STRING(4)"
                 },
                 "idTravailAFaire": {
                     "primaryKey": true,
@@ -309,7 +309,7 @@
                 "nomGroupe": {
                     "primaryKey": true,
                     "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(2)"
+                    "seqType": "Sequelize.STRING(4)"
                 },
                 "lienICalGroupe": {
                     "allowNull": false,
@@ -557,7 +557,9 @@
                 },
                 "droitsUser": {
                     "allowNull": false,
-                    "default": 0,
+                    "defaultValue": {
+                        "value": 0
+                    },
                     "field": "droitsUser",
                     "seqType": "Sequelize.INTEGER(1)"
                 },
@@ -568,13 +570,17 @@
                 },
                 "accepteRecevoirAnnonces": {
                     "allowNull": false,
-                    "default": true,
+                    "defaultValue": {
+                        "value": true
+                    },
                     "field": "accepteRecevoirAnnonces",
                     "seqType": "Sequelize.BOOLEAN"
                 },
                 "idTheme": {
                     "allowNull": false,
-                    "default": 0,
+                    "defaultValue": {
+                        "value": 0
+                    },
                     "field": "idTheme",
                     "seqType": "Sequelize.INTEGER"
                 },
@@ -584,7 +590,7 @@
                         "key": "nomGroupe"
                     },
                     "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(2)"
+                    "seqType": "Sequelize.STRING(4)"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -600,8 +606,8 @@
             "indexes": []
         }
     },
-    "path": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current.json",
-    "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/Backend/migrations/_current_bak.json",
+    "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
+    "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
     "exists": true,
-    "revision": 3
+    "revision": 2
 }

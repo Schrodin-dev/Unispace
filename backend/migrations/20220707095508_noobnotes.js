@@ -3,28 +3,27 @@ const Sequelize = require("sequelize");
 /**
  * Actions summary:
  *
- * addColumn(noteMaxDevoir) => "devoir"
+ * changeColumn(nomGroupe) => "user"
  *
  */
 
 const info = {
-  revision: 3,
+  revision: 2,
   name: "noobnotes",
-  created: "2022-07-06T07:56:38.636Z",
+  created: "2022-07-07T09:55:08.220Z",
   comment: "",
 };
 
 const migrationCommands = (transaction) => [
   {
-    fn: "addColumn",
+    fn: "changeColumn",
     params: [
-      "devoir",
-      "noteMaxDevoir",
+      "user",
+      "nomGroupe",
       {
-        type: Sequelize.INTEGER,
-        field: "noteMaxDevoir",
-        defaultValue: 20,
-        allowNull: false,
+        type: Sequelize.STRING(4),
+        field: "nomGroupe",
+        references: { model: "groupe", key: "nomGroupe" },
       },
       { transaction },
     ],
@@ -33,8 +32,17 @@ const migrationCommands = (transaction) => [
 
 const rollbackCommands = (transaction) => [
   {
-    fn: "removeColumn",
-    params: ["devoir", "noteMaxDevoir", { transaction }],
+    fn: "changeColumn",
+    params: [
+      "user",
+      "nomGroupe",
+      {
+        type: Sequelize.STRING(2),
+        field: "nomGroupe",
+        references: { model: "groupe", key: "nomGroupe" },
+      },
+      { transaction },
+    ],
   },
 ];
 

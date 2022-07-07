@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 0
         },
         nomGroupe: {
-            type: DataTypes.STRING(2),
+            type: DataTypes.STRING(4),
 
             references: {
                 model: 'groupe',

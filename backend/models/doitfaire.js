@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   doitFaire.init({
     nomGroupe: {
-      type: DataTypes.STRING(2),
+      type: DataTypes.STRING(4),
       primaryKey: true,
 
       references: {
