@@ -2,11 +2,15 @@ const bcrypt = require('bcrypt');
 const db = require('../models/index');
 const jsonwebtoken = require('jsonwebtoken');
 
-exports.register = (req, res, next) => {
+exports.register = async (req, res, next) => {
     //vérification des données avant insertion
-    if(!req.body.email.toString().includes('@etu.umontpellier.fr')){
+    if (await db.user.findOne({where: {emailUser: req.body.email}}) !== null) {
+        return res.status(400).json({message: 'Vous êtes déjà inscrit, veuillez vous connecter.'});
+    }
+    if (!req.body.email.toString().includes('@etu.umontpellier.fr')) {
         return res.status(400).json({message: 'Vous devez utiliser un email étudiant universitaire de Montpellier afin de vous inscrire.'});
     }
+
 
     bcrypt.hash(req.body.password, 10)
         .then(async hash => {
