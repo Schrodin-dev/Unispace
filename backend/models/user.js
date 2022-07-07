@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         droitsUser: {
             type: DataTypes.INTEGER(1),
             allowNull: false,
-            default: 0,
+            defaultValue: 0,
             get(){
                 switch(this.getDataValue('droitsUser')){
                     case 0:
@@ -39,6 +39,9 @@ module.exports = (sequelize, DataTypes) => {
                         return 'délégué';
                     break;
                     case 2:
+                        return 'publicateur';
+                    break;
+                    case 3:
                         return 'admin';
                     break;
                 }
@@ -51,8 +54,10 @@ module.exports = (sequelize, DataTypes) => {
                     case 'délégué':
                         this.setDataValue('droitsUser', 1);
                     break;
+                    case 'publicateur':
+                        this.setDataValue('droitsUser', 2)
                     case 'admin':
-                        this.setDataValue('droitsUser', 2);
+                        this.setDataValue('droitsUser', 3);
                     break;
                 }
             },
@@ -68,12 +73,12 @@ module.exports = (sequelize, DataTypes) => {
         accepteRecevoirAnnonces: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
-            default: true
+            defaultValue: true
         },
         idTheme: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            default: 0
+            defaultValue: 0
         },
         nomGroupe: {
             type: DataTypes.STRING(2),
