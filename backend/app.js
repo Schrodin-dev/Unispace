@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
+const auth = require('./middleware/auth');
+
 const userRoutes = require('./routes/user');
 
 app.use((req, res, next) => {
@@ -14,6 +16,8 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
+
+
 
 app.use('/api/auth', userRoutes);
 

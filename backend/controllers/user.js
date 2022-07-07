@@ -45,7 +45,11 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         email: user.email,
                         token: jsonwebtoken.sign(
-                            {userId : user.email},
+                            {
+                                userEmail : user.email,
+                                userGroupe: user.userGroupe,
+                                userClasse: user.userClasse
+                            },
                             'tokenMagique',//TODO: remplacer le token en production par un truc bien long comme il faut :)
                             {expiresIn: '24h'}
                         )
