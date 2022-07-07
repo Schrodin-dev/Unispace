@@ -3,12 +3,26 @@ const db = require('../models/index');
 const jsonwebtoken = require('jsonwebtoken');
 
 exports.register = async (req, res, next) => {
+    //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
     //vérification des données avant insertion
     if (await db.user.findOne({where: {emailUser: req.body.email}}) !== null) {
         return res.status(400).json({message: 'Vous êtes déjà inscrit, veuillez vous connecter.'});
     }
     if (!req.body.email.toString().includes('@etu.umontpellier.fr')) {
         return res.status(400).json({message: 'Vous devez utiliser un email étudiant universitaire de Montpellier afin de vous inscrire.'});
+    }
+    // vérification du format des données fournies par l'utilisateur
+    if(req.body.email.length > 128){
+        return res.status(400).json({message: 'Votre email est trop long (128 caractères maximum).'});
+    }
+    if(req.body.nom.length > 40){
+        return res.status(400).json({message: 'Votre nom est trop long (40 caractères maximum).'});
+    }
+    if(req.body.prenom.length > 40){
+        return res.status(400).json({message: 'Votre prénom est trop long (40 caractères maximum).'});
+    }
+    if(await db.groupe.findOne({where: {nomGroupe: req.body.groupe}}) === null){
+        return res.status(400).json({message: 'Le groupe renseigné n\'existe pas.'});
     }
 
 
