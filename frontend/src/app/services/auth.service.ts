@@ -12,7 +12,7 @@ export class AuthService{
 
   register(nom:String, prenom:String, email:String, password:String, classe:String, groupe:any){
     this.httpClient
-      .post('http://localhost:3000/users/register', {
+      .post('http://localhost:3001/users/register', {
         nom: nom,
         prenom: prenom,
         email: email,
