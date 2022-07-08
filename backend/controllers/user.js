@@ -42,9 +42,54 @@ exports.register = async (req, res, next) => {
                 .catch(error => res.status(400).json({error}));
         })
         .catch(error => {
-            console.error(error);
             res.status(500).json({error});
         });
+};
+
+exports.changementsDonneesCompte = async (req, res, next) => {
+    //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
+    //vérification des données avant insertion
+    db.user.findOne({where: {emailUser: req.body.email}})
+        .then(async (user) => {
+            if (user === null) {
+                return res.status(400).json({message: 'Vous n\'êtes pas inscrit, veuillez vous inscrire d\'abord.'});
+            }
+            // vérification du format des données fournies par l'utilisateur
+            if (req.body.nom.length > 40) {
+                return res.status(400).json({message: 'Le nouveau nom est trop long (40 caractères maximum).'});
+            }
+            if (req.body.prenom.length > 40) {
+                return res.status(400).json({message: 'Le nouveau prénom est trop long (40 caractères maximum).'});
+            }
+            if (req.body.groupe.length > 0 && await db.groupe.findOne({where: {nomGroupe: req.body.groupe}}) === null) {
+                return res.status(400).json({message: 'Le nouveau groupe renseigné n\'existe pas.'});
+            }
+
+            if (req.body.nom.length > 0) user.set({nomUser: req.body.nom});
+            if (req.body.prenom.length > 0) user.set({prenomUser: req.body.prenom});
+            if (req.body.groupe.length > 0) user.set({nomGroupe: req.body.groupe});
+            if (req.body.password.length > 0) {
+                await bcrypt.hash(req.body.password, 10)
+                    .then(hash => {
+                        user.set({mdpUser: hash});
+                    })
+                    .catch(error => {
+                        res.status(500).json({error});
+                    });
+            }
+            return user;
+        })
+        .then(user => {
+            user.save()
+                .then(() => {
+                    res.status(201).json({message: 'Les modifications ont été prises en compte.'})
+                })
+                .catch(error => res.status(400).json({error}));
+        })
+        .catch(error => {
+            res.status(500).json({error});
+        });
+
 };
 
 exports.login = (req, res, next) => {
