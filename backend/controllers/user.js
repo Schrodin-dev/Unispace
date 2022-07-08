@@ -107,8 +107,11 @@ exports.login = (req, res, next) => {
                     }
 
                     res.status(200).json({
-                        email: user.emailUser,
+                        nom: user.nomUser,
+                        prenom: user.prenomUser,
+                        theme: user.idTheme,
                         groupe: user.nomGroupe,
+                        droits: user.droitsUser,
                         token: jsonwebtoken.sign(
                             {
                                 userEmail: user.emailUser,
