@@ -17,6 +17,8 @@ app.use((req, res, next) => {
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
+require('./controllers/groupe').chargerGroupes();
+setInterval(() => require('./controllers/groupe').chargerGroupes(), 5*60*1000);
 
 
 app.use('/api/auth', userRoutes);
