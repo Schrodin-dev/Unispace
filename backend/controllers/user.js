@@ -49,7 +49,7 @@ exports.register = async (req, res, next) => {
 exports.changementsDonneesCompte = async (req, res, next) => {
     //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
     //vérification des données avant insertion
-    db.user.findOne({where: {emailUser: req.body.email}})
+    db.user.findOne({where: {emailUser: req.auth.userEmail}})
         .then(async (user) => {
             if (user === null) {
                 return res.status(400).json({message: 'Vous n\'êtes pas inscrit, veuillez vous inscrire d\'abord.'});
@@ -87,7 +87,8 @@ exports.changementsDonneesCompte = async (req, res, next) => {
                 .catch(error => res.status(400).json({error}));
         })
         .catch(error => {
-            res.status(500).json({error});
+            console.error(error);
+            res.status(500).json({error})
         });
 
 };
@@ -106,12 +107,12 @@ exports.login = (req, res, next) => {
                     }
 
                     res.status(200).json({
-                        email: user.email,
+                        email: user.emailUser,
+                        groupe: user.nomGroupe,
                         token: jsonwebtoken.sign(
                             {
-                                userEmail : user.email,
-                                userGroupe: user.userGroupe,
-                                userClasse: user.userClasse,
+                                userEmail: user.emailUser,
+                                userGroupe: user.nomGroupe,
                                 droitsUser: user.droitsUser
                             },
                             'tokenMagique',//TODO: remplacer le token en production par un truc bien long comme il faut :)
@@ -120,6 +121,18 @@ exports.login = (req, res, next) => {
                     });
                 })
                 .catch(error => res.status(500).json({error}));
+        })
+        .catch(error => res.status(500).json({error}));
+};
+
+exports.supprimerCompte = (req , res, next) => {
+    db.user.findOne({where: {emailUser: req.auth.userEmail}})
+        .then(user => {
+           user.destroy()
+               .then(() => {
+                   res.status(200).json({message: 'Votre compte a bien été supprimé'})
+               })
+               .catch(error => res.status(500).json({error}));
         })
         .catch(error => res.status(500).json({error}));
 };
