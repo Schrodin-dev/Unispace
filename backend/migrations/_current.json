@@ -592,6 +592,10 @@
                     "field": "nomGroupe",
                     "seqType": "Sequelize.STRING(4)"
                 },
+                "codeVerification": {
+                    "field": "codeVerification",
+                    "seqType": "Sequelize.UUID"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -608,6 +612,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

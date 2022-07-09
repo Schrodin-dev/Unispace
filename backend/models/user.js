@@ -32,6 +32,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 0,
             get(){
                 switch(this.getDataValue('droitsUser')){
+                    case -1:
+                        return 'non validé'
                     case 0:
                         return 'élève';
                     break;
@@ -48,6 +50,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             set(value){
                 switch(value){
+                    case 'non validé':
+                        this.setDataValue('droitsUser', -1);
                     case 'élève':
                         this.setDataValue('droitsUser', 0);
                     break;
@@ -62,8 +66,8 @@ module.exports = (sequelize, DataTypes) => {
                 }
             },
             validate: {
-                min: 0,
-                max: 2
+                min: -1,
+                max: 3
             }
         },
         mdpUser: {
@@ -78,7 +82,7 @@ module.exports = (sequelize, DataTypes) => {
         idTheme: {
             type: DataTypes.INTEGER,
             allowNull: false,
-            defaultValue: 0
+            defaultValue: 0 //TODO: manque une clé étrangère là
         },
         nomGroupe: {
             type: DataTypes.STRING(4),
@@ -87,6 +91,9 @@ module.exports = (sequelize, DataTypes) => {
                 model: 'groupe',
                 key: 'nomGroupe'
             }
+        },
+        codeVerification: {
+            type: DataTypes.UUID
         }
     }, {
         sequelize,

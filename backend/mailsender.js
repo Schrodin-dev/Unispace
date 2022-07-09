@@ -1,0 +1,1 @@
+const mailConfig = require('./config/mail.json');
