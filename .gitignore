@@ -332,3 +332,4 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node,webstorm,intellij
 
 backend/config/mail.json;
+backend/config/mail.json
