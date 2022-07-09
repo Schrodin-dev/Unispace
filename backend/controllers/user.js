@@ -1,8 +1,12 @@
 const bcrypt = require('bcrypt');
 const db = require('../models/index');
 const jsonwebtoken = require('jsonwebtoken');
+const crypto = require('crypto');
+const randomUUID = crypto.randomUUID;
 
 exports.register = async (req, res, next) => {
+
+
     //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
     //vérification des données avant insertion
     if (await db.user.findOne({where: {emailUser: req.body.email}}) !== null) {
@@ -25,6 +29,7 @@ exports.register = async (req, res, next) => {
         return res.status(400).json({message: 'Le groupe renseigné n\'existe pas.'});
     }
 
+    const uuid = randomUUID();
 
     bcrypt.hash(req.body.password, 10)
         .then(async hash => {
@@ -33,13 +38,20 @@ exports.register = async (req, res, next) => {
                 nomUser: req.body.nom,
                 prenomUser: req.body.prenom,
                 mdpUser: hash,
-                nomGroupe: req.body.groupe
-
+                nomGroupe: req.body.groupe,
+                codeVerification: uuid,
+                expirationCodeVerification: new Date(Date.now()).getTime() + 24*60*60*1000
             });
 
             await user.save()
+                .then(() => {
+                    require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', res, '<a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a>');
+                })
                 .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider la création de votre compte.'})) //TODO: validation du compte par email avant de lui donner lde droit d'accéder au site
-                .catch(error => res.status(400).json({error}));
+                .catch(error => {
+                    console.log(error)
+                    res.status(400).json({error})
+                });
         })
         .catch(error => {
             res.status(500).json({error});
@@ -106,7 +118,7 @@ exports.login = (req, res, next) => {
                         return res.status(400).json({message: 'paire email/mot de passe incorrecte'});
                     }
 
-                    res.status(200).json({
+                    res.status(201).json({
                         nom: user.nomUser,
                         prenom: user.prenomUser,
                         theme: user.idTheme,
@@ -133,9 +145,78 @@ exports.supprimerCompte = (req , res, next) => {
         .then(user => {
            user.destroy()
                .then(() => {
-                   res.status(200).json({message: 'Votre compte a bien été supprimé'})
+                   res.status(201).json({message: 'Votre compte a bien été supprimé'})
                })
                .catch(error => res.status(500).json({error}));
+        })
+        .catch(error => res.status(500).json({error}));
+};
+
+exports.validerCompte = (req, res, next) => {
+  db.user.findOne({where: {codeVerification: req.body.codeVerification}})
+      .then(user => {
+          if(user.expirationCodeVerification === null || user.expirationCodeVerification < new Date(Date.now()).getTime()){
+              return res.status(400).json({message: 'Le code de vérification est expiré.'});
+          }
+          if(user.droitsUser === 'non validé'){
+              user.set({droitsUser: "élève", expirationCodeVerification: null});
+          }else{
+              return res.status(400).json({message: 'Votre compte est déjà validé.'});
+          }
+
+
+          user.save()
+              .then(() => {
+                  res.status(201).json({message: 'Votre compté a bien été validé'});
+              })
+              .catch(error => res.status(500).json({error}));
+      })
+      .catch(error => res.status(500).json({error}));
+};
+
+exports.renvoyerCodeVerification = (req, res, next) => {
+  db.user.findOne({where: {emailUser: req.body.email}})
+      .then(async user => {
+          const uuid = randomUUID();
+          user.set({codeVerification: uuid, expirationCodeVerification: new Date(Date.now()).getTime() + 24*60*60*1000})
+
+          await user.save()
+              .then(() => {
+                  require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', res, '<a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a>');
+              })
+              .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'})) //TODO: validation du compte par email avant de lui donner lde droit d'accéder au site
+              .catch(error => {
+                  console.log(error)
+                  res.status(400).json({error})
+              });
+      })
+      .catch(error => res.status(500).json({error}));
+};
+
+exports.changerMotDePasse = (req, res, next) => {
+    db.user.findOne({where: {codeVerification: req.body.codeVerification}})
+        .then(async user => {
+            if (user.droitsUser === 'non validé') {
+                return res.status(400).json({message: 'veuillez valider votre compte d\'abord.'});
+            }
+
+            if (user.expirationCodeVerification === null || user.expirationCodeVerification < new Date(Date.now()).getTime()) {
+                return res.status(400).json({message: 'Le code de vérification est expiré.'})
+            }
+
+            await bcrypt.hash(req.body.password, 10)
+                .then(hash => {
+                    user.set({mdpUser: hash, expirationCodeVerification: null});
+                    user.save()
+                        .then(() => {
+                            res.status(201).json({message: 'Votre nouveau mot de passe a été pris en compte.'});
+                        })
+                        .catch(error => res.status(500).json({error}));
+                })
+                .catch(error => {
+                    res.status(500).json({error});
+                });
+
         })
         .catch(error => res.status(500).json({error}));
 };

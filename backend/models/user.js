@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         droitsUser: {
             type: DataTypes.INTEGER(1),
             allowNull: false,
-            defaultValue: 0,
+            defaultValue: -1,
             get(){
                 switch(this.getDataValue('droitsUser')){
                     case -1:
@@ -94,6 +94,9 @@ module.exports = (sequelize, DataTypes) => {
         },
         codeVerification: {
             type: DataTypes.UUID
+        },
+        expirationCodeVerification: {
+            type: DataTypes.DATE
         }
     }, {
         sequelize,

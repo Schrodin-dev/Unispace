@@ -596,10 +596,6 @@
                     "field": "codeVerification",
                     "seqType": "Sequelize.UUID"
                 },
-                "expirationCodeVerification": {
-                    "field": "expirationCodeVerification",
-                    "seqType": "Sequelize.DATE"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -617,5 +613,5 @@
     "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
     "exists": true,
-    "revision": 3
+    "revision": 2
 }
