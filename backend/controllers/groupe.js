@@ -21,6 +21,9 @@ exports.chargerGroupes = () => {
                         }
                         plannings[groupe.nomGroupe] = planning;
                     })
+                    .catch(() => {
+                        console.error('impossible de mettre à jour le planning du groupe ' + groupe.nomGroupe);
+                    })
 
             }
         }).then(() => {
@@ -54,3 +57,33 @@ function genererCours(cours){
         salles: cours.location
     }
 }
+
+exports.recupererEdt = (req, res, next) => {
+    db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+        .then(groupe => {
+            if(groupe === null){
+                res.status(400).json({message: 'impossible de trouver votre groupe.'});
+            }
+
+            let edt = [];
+            let i = 0;
+            const planning = plannings[req.auth.userGroupe];
+            for(const c in planning){
+                const cours = planning[c];
+                const finSansTemps = new Date(cours.fin);
+                finSansTemps.setHours(0,0,0,0);
+                if( cours.debut.getTime() >= new Date(req.body.debut).getTime() && finSansTemps.getTime() <= new Date(req.body.fin).getTime()){
+                    edt[i] = cours;
+                    i++
+                }
+            }
+
+            return res.status(200).json(edt);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json(error)
+        });
+
+
+};

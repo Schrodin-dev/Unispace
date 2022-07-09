@@ -5,6 +5,7 @@ const app = express();
 const auth = require('./middleware/auth');
 
 const userRoutes = require('./routes/user');
+const groupeRoutes = require('./routes/groupe');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -22,5 +23,6 @@ setInterval(() => require('./controllers/groupe').chargerGroupes(), 5*60*1000);
 
 
 app.use('/api/auth', userRoutes);
+app.use('/api/groupe', auth, groupeRoutes);
 
 module.exports = app;
