@@ -41,7 +41,6 @@ exports.annonce = async (req, res, next) => {
                 envoyerMails(users, req, res);
             })
             .catch(error => {
-                console.log(error)
                 res.status(500).json(error);
             })
     }else if(await db.groupe.findOne({where: {nomGroupe: req.body.destinataires}}) !== null) {
@@ -66,13 +65,14 @@ exports.annonce = async (req, res, next) => {
             return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
         }
 
-        db.groupe.findAll({
+        db.user.findAll({
             include: {
-                model: 'user',
-                required: true
+                model: db.groupe,
+                required: true,
+                where: {nomClasse: req.body.destinataires},
+                attributes: []
             },
             attributes: ['emailUser'],
-            where: {nomClasse: req.body.destinataires}
         })
             .then(users => {
                 envoyerMails(users, req, res);
@@ -92,11 +92,22 @@ function envoyerMails(destinataires, req, res){
     let i = 0;
 
     for(const destinataire of destinataires){
-        emails[i] = destinataire.emailUser;
-        i++;
+        if(destinataire.emailUser !== undefined){
+            emails[i] = destinataire.emailUser;
+            i++;
+        }
     }
 
-    require('../mailsender').envoyerMailGroupe(emails, req.body.subject, '<p>' + req.body.contenu + '</p>');
+    if(emails.length === 0){
+        return res.status(400).json({message: 'Impossible d\'envoyer l\'annonce, aucun destinataire trouvé.'});
+    }
+
+    try{
+        require('../mailsender').envoyerMailGroupe(emails, req.body.subject, '<p>' + req.body.contenu + '</p>');
+    }catch(error){
+        return res.status(500).json({error});
+    }
+
 
     res.status(201).json({message: 'Votre annonce a bien été envoyée'});
 }

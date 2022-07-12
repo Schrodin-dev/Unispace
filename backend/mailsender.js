@@ -99,7 +99,7 @@ exports.envoyerMailGroupe = (groupe, subject, content) => {
 
     transporter.sendMail(options, (error) => {
         if(error){
-            throw new error;
+            throw error;
         }
     });
 };
