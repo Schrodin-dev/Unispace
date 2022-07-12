@@ -1,4 +1,5 @@
 const db = require('../models/index');
+const { Op } = require("sequelize");
 
 exports.annonce = async (req, res, next) => {
 
@@ -49,6 +50,25 @@ exports.annonce = async (req, res, next) => {
             return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
         }
 
+        let err = false
+        if (req.auth.droitsUser === 'délégué') {
+            await db.groupe.findOne({where: {nomGroupe: req.body.destinataires}}).then(async dest => {
+                await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}}).then(sender => {
+                    if (dest.nomClasse !== sender.nomClasse) {
+                        err = true;
+                    }
+                }).catch(error => {
+                    res.status(500).json(error);
+                });
+            }).catch(error => {
+                res.status(500).json(error);
+            });
+        }
+
+        if(err){
+            return res.status(401).json({message: 'Vous n\'êtes pas délégué de cette classe.'});
+        }
+
         db.user.findAll({
             attributes: ['emailUser'],
             where: {nomGroupe: req.body.destinataires}
@@ -63,6 +83,19 @@ exports.annonce = async (req, res, next) => {
         // annonce à une classe
         if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué'){
             return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
+        }
+
+        let err = false;
+        if(req.auth.droitsUser === 'délégué') {
+            await db.groupe.findOne({where: {[Op.and]: [{nomClasse: req.body.destinataires}, {nomGroupe: req.auth.userGroupe}]}}).then(rep => {
+                if(rep === null) err = true;
+            }).catch(error => {
+                res.status(500).json(error);
+            });
+        }
+
+        if(err){
+            return res.status(401).json({message: "Vous n'êtes pas délégué de cette classe."});
         }
 
         db.user.findAll({

@@ -51,9 +51,9 @@ module.exports = (sequelize, DataTypes) => {
                     case 0:
                         return 'élève';
                     case 1:
-                        return 'délégué';
-                    case 2:
                         return 'publicateur';
+                    case 2:
+                        return 'délégué';
                     case 3:
                         return 'admin';
                 }
@@ -66,10 +66,10 @@ module.exports = (sequelize, DataTypes) => {
                     case 'élève':
                         this.setDataValue('droitsUser', 0);
                     break;
-                    case 'délégué':
+                    case 'publicateur':
                         this.setDataValue('droitsUser', 1);
                     break;
-                    case 'publicateur':
+                    case 'délégué':
                         this.setDataValue('droitsUser', 2)
                         break;
                     case 'admin':
