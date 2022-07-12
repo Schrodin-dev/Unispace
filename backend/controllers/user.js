@@ -45,7 +45,7 @@ exports.register = async (req, res, next) => {
 
             await user.save()
                 .then(() => {
-                    require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', res, '<a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a>');
+                    require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
                 })
                 .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider la création de votre compte.'})) //TODO: validation du compte par email avant de lui donner lde droit d'accéder au site
                 .catch(error => {
@@ -182,12 +182,11 @@ exports.renvoyerCodeVerification = (req, res, next) => {
 
           await user.save()
               .then(() => {
-                  require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', res, '<a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a>');
+                  require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
               })
               .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'})) //TODO: validation du compte par email avant de lui donner lde droit d'accéder au site
               .catch(error => {
-                  console.log(error)
-                  res.status(400).json({error})
+                  res.status(400).json({error});
               });
       })
       .catch(error => res.status(500).json({error}));

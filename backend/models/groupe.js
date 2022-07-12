@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      groupe.hasMany(models.user);
+      groupe.belongsTo(models.classe);
+      groups.hasMany(models.doitFaire);
+      groupe.belongsTo(models.aFait);
     }
   }
   groupe.init({

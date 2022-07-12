@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      contenuCours.hasMany(models.docsContenuCours);
+      contenuCours.belongsTo(models.cours);
+      contenuCours.hasMany(models.aFait);
     }
   }
   contenuCours.init({

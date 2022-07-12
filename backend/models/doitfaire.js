@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      doitFaire.belongsTo(models.groupe);
+      doitFaire.belongsTo(models.travailAFaire);
     }
   }
   doitFaire.init({

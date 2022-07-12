@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      travailAFaire.hasMany(models.doitFaire);
+      travailAFaire.hasMany(models.docsTravailARendre);
     }
   }
   travailAFaire.init({

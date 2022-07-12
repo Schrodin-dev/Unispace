@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      aFait.belongsTo(models.groupe);
+      aFait.belongsTo(models.contenuCours);
     }
   }
   aFait.init({
@@ -25,7 +27,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     idContenuCours: {
       type: DataTypes.INTEGER,
-      primaryKey: true
+      primaryKey: true,
+
+      references: {
+        model: 'contenuCours',
+        key: 'idContenuCours'
+      }
     }
   }, {
     sequelize,

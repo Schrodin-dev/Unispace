@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      ressource.belongsTo(models.UE);
+      ressource.belongsTo(models.anneeUniv);
     }
   }
   ressource.init({

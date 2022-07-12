@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
+            user.belongsTo(models.groupe);
+            user.belongsTo(models.theme);
+            user.hasMany(models.note);
         }
     }
     user.init({
@@ -36,22 +39,19 @@ module.exports = (sequelize, DataTypes) => {
                         return 'non validé'
                     case 0:
                         return 'élève';
-                    break;
                     case 1:
                         return 'délégué';
-                    break;
                     case 2:
                         return 'publicateur';
-                    break;
                     case 3:
                         return 'admin';
-                    break;
                 }
             },
             set(value){
                 switch(value){
                     case 'non validé':
                         this.setDataValue('droitsUser', -1);
+                        break;
                     case 'élève':
                         this.setDataValue('droitsUser', 0);
                     break;
@@ -60,6 +60,7 @@ module.exports = (sequelize, DataTypes) => {
                     break;
                     case 'publicateur':
                         this.setDataValue('droitsUser', 2)
+                        break;
                     case 'admin':
                         this.setDataValue('droitsUser', 3);
                     break;
