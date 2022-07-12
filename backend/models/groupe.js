@@ -15,9 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomGroupe',
         allowNull: false
       }});
-      groupe.belongsTo(models.classe, {foreignKey: 'nomClasse'});
-      groupe.belongsToMany(models.travailAFaire, {through: 'doitFaire'});
-      groupe.belongsToMany(models.contenuCours, {through: 'aFait'});
+      groupe.belongsTo(models.classe, {foreignKey: {
+        name: 'nomClasse',
+        allowNull: false
+      }});
+      groupe.belongsToMany(models.travailAFaire, {through: 'doitFaire', foreignKey: 'nomGroupe'});
+      groupe.belongsToMany(models.contenuCours, {through: 'aFait', foreignKey: 'nomGroupe'});
     }
   }
   groupe.init({

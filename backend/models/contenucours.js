@@ -15,8 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         name: 'idContenuCours',
         allowNull: false
       }});
-      contenuCours.belongsTo(models.cours, {foreignKey: 'nomCours'});
-      contenuCours.belongsToMany(models.groupe, {through: 'aFait'});
+      contenuCours.belongsTo(models.cours, {foreignKey: {
+        name: 'nomCours',
+        allowNull: false
+      }});
+      contenuCours.belongsToMany(models.groupe, {through: 'aFait', foreignKey: 'idContenuCours'});
     }
   }
   contenuCours.init({
@@ -32,15 +35,6 @@ module.exports = (sequelize, DataTypes) => {
     descContenuCours: {
       type:DataTypes.TEXT,
       allowNull: false
-    },
-    nomCours: {
-      type:DataTypes.STRING(100),
-      allowNull: false,
-
-      references: {
-        model: 'cours',
-        key: 'nomCours'
-      }
     }
   }, {
     sequelize,

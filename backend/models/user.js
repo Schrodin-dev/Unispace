@@ -11,8 +11,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            user.belongsTo(models.groupe, {foreignKey: 'nomGroupe'});
-            user.belongsTo(models.theme, {foreignKey: 'idTheme'});
+            user.belongsTo(models.groupe, {foreignKey: {
+                name: 'nomGroupe',
+                allowNull: false
+            }});
+            user.belongsTo(models.theme, {foreignkey: {
+                name: 'idTheme',
+                allowNull: false
+            }});
             user.belongsToMany(models.devoir, {
                     foreignKey: {
                     name: 'emailUser'

@@ -11,8 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ressource.belongsTo(models.UE, {foreignKey: 'idUE'});
-      ressource.belongsTo(models.anneeUniv, {foreignKey: 'nomAnneeUniv'});
+      ressource.belongsTo(models.UE, {foreignKey: {
+        name: 'idUE',
+        allowNull: false
+      }});
+      ressource.belongsTo(models.anneeUniv, {foreignKey: {
+        name: 'nomAnneeUniv',
+        allowNull: false
+      }});
       ressource.hasMany(models.devoir, {foreignKey: {
         name: 'idRessource',
         allowNull: false

@@ -17,7 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         },
         through: models.note
       });
-      devoir.belongsTo(models.ressource, {foreignKey: 'idRessource'})
+      devoir.belongsTo(models.ressource, {foreignKey: {
+        name: 'idRessource',
+        allowNull: false
+      }});
     }
   }
   devoir.init({

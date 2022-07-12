@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      travailAFaire.belongsToMany(models.groupe, {through: 'doitFaire'});
-      travailAFaire.hasMany(models.docsTravailARendre, {foreignkey: {
+      travailAFaire.belongsToMany(models.groupe, {through: 'doitFaire', foreignKey: 'idTravailAFaire'});
+      travailAFaire.hasMany(models.docsTravailARendre, {foreignKey: {
         name: 'idTravailAFaire',
         allowNull: false
       }});

@@ -73,18 +73,6 @@
                     "field": "descContenuCours",
                     "seqType": "Sequelize.TEXT"
                 },
-                "nomCours": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "cours",
-                        "key": "nomCours"
-                    },
-                    "field": "nomCours",
-                    "onDelete": "NO ACTION",
-                    "onUpdate": "CASCADE",
-                    "name": "nomCours",
-                    "seqType": "Sequelize.STRING(100)"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -94,6 +82,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomCours": {
+                    "allowNull": false,
+                    "name": "nomCours",
+                    "references": {
+                        "model": "cours",
+                        "key": "nomCours"
+                    },
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "field": "nomCours",
+                    "seqType": "Sequelize.STRING(100)"
                 }
             },
             "indexes": []
@@ -162,15 +162,15 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "idRessource": {
-                    "allowNull": true,
+                    "allowNull": false,
+                    "name": "idRessource",
                     "references": {
                         "model": "ressource",
                         "key": "idRessource"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "idRessource",
-                    "name": "idRessource",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -240,25 +240,15 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "idTravailAFaire": {
-                    "allowNull": true,
+                    "allowNull": false,
+                    "name": "idTravailAFaire",
                     "references": {
                         "model": "travailAFaire",
                         "key": "idTravailAFaire"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "idTravailAFaire",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "travailAFaireIdTravailAFaire": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "travailAFaire",
-                        "key": "idTravailAFaire"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "travailAFaireIdTravailAFaire",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -389,15 +379,15 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "idUE": {
-                    "allowNull": true,
+                    "allowNull": false,
+                    "name": "idUE",
                     "references": {
                         "model": "UE",
                         "key": "idUE"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "idUE",
-                    "name": "idUE",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -593,17 +583,6 @@
                     "onUpdate": "CASCADE",
                     "field": "themeIdTheme",
                     "seqType": "Sequelize.INTEGER"
-                },
-                "idTheme": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "theme",
-                        "key": "idTheme"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "idTheme",
-                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -621,7 +600,7 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "contenuCourIdContenuCours": {
+                "idContenuCours": {
                     "primaryKey": true,
                     "references": {
                         "model": "contenuCours",
@@ -629,10 +608,10 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "contenuCourIdContenuCours",
+                    "field": "idContenuCours",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "groupeNomGroupe": {
+                "nomGroupe": {
                     "primaryKey": true,
                     "references": {
                         "model": "groupe",
@@ -640,7 +619,7 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "groupeNomGroupe",
+                    "field": "nomGroupe",
                     "seqType": "Sequelize.STRING(4)"
                 }
             },
@@ -659,7 +638,7 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "groupeNomGroupe": {
+                "nomGroupe": {
                     "primaryKey": true,
                     "references": {
                         "model": "groupe",
@@ -667,10 +646,10 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "groupeNomGroupe",
+                    "field": "nomGroupe",
                     "seqType": "Sequelize.STRING(4)"
                 },
-                "travailAFaireIdTravailAFaire": {
+                "idTravailAFaire": {
                     "primaryKey": true,
                     "references": {
                         "model": "travailAFaire",
@@ -678,7 +657,7 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "travailAFaireIdTravailAFaire",
+                    "field": "idTravailAFaire",
                     "seqType": "Sequelize.INTEGER"
                 }
             },

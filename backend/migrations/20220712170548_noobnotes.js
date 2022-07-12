@@ -12,9 +12,9 @@ const Sequelize = require("sequelize");
  * createTable() => "contenuCours", deps: [cours]
  * createTable() => "ressource", deps: [anneeUniv, UE]
  * createTable() => "docsContenuCours", deps: [contenuCours]
- * createTable() => "docsTravailARendre", deps: [travailAFaire, travailAFaire]
+ * createTable() => "docsTravailARendre", deps: [travailAFaire]
  * createTable() => "groupe", deps: [classe]
- * createTable() => "user", deps: [groupe, theme, theme]
+ * createTable() => "user", deps: [groupe, theme]
  * createTable() => "devoir", deps: [ressource]
  * createTable() => "note", deps: [devoir, user]
  * createTable() => "aFait", deps: [contenuCours, groupe]
@@ -25,7 +25,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-07-12T14:19:07.048Z",
+  created: "2022-07-12T17:05:48.497Z",
   comment: "",
 };
 
@@ -249,15 +249,6 @@ const migrationCommands = (transaction) => [
           field: "descContenuCours",
           allowNull: false,
         },
-        nomCours: {
-          type: Sequelize.STRING(100),
-          name: "nomCours",
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          field: "nomCours",
-          references: { model: "cours", key: "nomCours" },
-          allowNull: false,
-        },
         createdAt: {
           type: Sequelize.DATE,
           field: "createdAt",
@@ -266,6 +257,15 @@ const migrationCommands = (transaction) => [
         updatedAt: {
           type: Sequelize.DATE,
           field: "updatedAt",
+          allowNull: false,
+        },
+        nomCours: {
+          type: Sequelize.STRING(100),
+          field: "nomCours",
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          references: { model: "cours", key: "nomCours" },
+          name: "nomCours",
           allowNull: false,
         },
       },
@@ -314,12 +314,12 @@ const migrationCommands = (transaction) => [
         },
         idUE: {
           type: Sequelize.INTEGER,
-          name: "idUE",
           field: "idUE",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
+          onDelete: "NO ACTION",
           references: { model: "UE", key: "idUE" },
-          allowNull: true,
+          name: "idUE",
+          allowNull: false,
         },
       },
       { transaction },
@@ -386,17 +386,10 @@ const migrationCommands = (transaction) => [
           type: Sequelize.INTEGER,
           field: "idTravailAFaire",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
+          onDelete: "NO ACTION",
           references: { model: "travailAFaire", key: "idTravailAFaire" },
-          allowNull: true,
-        },
-        travailAFaireIdTravailAFaire: {
-          type: Sequelize.INTEGER,
-          field: "travailAFaireIdTravailAFaire",
-          onUpdate: "CASCADE",
-          onDelete: "SET NULL",
-          references: { model: "travailAFaire", key: "idTravailAFaire" },
-          allowNull: true,
+          name: "idTravailAFaire",
+          allowNull: false,
         },
       },
       { transaction },
@@ -509,14 +502,6 @@ const migrationCommands = (transaction) => [
           references: { model: "theme", key: "idTheme" },
           allowNull: true,
         },
-        idTheme: {
-          type: Sequelize.INTEGER,
-          field: "idTheme",
-          onUpdate: "CASCADE",
-          onDelete: "SET NULL",
-          references: { model: "theme", key: "idTheme" },
-          allowNull: true,
-        },
       },
       { transaction },
     ],
@@ -560,12 +545,12 @@ const migrationCommands = (transaction) => [
         },
         idRessource: {
           type: Sequelize.INTEGER,
-          name: "idRessource",
           field: "idRessource",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
+          onDelete: "NO ACTION",
           references: { model: "ressource", key: "idRessource" },
-          allowNull: true,
+          name: "idRessource",
+          allowNull: false,
         },
       },
       { transaction },
@@ -628,17 +613,17 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        contenuCourIdContenuCours: {
+        idContenuCours: {
           type: Sequelize.INTEGER,
-          field: "contenuCourIdContenuCours",
+          field: "idContenuCours",
           onUpdate: "CASCADE",
           onDelete: "CASCADE",
           references: { model: "contenuCours", key: "idContenuCours" },
           primaryKey: true,
         },
-        groupeNomGroupe: {
+        nomGroupe: {
           type: Sequelize.STRING(4),
-          field: "groupeNomGroupe",
+          field: "nomGroupe",
           onUpdate: "CASCADE",
           onDelete: "CASCADE",
           references: { model: "groupe", key: "nomGroupe" },
@@ -663,17 +648,17 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        groupeNomGroupe: {
+        nomGroupe: {
           type: Sequelize.STRING(4),
-          field: "groupeNomGroupe",
+          field: "nomGroupe",
           onUpdate: "CASCADE",
           onDelete: "CASCADE",
           references: { model: "groupe", key: "nomGroupe" },
           primaryKey: true,
         },
-        travailAFaireIdTravailAFaire: {
+        idTravailAFaire: {
           type: Sequelize.INTEGER,
-          field: "travailAFaireIdTravailAFaire",
+          field: "idTravailAFaire",
           onUpdate: "CASCADE",
           onDelete: "CASCADE",
           references: { model: "travailAFaire", key: "idTravailAFaire" },
