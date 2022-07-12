@@ -11,8 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ressource.belongsTo(models.UE);
-      ressource.belongsTo(models.anneeUniv);
+      ressource.belongsTo(models.UE, {foreignKey: 'idUE'});
+      ressource.belongsTo(models.anneeUniv, {foreignKey: 'nomAnneeUniv'});
+      ressource.hasMany(models.devoir, {foreignKey: {
+        name: 'idRessource',
+        allowNull: false
+      }});
     }
   }
   ressource.init({
@@ -35,24 +39,6 @@ module.exports = (sequelize, DataTypes) => {
           }
         },
         max: 100
-      }
-    },
-    idUE: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references: {
-        model: 'ue',
-        key: 'idUE'
-      }
-    },
-    nomAnneeUniv: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references: {
-        model: 'anneeUniv',
-        key: 'nomAnneeUniv'
       }
     }
   }, {

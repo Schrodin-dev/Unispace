@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      docsTravailARendre.belongsTo(models.travailAFaire);
+      docsTravailARendre.belongsTo(models.travailAFaire, {foreignKey: 'idTravailAFaire'});
     }
   }
   docsTravailARendre.init({
@@ -23,15 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     lienDoc: {
       type: DataTypes.TEXT,
       allowNull: false
-    },
-    idTravailAFaire: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references:{
-        model: 'travailAFaire',
-        key: 'idTravailAFaire'
-      }
     }
   }, {
     sequelize,

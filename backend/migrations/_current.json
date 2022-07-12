@@ -1,35 +1,5 @@
 {
     "tables": {
-        "aFait": {
-            "tableName": "aFait",
-            "schema": {
-                "nomGroupe": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "groupe",
-                        "key": "nomGroupe"
-                    },
-                    "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(4)"
-                },
-                "idContenuCours": {
-                    "primaryKey": true,
-                    "field": "idContenuCours",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                }
-            },
-            "indexes": []
-        },
         "anneeUniv": {
             "tableName": "anneeUniv",
             "schema": {
@@ -59,15 +29,6 @@
                     "field": "nomClasse",
                     "seqType": "Sequelize.STRING(2)"
                 },
-                "anneeUniv": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "anneeUniv",
-                        "key": "nomAnneeUniv"
-                    },
-                    "field": "anneeUniv",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -77,6 +38,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomAnneeUniv": {
+                    "allowNull": false,
+                    "name": "nomAnneeUniv",
+                    "references": {
+                        "model": "anneeUniv",
+                        "key": "nomAnneeUniv"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomAnneeUniv",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -107,6 +80,9 @@
                         "key": "nomCours"
                     },
                     "field": "nomCours",
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "name": "nomCours",
                     "seqType": "Sequelize.STRING(100)"
                 },
                 "createdAt": {
@@ -175,15 +151,6 @@
                     "field": "noteMaxDevoir",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "idRessource": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "ressource",
-                        "key": "idRessource"
-                    },
-                    "field": "idRessource",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -193,6 +160,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "idRessource": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "ressource",
+                        "key": "idRessource"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "idRessource",
+                    "name": "idRessource",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -211,15 +190,6 @@
                     "field": "lienDoc",
                     "seqType": "Sequelize.TEXT"
                 },
-                "idContenuCours": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "contenuCours",
-                        "key": "idContenuCours"
-                    },
-                    "field": "idContenuCours",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -229,6 +199,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "idContenuCours": {
+                    "allowNull": false,
+                    "name": "idContenuCours",
+                    "references": {
+                        "model": "contenuCours",
+                        "key": "idContenuCours"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "idContenuCours",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -247,15 +229,6 @@
                     "field": "lienDoc",
                     "seqType": "Sequelize.TEXT"
                 },
-                "idTravailAFaire": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "travailAFaire",
-                        "key": "idTravailAFaire"
-                    },
-                    "field": "idTravailAFaire",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -265,40 +238,28 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
-                }
-            },
-            "indexes": []
-        },
-        "doitFaire": {
-            "tableName": "doitFaire",
-            "schema": {
-                "nomGroupe": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "groupe",
-                        "key": "nomGroupe"
-                    },
-                    "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(4)"
                 },
                 "idTravailAFaire": {
-                    "primaryKey": true,
+                    "allowNull": true,
                     "references": {
                         "model": "travailAFaire",
                         "key": "idTravailAFaire"
                     },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
                     "field": "idTravailAFaire",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
+                "travailAFaireIdTravailAFaire": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "travailAFaire",
+                        "key": "idTravailAFaire"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "travailAFaireIdTravailAFaire",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -316,14 +277,6 @@
                     "field": "lienICalGroupe",
                     "seqType": "Sequelize.STRING(512)"
                 },
-                "nomClasse": {
-                    "references": {
-                        "model": "classe",
-                        "key": "nomClasse"
-                    },
-                    "field": "nomClasse",
-                    "seqType": "Sequelize.STRING(2)"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -333,6 +286,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomClasse": {
+                    "allowNull": false,
+                    "name": "nomClasse",
+                    "references": {
+                        "model": "classe",
+                        "key": "nomClasse"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomClasse",
+                    "seqType": "Sequelize.STRING(2)"
                 }
             },
             "indexes": []
@@ -340,24 +305,6 @@
         "note": {
             "tableName": "note",
             "schema": {
-                "emailUser": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "user",
-                        "key": "emailUser"
-                    },
-                    "field": "emailUser",
-                    "seqType": "Sequelize.STRING(128)"
-                },
-                "idDevoir": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "devoir",
-                        "key": "idDevoir"
-                    },
-                    "field": "idDevoir",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "noteDevoir": {
                     "allowNull": false,
                     "field": "noteDevoir",
@@ -372,6 +319,30 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "idDevoir": {
+                    "name": "idDevoir",
+                    "primaryKey": true,
+                    "references": {
+                        "model": "devoir",
+                        "key": "idDevoir"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "idDevoir",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "emailUser": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "user",
+                        "key": "emailUser"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "emailUser",
+                    "name": "emailUser",
+                    "seqType": "Sequelize.STRING(128)"
                 }
             },
             "indexes": []
@@ -395,24 +366,6 @@
                     "field": "coeffRessource",
                     "seqType": "Sequelize.FLOAT"
                 },
-                "idUE": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "ue",
-                        "key": "idUE"
-                    },
-                    "field": "idUE",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "nomAnneeUniv": {
-                    "allowNull": false,
-                    "references": {
-                        "model": "anneeUniv",
-                        "key": "nomAnneeUniv"
-                    },
-                    "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -422,6 +375,30 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomAnneeUniv": {
+                    "allowNull": false,
+                    "name": "nomAnneeUniv",
+                    "references": {
+                        "model": "anneeUniv",
+                        "key": "nomAnneeUniv"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomAnneeUniv",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "idUE": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "UE",
+                        "key": "idUE"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "idUE",
+                    "name": "idUE",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -576,22 +553,6 @@
                     "field": "accepteRecevoirAnnonces",
                     "seqType": "Sequelize.BOOLEAN"
                 },
-                "idTheme": {
-                    "allowNull": false,
-                    "defaultValue": {
-                        "value": 0
-                    },
-                    "field": "idTheme",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "nomGroupe": {
-                    "references": {
-                        "model": "groupe",
-                        "key": "nomGroupe"
-                    },
-                    "field": "nomGroupe",
-                    "seqType": "Sequelize.STRING(4)"
-                },
                 "codeVerification": {
                     "field": "codeVerification",
                     "seqType": "Sequelize.UUID"
@@ -609,6 +570,116 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomGroupe": {
+                    "allowNull": false,
+                    "name": "nomGroupe",
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(4)"
+                },
+                "themeIdTheme": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "theme",
+                        "key": "idTheme"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "themeIdTheme",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "idTheme": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "theme",
+                        "key": "idTheme"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "idTheme",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "aFait": {
+            "tableName": "aFait",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "contenuCourIdContenuCours": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "contenuCours",
+                        "key": "idContenuCours"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "contenuCourIdContenuCours",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "groupeNomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "groupeNomGroupe",
+                    "seqType": "Sequelize.STRING(4)"
+                }
+            },
+            "indexes": []
+        },
+        "doitFaire": {
+            "tableName": "doitFaire",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "groupeNomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "groupeNomGroupe",
+                    "seqType": "Sequelize.STRING(4)"
+                },
+                "travailAFaireIdTravailAFaire": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "travailAFaire",
+                        "key": "idTravailAFaire"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "travailAFaireIdTravailAFaire",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -616,6 +687,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 3
+    "exists": false,
+    "revision": 1
 }

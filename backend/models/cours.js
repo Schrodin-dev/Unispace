@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      cours.hasMany(models.contenuCours);
+      cours.hasMany(models.contenuCours, {foreignKey: {
+        name: 'nomCours',
+        allowNull: false
+      }});
     }
   }
   cours.init({

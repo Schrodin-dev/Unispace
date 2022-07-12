@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      docsContenuCours.belongsTo(models.contenuCours);
+      docsContenuCours.belongsTo(models.contenuCours, {foreignKey: 'idContenuCours'});
     }
   }
   docsContenuCours.init({
@@ -23,15 +23,6 @@ module.exports = (sequelize, DataTypes) => {
     lienDoc: {
       type:DataTypes.TEXT,
       allowNull: false
-    },
-    idContenuCours: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references: {
-        model: 'contenuCours',
-        key: 'idContenuCours'
-      }
     }
   }, {
     sequelize,

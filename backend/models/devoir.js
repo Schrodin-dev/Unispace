@@ -11,7 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      devoir.hasMany(models.note);
+      devoir.belongsToMany(models.user, {
+          foreignKey: {
+          name: 'idDevoir'
+        },
+        through: models.note
+      });
+      devoir.belongsTo(models.ressource, {foreignKey: 'idRessource'})
     }
   }
   devoir.init({
@@ -40,15 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull:false,
       defaultValue: 20
-    },
-    idRessource: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references: {
-        model: 'ressource',
-        key: 'idRessource'
-      }
     }
   }, {
     sequelize,

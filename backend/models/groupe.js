@@ -11,10 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      groupe.hasMany(models.user);
-      groupe.belongsTo(models.classe);
-      groups.hasMany(models.doitFaire);
-      groupe.belongsTo(models.aFait);
+      groupe.hasMany(models.user, {foreignKey: {
+        name: 'nomGroupe',
+        allowNull: false
+      }});
+      groupe.belongsTo(models.classe, {foreignKey: 'nomClasse'});
+      groupe.belongsToMany(models.travailAFaire, {through: 'doitFaire'});
+      groupe.belongsToMany(models.contenuCours, {through: 'aFait'});
     }
   }
   groupe.init({
@@ -25,14 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     lienICalGroupe: {
       type: DataTypes.STRING(512),
       allowNull: false
-    },
-    nomClasse: {
-      type: DataTypes.STRING(2),
-
-      references: {
-        model: 'classe',
-        key: 'nomClasse'
-      }
     }
   }, {
     sequelize,

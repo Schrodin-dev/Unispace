@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UE.hasMany(models.ressource);
+      UE.hasMany(models.ressource, {foreignKey: {
+        name: 'idUE',
+        allowNull: false
+      }});
     }
   }
   UE.init({

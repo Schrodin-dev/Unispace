@@ -11,29 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      note.belongsTo(models.user);
-      note.belongsTo(models.devoir);
     }
   }
   note.init({
-    emailUser: {
-      type: DataTypes.STRING(128),
-      primaryKey: true,
-
-      references: {
-        model: 'user',
-        key: 'emailUser'
-      }
-    },
-    idDevoir: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-
-      references: {
-        model: 'devoir',
-        key: 'idDevoir'
-      }
-    },
     noteDevoir: {
       type: DataTypes.FLOAT,
       allowNull: false,

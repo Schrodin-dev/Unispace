@@ -11,23 +11,17 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      classe.hasMany(models.groupe);
-      classe.belongsTo(models.anneeUniv);
+      classe.hasMany(models.groupe, {foreignKey: {
+        name: 'nomClasse',
+        allowNull: false
+      }});
+      classe.belongsTo(models.anneeUniv, {foreignKey: 'nomAnneeUniv'});
     }
   }
   classe.init({
     nomClasse: {
       type: DataTypes.STRING(2),
       primaryKey: true
-    },
-    anneeUniv: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-
-      references: {
-        model: 'anneeUniv',
-        key: 'nomAnneeUniv'
-      }
     }
   }, {
     sequelize,

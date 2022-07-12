@@ -11,9 +11,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            user.belongsTo(models.groupe);
-            user.belongsTo(models.theme);
-            user.hasMany(models.note);
+            user.belongsTo(models.groupe, {foreignKey: 'nomGroupe'});
+            user.belongsTo(models.theme, {foreignKey: 'idTheme'});
+            user.belongsToMany(models.devoir, {
+                    foreignKey: {
+                    name: 'emailUser'
+                },
+                through: models.note
+            });
         }
     }
     user.init({
@@ -79,19 +84,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: true
-        },
-        idTheme: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            defaultValue: 0 //TODO: manque une clé étrangère là
-        },
-        nomGroupe: {
-            type: DataTypes.STRING(4),
-
-            references: {
-                model: 'groupe',
-                key: 'nomGroupe'
-            }
         },
         codeVerification: {
             type: DataTypes.UUID

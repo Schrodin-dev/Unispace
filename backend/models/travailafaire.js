@@ -11,8 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      travailAFaire.hasMany(models.doitFaire);
-      travailAFaire.hasMany(models.docsTravailARendre);
+      travailAFaire.belongsToMany(models.groupe, {through: 'doitFaire'});
+      travailAFaire.hasMany(models.docsTravailARendre, {foreignkey: {
+        name: 'idTravailAFaire',
+        allowNull: false
+      }});
     }
   }
   travailAFaire.init({
