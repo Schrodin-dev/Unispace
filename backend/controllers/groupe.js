@@ -1,7 +1,9 @@
 const db = require('../models/index');
 const ical = require('node-ical');
+const couleurs = require('../config/couleurCours.json');
 
 let plannings = {};
+let couleurCours = {};
 
 exports.chargerGroupes = () => {
     plannings = {};
@@ -9,13 +11,13 @@ exports.chargerGroupes = () => {
         .then(async groupes => {
             for (const groupe of groupes) {
                 await ical.async.fromURL(groupe.lienICalGroupe)
-                    .then(calendrier => {
+                    .then(async calendrier => {
                         let planning = [];
                         let i = 0;
-                        for(const c in calendrier){
+                        for (const c in calendrier) {
                             const cours = calendrier[c];
-                            if(cours.type === 'VEVENT'){
-                                planning[i] = genererCours(cours);
+                            if (cours.type === 'VEVENT') {
+                                planning[i] = await genererCours(cours);
                                 i++;
                             }
                         }
@@ -48,13 +50,15 @@ function parseDescription(description){
     return nouvelleDescription;
 }
 
-function genererCours(cours){
+async function genererCours(cours){
+    const couleur = await chargerCouleur(cours.summary);
     return {
         nom: cours.summary,
         debut: cours.start,
         fin: cours.end,
         profs: parseDescription(cours.description),
-        salles: cours.location
+        salles: cours.location,
+        couleur: couleur
     }
 }
 
@@ -68,6 +72,7 @@ exports.recupererEdt = (req, res, next) => {
             let edt = [];
             let i = 0;
             const planning = plannings[req.auth.userGroupe];
+
             for(const c in planning){
                 const cours = planning[c];
                 const finSansTemps = new Date(cours.fin);
@@ -87,3 +92,26 @@ exports.recupererEdt = (req, res, next) => {
 
 
 };
+
+async function chargerCouleur(nomCours) {
+    if (! (nomCours in couleurCours)) {
+        await db.cours.findOne({where: {nomCours: nomCours}})
+            .then(async cours => {
+                if (cours === null) {
+                    await db.cours.create({
+                        nomCours: nomCours,
+                        couleurCours: couleurs[Math.floor(Math.random() * couleurs.length)]
+                    }).then(cours => {
+                        couleurCours[nomCours] = cours.couleurCours;
+                    }).catch(error => {
+                        console.error(error);
+                    });
+                } else {
+                    couleurCours[nomCours] = cours.couleurCours;
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+    }
+    return couleurCours[nomCours];
+}
