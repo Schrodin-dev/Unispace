@@ -11,19 +11,23 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            user.belongsTo(models.groupe, {foreignKey: {
-                name: 'nomGroupe',
-                allowNull: false
-            }});
-            user.belongsTo(models.theme, {foreignkey: {
+            user.belongsTo(models.groupe, {
+                foreignKey: {
+                    name: 'nomGroupe'
+                },
+                onUpdate: 'cascade'
+            });
+            user.belongsTo(models.theme, {foreignKey: {
                 name: 'idTheme',
-                allowNull: false
+                allowNull: false,
+                defaultValue: 1
             }});
             user.belongsToMany(models.devoir, {
                     foreignKey: {
                     name: 'emailUser'
                 },
-                through: models.note
+                through: models.note,
+                onUpdate: 'cascade'
             });
         }
     }

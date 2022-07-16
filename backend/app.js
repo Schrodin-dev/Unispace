@@ -7,6 +7,7 @@ const auth = require('./middleware/auth');
 const userRoutes = require('./routes/user');
 const groupeRoutes = require('./routes/groupe');
 const mailRoutes = require('./routes/mail');
+const classeRoutes = require('./routes/classe');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -26,5 +27,6 @@ setInterval(() => require('./controllers/groupe').chargerGroupes(), 5*60*1000);
 app.use('/api/auth', userRoutes);
 app.use('/api/groupe', auth, groupeRoutes);
 app.use('/api/mail', auth, mailRoutes);
+app.use('/api/classe', auth, classeRoutes);
 
 module.exports = app;

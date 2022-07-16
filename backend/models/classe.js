@@ -15,10 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomClasse',
         allowNull: false
       }});
-      classe.belongsTo(models.anneeUniv, {foreignKey: {
-        name: 'nomAnneeUniv',
-        allowNull: false
-      }});
+      classe.belongsTo(models.anneeUniv, {
+          foreignKey: {
+          name: 'nomAnneeUniv',
+          allowNull: false
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
     }
   }
   classe.init({

@@ -15,10 +15,14 @@ module.exports = (sequelize, DataTypes) => {
         name: 'idUE',
         allowNull: false
       }});
-      ressource.belongsTo(models.anneeUniv, {foreignKey: {
-        name: 'nomAnneeUniv',
-        allowNull: false
-      }});
+      ressource.belongsTo(models.anneeUniv, {
+          foreignKey: {
+          name: 'nomAnneeUniv',
+          allowNull: false
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
       ressource.hasMany(models.devoir, {foreignKey: {
         name: 'idRessource',
         allowNull: false

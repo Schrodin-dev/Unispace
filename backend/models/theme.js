@@ -11,9 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      theme.hasMany(models.user, {foreignkey: {
+      theme.hasMany(models.user, {foreignKey: {
         name: 'idTheme',
-        allowNull: false
+        allowNull: false,
+        defaultValue: 1
       }});
     }
   }

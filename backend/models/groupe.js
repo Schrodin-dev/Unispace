@@ -12,13 +12,16 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       groupe.hasMany(models.user, {foreignKey: {
-        name: 'nomGroupe',
-        allowNull: false
+        name: 'nomGroupe'
       }});
-      groupe.belongsTo(models.classe, {foreignKey: {
-        name: 'nomClasse',
-        allowNull: false
-      }});
+      groupe.belongsTo(models.classe, {
+          foreignKey: {
+          name: 'nomClasse',
+          allowNull: false
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
       groupe.belongsToMany(models.travailAFaire, {through: 'doitFaire', foreignKey: 'nomGroupe'});
       groupe.belongsToMany(models.contenuCours, {through: 'aFait', foreignKey: 'nomGroupe'});
     }

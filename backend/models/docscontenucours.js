@@ -11,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      docsContenuCours.belongsTo(models.contenuCours, {foreignKey: {
-        name: 'idContenuCours',
-        allowNull: false
-      }});
+      docsContenuCours.belongsTo(models.contenuCours, {
+          foreignKey: {
+          name: 'idContenuCours',
+          allowNull: false
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
     }
   }
   docsContenuCours.init({

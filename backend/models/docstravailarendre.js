@@ -11,10 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      docsTravailARendre.belongsTo(models.travailAFaire, {foreignKey: {
-        name: 'idTravailAFaire',
-        allowNull: false
-      }});
+      docsTravailARendre.belongsTo(models.travailAFaire, {
+          foreignKey: {
+          name: 'idTravailAFaire',
+          allowNull: false
+        },
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
     }
   }
   docsTravailARendre.init({

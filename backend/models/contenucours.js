@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      contenuCours.hasMany(models.docsContenuCours, {foreignKey: {
+      contenuCours.hasMany(models.docsContenuCours, {
+        foreignKey: {
         name: 'idContenuCours',
         allowNull: false
       }});
@@ -19,7 +20,12 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomCours',
         allowNull: false
       }});
-      contenuCours.belongsToMany(models.groupe, {through: 'aFait', foreignKey: 'idContenuCours'});
+      contenuCours.belongsToMany(models.groupe, {
+        through: 'aFait',
+        foreignKey: 'idContenuCours',
+        onDelete: 'cascade',
+        onUpdate: 'cascade'
+      });
     }
   }
   contenuCours.init({

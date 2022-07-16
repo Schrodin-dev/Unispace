@@ -115,3 +115,38 @@ async function chargerCouleur(nomCours) {
     }
     return couleurCours[nomCours];
 }
+
+exports.creerGroupe = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin'){
+        return res.status(401).json({message: "Vous devez être admin pour créer un groupe."});
+    }
+
+    db.groupe.create({
+        nomGroupe: req.body.nom,
+        lienICalGroupe: req.body.lienICal,
+        nomClasse: req.body.classe
+    })
+        .then(() => {
+            return res.status(201).json({message: "Le groupe a bien été créé."})
+        })
+        .catch(error => {res.status(500).json(error)});
+}
+
+exports.supprimerGroupe = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin'){
+        return res.status(401).json({message: "Vous devez être admin pour supprimer un groupe."});
+    }
+
+    db.groupe.findOne({where: {nomGroupe: req.body.groupe}})
+        .then(groupe => {
+            if(groupe === null){
+                return res.status(400).json({message: "Le groupe que vous souhaitez supprimer n'existe pas."});
+            }
+
+            groupe.destroy()
+                .then(() => {
+                    return res.status(201).json({message: "Le groupe a bien été supprimé."});
+                })
+                .catch(error => {return res.status(500).json(error)});
+        })
+}
