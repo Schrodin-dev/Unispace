@@ -149,4 +149,5 @@ exports.supprimerGroupe = (req, res, next) => {
                 })
                 .catch(error => {return res.status(500).json(error)});
         })
+        .catch(error => {return res.status(500).json(error)});
 }
