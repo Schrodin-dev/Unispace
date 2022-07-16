@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
                 through: models.note,
                 onUpdate: 'cascade'
             });
+            user.hasMany(models.note, {foreignKey: 'emailUser'});
         }
     }
     user.init({

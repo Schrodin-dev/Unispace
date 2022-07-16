@@ -330,17 +330,19 @@
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "idDevoir",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 },
                 "emailUser": {
-                    "primaryKey": true,
+                    "allowNull": true,
                     "references": {
                         "model": "user",
                         "key": "emailUser"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "SET NULL",
                     "onUpdate": "cascade",
                     "field": "emailUser",
+                    "primaryKey": true,
                     "name": "emailUser",
                     "seqType": "Sequelize.STRING(128)"
                 }
@@ -495,11 +497,6 @@
                     "allowNull": false,
                     "field": "nomUE",
                     "seqType": "Sequelize.STRING"
-                },
-                "coeffUE": {
-                    "allowNull": false,
-                    "field": "coeffUE",
-                    "seqType": "Sequelize.FLOAT"
                 },
                 "createdAt": {
                     "allowNull": false,

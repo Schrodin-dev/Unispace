@@ -25,7 +25,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-07-16T10:15:52.284Z",
+  created: "2022-07-16T17:45:14.418Z",
   comment: "",
 };
 
@@ -180,7 +180,6 @@ const migrationCommands = (transaction) => [
           primaryKey: true,
         },
         nomUE: { type: Sequelize.STRING, field: "nomUE", allowNull: false },
-        coeffUE: { type: Sequelize.FLOAT, field: "coeffUE", allowNull: false },
         createdAt: {
           type: Sequelize.DATE,
           field: "createdAt",
@@ -336,6 +335,11 @@ const migrationCommands = (transaction) => [
           autoIncrement: true,
           primaryKey: true,
         },
+        nomDoc: {
+          type: Sequelize.STRING(100),
+          field: "nomDoc",
+          allowNull: false,
+        },
         lienDoc: { type: Sequelize.TEXT, field: "lienDoc", allowNull: false },
         createdAt: {
           type: Sequelize.DATE,
@@ -370,6 +374,11 @@ const migrationCommands = (transaction) => [
           field: "idDoc",
           autoIncrement: true,
           primaryKey: true,
+        },
+        nomDoc: {
+          type: Sequelize.STRING(100),
+          field: "nomDoc",
+          allowNull: false,
         },
         lienDoc: { type: Sequelize.TEXT, field: "lienDoc", allowNull: false },
         createdAt: {
@@ -500,6 +509,7 @@ const migrationCommands = (transaction) => [
           onUpdate: "CASCADE",
           onDelete: "CASCADE",
           references: { model: "theme", key: "idTheme" },
+          defaultValue: 1,
           name: "idTheme",
           allowNull: false,
         },
@@ -562,6 +572,13 @@ const migrationCommands = (transaction) => [
     params: [
       "note",
       {
+        id: {
+          type: Sequelize.INTEGER,
+          field: "id",
+          autoIncrement: true,
+          primaryKey: true,
+          allowNull: false,
+        },
         noteDevoir: {
           type: Sequelize.FLOAT,
           field: "noteDevoir",
@@ -581,19 +598,19 @@ const migrationCommands = (transaction) => [
           type: Sequelize.INTEGER,
           field: "idDevoir",
           onUpdate: "CASCADE",
-          onDelete: "CASCADE",
+          onDelete: "SET NULL",
           references: { model: "devoir", key: "idDevoir" },
-          primaryKey: true,
           name: "idDevoir",
+          allowNull: true,
         },
         emailUser: {
           type: Sequelize.STRING(128),
-          name: "emailUser",
           field: "emailUser",
           onUpdate: "cascade",
-          onDelete: "CASCADE",
+          onDelete: "cascade",
           references: { model: "user", key: "emailUser" },
-          primaryKey: true,
+          name: "emailUser",
+          allowNull: true,
         },
       },
       { transaction },

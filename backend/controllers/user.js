@@ -112,6 +112,10 @@ exports.login = (req, res, next) => {
                 return res.status(400).json({message: 'paire email/mot de passe incorrecte'});
             }
 
+            if(user.droitsUser === 'non validé'){
+                return res.status(401).json({message: "Veuillez vérifier votre compte avant de vous connecter."});
+            }
+
             bcrypt.compare(req.body.password, user.mdpUser)
                 .then(valide => {
                     if(!valide){

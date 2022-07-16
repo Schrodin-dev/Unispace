@@ -26,18 +26,6 @@ module.exports = (sequelize, DataTypes) => {
     nomUE: {
       type: DataTypes.STRING,
       allowNull: false
-    },
-    coeffUE: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        min(value){
-          if(value <= 0){
-            throw new Error('le coefficient doit être supérieur à 0.');
-          }
-        },
-        max: 100
-      }
     }
   }, {
     sequelize,

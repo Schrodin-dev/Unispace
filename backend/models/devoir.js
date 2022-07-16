@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade'
       });
+      devoir.hasMany(models.note, {foreignKey: 'idDevoir'});
     }
   }
   devoir.init({
