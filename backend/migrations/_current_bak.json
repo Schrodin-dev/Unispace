@@ -576,6 +576,9 @@
                 "idTheme": {
                     "allowNull": false,
                     "name": "idTheme",
+                    "defaultValue": {
+                        "value": 1
+                    },
                     "references": {
                         "model": "theme",
                         "key": "idTheme"
@@ -667,6 +670,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
-    "exists": false,
-    "revision": 1
+    "exists": true,
+    "revision": 2
 }

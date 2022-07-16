@@ -185,6 +185,11 @@
                     "field": "idDoc",
                     "seqType": "Sequelize.INTEGER"
                 },
+                "nomDoc": {
+                    "allowNull": false,
+                    "field": "nomDoc",
+                    "seqType": "Sequelize.STRING(100)"
+                },
                 "lienDoc": {
                     "allowNull": false,
                     "field": "lienDoc",
@@ -223,6 +228,11 @@
                     "autoIncrement": true,
                     "field": "idDoc",
                     "seqType": "Sequelize.INTEGER"
+                },
+                "nomDoc": {
+                    "allowNull": false,
+                    "field": "nomDoc",
+                    "seqType": "Sequelize.STRING(100)"
                 },
                 "lienDoc": {
                     "allowNull": false,
@@ -671,5 +681,5 @@
     "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
     "exists": true,
-    "revision": 2
+    "revision": 3
 }

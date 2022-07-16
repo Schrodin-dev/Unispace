@@ -27,6 +27,10 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
+    nomDoc: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
     lienDoc: {
       type:DataTypes.TEXT,
       allowNull: false
