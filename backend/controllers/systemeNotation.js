@@ -184,7 +184,51 @@ exports.detailDesNotes = (req, res, next) => {
 				return res.status(400).json({message: "Aucune note trouvée."});
 			}
 
-			return res.status(201).json(detail);
+			return res.status(201).json(calculateurMoyennes(detail));
 		})
 		.catch(error => {return res.status(500).json(error);});
 };
+
+function calculateurMoyennes(detail){
+	let parsedNotes = [];
+
+	for(let indexUE in detail ){
+		const UE = detail[indexUE];
+
+		parsedNotes[indexUE] = {};
+		parsedNotes[indexUE].nom = UE.nomUE;
+		parsedNotes[indexUE].ressources = [];
+
+		let sommePondereeRessources = 0.0;
+		let sommePoidsRessources = 0.0;
+		for(let indexRessource in UE.ressources){
+			const ressource = UE.ressources[indexRessource];
+
+			parsedNotes[indexUE].ressources[indexRessource] = {};
+			parsedNotes[indexUE].ressources[indexRessource].nom = ressource.nomRessource;
+			parsedNotes[indexUE].ressources[indexRessource].devoirs = [];
+
+			let sommePondereeDevoirs = 0.0;
+			let sommePoidsDevoirs = 0.0;
+			for(let indexDevoir in ressource.devoirs){
+				const devoir = ressource.devoirs[indexDevoir]
+				sommePondereeDevoirs += devoir.notes[0].noteDevoir * devoir.coeffDevoir;
+				sommePoidsDevoirs += devoir.coeffDevoir;
+
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir] = {};
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].nom = devoir.nomDevoir;
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = devoir.notes[0].noteDevoir;
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].bareme = devoir.noteMaxDevoir;
+			}
+
+			parsedNotes[indexUE].ressources[indexRessource].moyenne = sommePondereeDevoirs/sommePoidsDevoirs;
+			sommePondereeRessources += parsedNotes[indexUE].ressources[indexRessource].moyenne * ressource.coeffRessource;
+			sommePoidsRessources += ressource.coeffRessource;
+		}
+		parsedNotes[indexUE].moyenne = sommePondereeRessources/sommePoidsRessources;
+
+	}
+
+	console.log(parsedNotes)
+	return parsedNotes;
+}
