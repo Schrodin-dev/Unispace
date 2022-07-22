@@ -11,10 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ressource.belongsTo(models.UE, {foreignKey: {
-        name: 'idUE',
-        allowNull: false
-      }});
+      ressource.belongsToMany(models.UE, {through: models.etreLieUE});
+      ressource.hasMany(models.etreLieUE);
       ressource.belongsTo(models.anneeUniv, {
           foreignKey: {
           name: 'nomAnneeUniv',
@@ -38,18 +36,6 @@ module.exports = (sequelize, DataTypes) => {
     nomRessource: {
       type: DataTypes.STRING(256),
       allowNull: false
-    },
-    coeffRessource: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      validate: {
-        min(value){
-          if(value <= 0){
-            throw new Error('le coefficient doit être supérieur à 0.');
-          }
-        },
-        max: 100
-      }
     }
   }, {
     sequelize,

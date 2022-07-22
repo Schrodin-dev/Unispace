@@ -264,6 +264,51 @@
             },
             "indexes": []
         },
+        "etreLieUE": {
+            "tableName": "etreLieUE",
+            "schema": {
+                "coeffRessource": {
+                    "allowNull": false,
+                    "field": "coeffRessource",
+                    "seqType": "Sequelize.FLOAT"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "ressourceIdRessource": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "ressource",
+                        "key": "idRessource"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "ressourceIdRessource",
+                    "allowNull": true,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "UEIdUE": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "UE",
+                        "key": "idUE"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "UEIdUE",
+                    "allowNull": true,
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "groupe": {
             "tableName": "groupe",
             "schema": {
@@ -320,8 +365,7 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "idDevoir": {
-                    "name": "idDevoir",
+                "devoirIdDevoir": {
                     "primaryKey": true,
                     "references": {
                         "model": "devoir",
@@ -329,10 +373,11 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "field": "idDevoir",
+                    "field": "devoirIdDevoir",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 },
-                "emailUser": {
+                "userEmailUser": {
                     "primaryKey": true,
                     "references": {
                         "model": "user",
@@ -340,8 +385,8 @@
                     },
                     "onDelete": "CASCADE",
                     "onUpdate": "cascade",
-                    "field": "emailUser",
-                    "name": "emailUser",
+                    "field": "userEmailUser",
+                    "allowNull": true,
                     "seqType": "Sequelize.STRING(128)"
                 }
             },
@@ -360,11 +405,6 @@
                     "allowNull": false,
                     "field": "nomRessource",
                     "seqType": "Sequelize.STRING(256)"
-                },
-                "coeffRessource": {
-                    "allowNull": false,
-                    "field": "coeffRessource",
-                    "seqType": "Sequelize.FLOAT"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -386,18 +426,6 @@
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "idUE": {
-                    "allowNull": false,
-                    "name": "idUE",
-                    "references": {
-                        "model": "UE",
-                        "key": "idUE"
-                    },
-                    "onDelete": "NO ACTION",
-                    "onUpdate": "CASCADE",
-                    "field": "idUE",
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -495,6 +523,11 @@
                     "allowNull": false,
                     "field": "nomUE",
                     "seqType": "Sequelize.STRING"
+                },
+                "numeroUE": {
+                    "allowNull": false,
+                    "field": "numeroUE",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -629,6 +662,46 @@
                     "onDelete": "cascade",
                     "onUpdate": "cascade",
                     "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(4)"
+                }
+            },
+            "indexes": []
+        },
+        "aPourDevoir": {
+            "tableName": "aPourDevoir",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "idDevoir": {
+                    "name": "idDevoir",
+                    "primaryKey": true,
+                    "references": {
+                        "model": "devoir",
+                        "key": "idDevoir"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "idDevoir",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomGroupe",
+                    "name": "nomGroupe",
                     "seqType": "Sequelize.STRING(4)"
                 }
             },

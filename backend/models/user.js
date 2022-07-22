@@ -23,13 +23,10 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: 1
             }});
             user.belongsToMany(models.devoir, {
-                    foreignKey: {
-                    name: 'emailUser'
-                },
                 through: models.note,
                 onUpdate: 'cascade'
             });
-            user.hasMany(models.note, {foreignKey: 'emailUser'});
+            user.hasMany(models.note);
         }
     }
     user.init({

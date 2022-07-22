@@ -167,7 +167,6 @@ exports.detailDesNotes = (req, res, next) => {
 			required: true,
 			include: {
 				model: db.devoir,
-				required: true,
 				include: {
 					model: db.note,
 					where: {emailUser: req.auth.userEmail},
@@ -212,12 +211,17 @@ function calculateurMoyennes(detail){
 			let sommePoidsDevoirs = 0.0;
 			for(let indexDevoir in ressource.devoirs){
 				const devoir = ressource.devoirs[indexDevoir]
-				sommePondereeDevoirs += devoir.notes[0].noteDevoir * devoir.coeffDevoir;
-				sommePoidsDevoirs += devoir.coeffDevoir;
 
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir] = {};
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].nom = devoir.nomDevoir;
-				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = devoir.notes[0].noteDevoir;
+				if(devoir.notes !== undefined){
+					sommePondereeDevoirs += devoir.notes[0].noteDevoir * devoir.coeffDevoir;
+					sommePoidsDevoirs += devoir.coeffDevoir;
+
+					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = devoir.notes[0].noteDevoir;
+				}else{
+					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = "non renseigné";
+				}
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].bareme = devoir.noteMaxDevoir;
 			}
 
@@ -229,6 +233,5 @@ function calculateurMoyennes(detail){
 
 	}
 
-	console.log(parsedNotes)
 	return parsedNotes;
 }

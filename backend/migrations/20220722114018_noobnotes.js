@@ -10,14 +10,16 @@ const Sequelize = require("sequelize");
  * createTable() => "UE", deps: []
  * createTable() => "classe", deps: [anneeUniv]
  * createTable() => "contenuCours", deps: [cours]
- * createTable() => "ressource", deps: [anneeUniv, UE]
+ * createTable() => "ressource", deps: [anneeUniv]
  * createTable() => "docsContenuCours", deps: [contenuCours]
  * createTable() => "docsTravailARendre", deps: [travailAFaire]
+ * createTable() => "devoir", deps: [ressource]
  * createTable() => "groupe", deps: [classe]
  * createTable() => "user", deps: [groupe, theme]
- * createTable() => "devoir", deps: [ressource]
+ * createTable() => "etreLieUE", deps: [ressource, UE]
  * createTable() => "note", deps: [devoir, user]
  * createTable() => "aFait", deps: [contenuCours, groupe]
+ * createTable() => "aPourDevoir", deps: [devoir, groupe]
  * createTable() => "doitFaire", deps: [groupe, travailAFaire]
  *
  */
@@ -25,7 +27,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-07-16T17:45:14.418Z",
+  created: "2022-07-22T11:40:18.469Z",
   comment: "",
 };
 
@@ -287,11 +289,6 @@ const migrationCommands = (transaction) => [
           field: "nomRessource",
           allowNull: false,
         },
-        coeffRessource: {
-          type: Sequelize.FLOAT,
-          field: "coeffRessource",
-          allowNull: false,
-        },
         createdAt: {
           type: Sequelize.DATE,
           field: "createdAt",
@@ -309,15 +306,6 @@ const migrationCommands = (transaction) => [
           onDelete: "CASCADE",
           references: { model: "anneeUniv", key: "nomAnneeUniv" },
           name: "nomAnneeUniv",
-          allowNull: false,
-        },
-        idUE: {
-          type: Sequelize.INTEGER,
-          field: "idUE",
-          onUpdate: "CASCADE",
-          onDelete: "NO ACTION",
-          references: { model: "UE", key: "idUE" },
-          name: "idUE",
           allowNull: false,
         },
       },
@@ -398,6 +386,56 @@ const migrationCommands = (transaction) => [
           onDelete: "cascade",
           references: { model: "travailAFaire", key: "idTravailAFaire" },
           name: "idTravailAFaire",
+          allowNull: false,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "devoir",
+      {
+        idDevoir: {
+          type: Sequelize.INTEGER,
+          field: "idDevoir",
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        coeffDevoir: {
+          type: Sequelize.FLOAT,
+          field: "coeffDevoir",
+          allowNull: false,
+        },
+        nomDevoir: {
+          type: Sequelize.STRING,
+          field: "nomDevoir",
+          allowNull: false,
+        },
+        noteMaxDevoir: {
+          type: Sequelize.INTEGER,
+          field: "noteMaxDevoir",
+          defaultValue: 20,
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+        idRessource: {
+          type: Sequelize.INTEGER,
+          field: "idRessource",
+          onUpdate: "cascade",
+          onDelete: "cascade",
+          references: { model: "ressource", key: "idRessource" },
+          name: "idRessource",
           allowNull: false,
         },
       },
@@ -520,28 +558,11 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "devoir",
+      "etreLieUE",
       {
-        idDevoir: {
-          type: Sequelize.INTEGER,
-          field: "idDevoir",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        coeffDevoir: {
+        coeffRessource: {
           type: Sequelize.FLOAT,
-          field: "coeffDevoir",
-          allowNull: false,
-        },
-        nomDevoir: {
-          type: Sequelize.STRING,
-          field: "nomDevoir",
-          allowNull: false,
-        },
-        noteMaxDevoir: {
-          type: Sequelize.INTEGER,
-          field: "noteMaxDevoir",
-          defaultValue: 20,
+          field: "coeffRessource",
           allowNull: false,
         },
         createdAt: {
@@ -554,14 +575,23 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        idRessource: {
+        ressourceIdRessource: {
           type: Sequelize.INTEGER,
-          field: "idRessource",
-          onUpdate: "cascade",
-          onDelete: "cascade",
+          allowNull: true,
+          field: "ressourceIdRessource",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
           references: { model: "ressource", key: "idRessource" },
-          name: "idRessource",
-          allowNull: false,
+          primaryKey: true,
+        },
+        UEIdUE: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+          field: "UEIdUE",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "UE", key: "idUE" },
+          primaryKey: true,
         },
       },
       { transaction },
@@ -572,13 +602,6 @@ const migrationCommands = (transaction) => [
     params: [
       "note",
       {
-        id: {
-          type: Sequelize.INTEGER,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-          allowNull: false,
-        },
         noteDevoir: {
           type: Sequelize.FLOAT,
           field: "noteDevoir",
@@ -594,23 +617,23 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        idDevoir: {
+        devoirIdDevoir: {
           type: Sequelize.INTEGER,
-          field: "idDevoir",
+          allowNull: true,
+          field: "devoirIdDevoir",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
+          onDelete: "CASCADE",
           references: { model: "devoir", key: "idDevoir" },
-          name: "idDevoir",
-          allowNull: true,
+          primaryKey: true,
         },
-        emailUser: {
+        userEmailUser: {
           type: Sequelize.STRING(128),
-          field: "emailUser",
-          onUpdate: "cascade",
-          onDelete: "cascade",
-          references: { model: "user", key: "emailUser" },
-          name: "emailUser",
           allowNull: true,
+          field: "userEmailUser",
+          onUpdate: "cascade",
+          onDelete: "CASCADE",
+          references: { model: "user", key: "emailUser" },
+          primaryKey: true,
         },
       },
       { transaction },
@@ -644,6 +667,43 @@ const migrationCommands = (transaction) => [
           field: "nomGroupe",
           onUpdate: "cascade",
           onDelete: "cascade",
+          references: { model: "groupe", key: "nomGroupe" },
+          primaryKey: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "aPourDevoir",
+      {
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+        idDevoir: {
+          type: Sequelize.INTEGER,
+          field: "idDevoir",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
+          references: { model: "devoir", key: "idDevoir" },
+          primaryKey: true,
+          name: "idDevoir",
+        },
+        nomGroupe: {
+          type: Sequelize.STRING(4),
+          name: "nomGroupe",
+          field: "nomGroupe",
+          onUpdate: "CASCADE",
+          onDelete: "CASCADE",
           references: { model: "groupe", key: "nomGroupe" },
           primaryKey: true,
         },
@@ -719,6 +779,10 @@ const rollbackCommands = (transaction) => [
   },
   {
     fn: "dropTable",
+    params: ["etreLieUE", { transaction }],
+  },
+  {
+    fn: "dropTable",
     params: ["groupe", { transaction }],
   },
   {
@@ -748,6 +812,10 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["aFait", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["aPourDevoir", { transaction }],
   },
   {
     fn: "dropTable",

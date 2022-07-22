@@ -11,10 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UE.hasMany(models.ressource, {foreignKey: {
-        name: 'idUE',
-        allowNull: false
-      }});
+      UE.belongsToMany(models.ressource, {through: models.etreLieUE});
+      UE.hasMany(models.etreLieUE);
     }
   }
   UE.init({
@@ -26,6 +24,14 @@ module.exports = (sequelize, DataTypes) => {
     nomUE: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    numeroUE: {
+      type: DataTypes.INTEGER(1),
+      allowNull: false,
+      validate: {
+        min: 0,
+        max: 6
+      }
     }
   }, {
     sequelize,

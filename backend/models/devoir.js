@@ -11,12 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      devoir.belongsToMany(models.user, {
-          foreignKey: {
+      devoir.belongsToMany(models.groupe, {
+        foreignKey: {
           name: 'idDevoir'
         },
+        through: 'aPourDevoir'
+      });
+      devoir.belongsToMany(models.user, {
         through: models.note
       });
+      devoir.hasMany(models.note);
       devoir.belongsTo(models.ressource, {
           foreignKey: {
           name: 'idRessource',
@@ -25,7 +29,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade'
       });
-      devoir.hasMany(models.note, {foreignKey: 'idDevoir'});
     }
   }
   devoir.init({

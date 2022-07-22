@@ -11,6 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      groupe.belongsToMany(models.devoir, {
+        foreignKey: {
+          name: 'nomGroupe'
+        },
+        through: 'aPourDevoir'
+      });
       groupe.hasMany(models.user, {foreignKey: {
         name: 'nomGroupe'
       }});
