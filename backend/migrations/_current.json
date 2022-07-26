@@ -6,7 +6,7 @@
                 "nomAnneeUniv": {
                     "primaryKey": true,
                     "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.INTEGER(1)"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -49,7 +49,7 @@
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.INTEGER(1)"
                 }
             },
             "indexes": []
@@ -415,18 +415,38 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "semestre": {
+            "tableName": "semestre",
+            "schema": {
+                "nomSemestre": {
+                    "primaryKey": true,
+                    "field": "nomSemestre",
+                    "seqType": "Sequelize.INTEGER(1)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
                 },
                 "nomAnneeUniv": {
-                    "allowNull": false,
-                    "name": "nomAnneeUniv",
+                    "allowNull": true,
                     "references": {
                         "model": "anneeUniv",
                         "key": "nomAnneeUniv"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "SET NULL",
                     "onUpdate": "CASCADE",
                     "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER"
+                    "seqType": "Sequelize.INTEGER(1)"
                 }
             },
             "indexes": []
@@ -538,6 +558,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomSemestre": {
+                    "allowNull": false,
+                    "name": "nomSemestre",
+                    "references": {
+                        "model": "semestre",
+                        "key": "nomSemestre"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomSemestre",
+                    "seqType": "Sequelize.INTEGER(1)"
                 }
             },
             "indexes": []
@@ -746,8 +778,8 @@
             "indexes": []
         }
     },
-    "path": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current.json",
-    "backupPath": "/Users/Raf_1/Documents/GitHub/pronote/backend/migrations/_current_bak.json",
+    "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
+    "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
     "exists": true,
     "revision": 3
 }

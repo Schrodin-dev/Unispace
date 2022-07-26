@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'cascade',
         onUpdate: 'cascade'
       });
+
       travailAFaire.hasMany(models.docsTravailARendre, {foreignKey: {
         name: 'idTravailAFaire',
         allowNull: false

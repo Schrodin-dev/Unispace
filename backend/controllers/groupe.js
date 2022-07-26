@@ -132,6 +132,27 @@ exports.creerGroupe = (req, res, next) => {
         .catch(error => {res.status(500).json(error)});
 }
 
+exports.modifierLienICal = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin'){
+        return res.status(401).json({message: "Vous devez être admin pour modifier un groupe."});
+    }
+
+    db.groupe.findOne({where: {nomGroupe: req.body.nom}})
+        .then(groupe => {
+            if(groupe === null){
+                return res.status(401).json({message: "Impossible de trouver le groupe correspondant."});
+            }
+
+            groupe.lienICalGroupe = req.body.lienICal;
+            groupe.save()
+                .then(() => {
+                    return res.status(201).json({message: "Le lien ICal du groupe a bien été mis à jour."});
+                })
+                .catch(error => {return res.status(500).json(error);});
+        })
+        .catch(error => {return res.status(500).json(error);});
+}
+
 exports.supprimerGroupe = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
         return res.status(401).json({message: "Vous devez être admin pour supprimer un groupe."});

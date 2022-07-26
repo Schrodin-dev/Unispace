@@ -15,15 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomAnneeUniv',
         allowNull: false
       }});
-      anneeUniv.hasMany(models.ressource, {foreignKey: {
-        name: 'nomAnneeUniv',
-        allowNull: false
-      }});
+      anneeUniv.hasMany(models.semestre, {foreignKey: 'nomAnneeUniv'});
     }
   }
   anneeUniv.init({
     nomAnneeUniv: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER(1),
       primaryKey: true,
       validate: {
         min: 1,

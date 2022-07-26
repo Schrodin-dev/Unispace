@@ -13,14 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       ressource.belongsToMany(models.UE, {through: models.etreLieUE});
       ressource.hasMany(models.etreLieUE);
-      ressource.belongsTo(models.anneeUniv, {
-          foreignKey: {
-          name: 'nomAnneeUniv',
-          allowNull: false
-        },
-        onDelete: 'cascade',
-        onUpdate: 'cascade'
-      });
       ressource.hasMany(models.devoir, {foreignKey: {
         name: 'idRessource',
         allowNull: false

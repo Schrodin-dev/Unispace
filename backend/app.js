@@ -10,6 +10,7 @@ const mailRoutes = require('./routes/mail');
 const classeRoutes = require('./routes/classe');
 const anneeUnivRoutes = require('./routes/anneeUniv');
 const systemeNotationRoutes = require('./routes/systemeNotation');
+const travailAFaireRoutes = require('./routes/travailAFaire');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -32,5 +33,6 @@ app.use('/api/mail', auth, mailRoutes);
 app.use('/api/classe', auth, classeRoutes);
 app.use('/api/anneeUniv', auth, anneeUnivRoutes);
 app.use('/api/notation', auth, systemeNotationRoutes);
+app.use('/api/travailAFaire', auth, travailAFaireRoutes);
 
 module.exports = app;
