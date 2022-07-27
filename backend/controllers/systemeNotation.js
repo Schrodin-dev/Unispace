@@ -1,4 +1,5 @@
 const db = require('../models/index');
+const {Op} = require("sequelize");
 
 exports.ajouterUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
@@ -174,14 +175,44 @@ exports.ajouterDevoir = (req, res, next) => {
 		noteMaxDevoir: req.body.bareme,
 		idRessource: req.body.ressource
 	})
-		.then(devoir => {
-			devoir.setGroupes(req.body.groupes)
+		.then(async devoir => {
+			groupesModifies = true;
+
+			await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+				.then(async userGroupe => {
+					for(const groupe of req.body.groupes){
+						await db.groupe.findOne({where: {
+								[Op.and]: {
+									nomClasse: userGroupe.nomClasse,
+									nomGroupe: groupe
+								}
+							}})
+							.then(async groupe => {
+								if(!groupe){
+									groupesModifies = false;
+									return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
+								}
+
+								await devoir.addGroupe(groupe.nomGroupe)
+									.catch(error => {
+										groupesModifies = false;
+										return res.status(500).json(error);
+									})
+							})
+							.catch(error => {
+								groupesModifies = false;
+								return res.status(500).json(error);
+							})
+					}
+				})
+				.catch(error => {
+					groupesModifies = false;
+					return res.status(500).json(error);
+				})
+
+			if(groupesModifies) devoir.save()
 				.then(() => {
-					devoir.save()
-						.then(() => {
-							return res.status(201).json({message: "Le devoir a bien été créé."});
-						})
-						.catch(error => {return res.status(500).json(error);});
+					return res.status(201).json({message: "Le devoir a bien été créé."});
 				})
 				.catch(error => {return res.status(500).json(error);});
 		})
@@ -220,12 +251,40 @@ exports.modifierDevoir = (req, res, next) => {
 					if (req.body.ressource.length > 0) {
 						devoir.idRessource = req.body.ressource;
 					}
+
 					let groupesModifies = true;
+					devoir.setGroupes([]);
 					if (req.body.groupes.length > 0) {
-						await devoir.setGroupes(req.body.groupes)
-							.catch(() => {
+						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+							.then(async userGroupe => {
+								for(const groupe of req.body.groupes){
+									await db.groupe.findOne({where: {
+											[Op.and]: {
+												nomClasse: userGroupe.nomClasse,
+												nomGroupe: groupe
+											}
+										}})
+										.then(async groupe => {
+											if(!groupe){
+												groupesModifies = false;
+												return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
+											}
+
+											await devoir.addGroupe(groupe.nomGroupe)
+												.catch(error => {
+													groupesModifies = false;
+													return res.status(500).json(error);
+												})
+										})
+										.catch(error => {
+											groupesModifies = false;
+											return res.status(500).json(error);
+										})
+								}
+							})
+							.catch(error => {
 								groupesModifies = false;
-								return res.status(500).json({message: "Impossible de modifier les groupes."});
+								return res.status(500).json(error);
 							})
 					}
 
