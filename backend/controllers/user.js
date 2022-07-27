@@ -223,3 +223,97 @@ exports.changerMotDePasse = (req, res, next) => {
         })
         .catch(error => res.status(500).json({error}));
 };
+
+exports.afficherUtilisateurs = (req, res, next) => {
+    switch(req.auth.droitsUser){
+        case 'admin':
+            db.user.findAll({
+                attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser']
+            })
+                .then(users => {
+                    return res.status(200).json(users);
+                })
+                .catch(error => {return res.status(500).json(error);});
+            break;
+        case 'délégué':
+            db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+                .then(userGroupe => {
+                    db.user.findAll({
+                        attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser'],
+                        include: {
+                            model: db.groupe,
+                            required: true,
+                            where: {nomClasse: userGroupe.nomClasse},
+                            attributes: []
+                        }
+                    })
+                        .then(users => {
+                            return res.status(200).json(users);
+                        })
+                        .catch(error => {return res.status(500).json(error);});
+                })
+                .catch(error => {return res.status(500).json(error);});
+            break;
+        default:
+            return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les autres utilisateurs."});
+    }
+};
+
+exports.modifierDroits = (req, res, next) => {
+    switch(req.auth.droitsUser){
+        case 'admin':
+            db.user.findOne({where: {emailUser: req.body.user}})
+                .then(user => {
+                    if(!user){
+                        return res.status(400).json({message: "Impossible de trouver l'utilisateur."});
+                    }
+
+                    user.droitsUser = req.body.droits;
+                    user.save()
+                        .then(() => {
+                            return res.status(200).json({message: "Les droits de l'utilisateur ont bien été mis à jour."});
+                        })
+                        .catch(error => {return res.status(500).json(error);});
+                })
+                .catch(error => {return res.status(500).json(error);});
+            break;
+        case 'délégué':
+            if(req.body.droits === 'admin' || req.body.droits === 'délégué' || req.body.droits === 'non validé'){
+                return res.status(401).json({message: "Vous ne pouvez pas donner ces droits avec vos droits actuels."});
+            }
+
+            db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+                .then(userGroupe => {
+                    db.user.findOne({
+                        include: {
+                            model: db.groupe,
+                            required: true,
+                            where: {nomClasse: userGroupe.nomClasse},
+                            attributes: []
+                        },
+                        where: {emailUser: req.body.user}
+                    })
+                        .then(user => {
+                            if(!user){
+                                return res.status(400).json({message: "Impossible de trouver l'utilisateur."});
+                            }
+
+                            if(user.droitsUser === 'admin' || user.droitsUser === 'délégué'){
+                                return res.status(401).json({message: "Vous ne pouvez pas modifier les droits de cet utilisateur."});
+                            }
+
+                            user.droitsUser = req.body.droits;
+                            user.save()
+                                .then(() => {
+                                    return res.status(200).json({message: "Les droits de l'utilisateur ont bien été mis à jour."});
+                                })
+                                .catch(error => {return res.status(500).json(error);});
+                        })
+                        .catch(error => {return res.status(500).json(error);});
+                })
+                .catch(error => {return res.status(500).json(error);});
+            break;
+        default:
+            return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier les droits d'autres utilisateurs."});
+    }
+};
