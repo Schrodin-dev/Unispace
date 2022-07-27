@@ -66,7 +66,7 @@ exports.recupererEdt = (req, res, next) => {
     db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
         .then(groupe => {
             if(groupe === null){
-                res.status(400).json({message: 'impossible de trouver votre groupe.'});
+                res.status(400).json({message: 'Impossible de trouver votre groupe.'});
             }
 
             let edt = [];
@@ -86,7 +86,6 @@ exports.recupererEdt = (req, res, next) => {
             return res.status(200).json(edt);
         })
         .catch(error => {
-            console.error(error);
             res.status(500).json(error)
         });
 
@@ -172,3 +171,30 @@ exports.supprimerGroupe = (req, res, next) => {
         })
         .catch(error => {return res.status(500).json(error)});
 }
+
+//non utilisé
+exports.verifierExistanceCours = async (dateDebut, nomCours, userGroupe) => {
+    let returnValue = undefined;
+    await db.groupe.findOne({where: {nomGroupe: userGroupe}})
+        .then(groupe => {
+            if(groupe === undefined){
+                return returnValue = false;
+            }
+
+            const planning = plannings[groupe.nomGroupe];
+
+            for(const c in planning){
+                const cours = planning[c];
+                console.log(cours);
+                if(cours.debut.getTime() === new Date(dateDebut).getTime() && cours.nom === nomCours){
+                    return returnValue = true;
+                }
+            }
+            return returnValue = false;
+        })
+        .catch(error => {
+            return returnValue = false;
+        });
+
+    return returnValue;
+};
