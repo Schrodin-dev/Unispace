@@ -30,6 +30,11 @@ module.exports = (sequelize, DataTypes) => {
       });
       groupe.belongsToMany(models.travailAFaire, {through: 'doitFaire', foreignKey: 'nomGroupe'});
       groupe.belongsToMany(models.contenuCours, {through: 'aFait', foreignKey: 'nomGroupe'});
+      this.belongsToMany(models.travailDeGroupe, {
+        through: 'concernerGroupe',
+        onDelete: 'cascade',
+        foreignKey: 'nomGroupe'
+      });
     }
   }
   groupe.init({

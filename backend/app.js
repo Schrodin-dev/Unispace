@@ -12,6 +12,7 @@ const anneeUnivRoutes = require('./routes/anneeUniv');
 const systemeNotationRoutes = require('./routes/systemeNotation');
 const travailAFaireRoutes = require('./routes/travailAFaire');
 const contenuCoursRoutes = require('./routes/contenuCours');
+const travailDeGroupeRoutes = require('./routes/travailDeGroupe');
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
@@ -36,5 +37,6 @@ app.use('/api/anneeUniv', auth, anneeUnivRoutes);
 app.use('/api/notation', auth, systemeNotationRoutes);
 app.use('/api/travailAFaire', auth, travailAFaireRoutes);
 app.use('/api/contenuCours', auth, contenuCoursRoutes);
+app.use('/api/travailDeGroupe', auth, travailDeGroupeRoutes);
 
 module.exports = app;

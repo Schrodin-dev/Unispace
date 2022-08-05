@@ -347,6 +347,53 @@
             },
             "indexes": []
         },
+        "invitationTravailDeGroupe": {
+            "tableName": "invitationTravailDeGroupe",
+            "schema": {
+                "UUIDInvitation": {
+                    "required": true,
+                    "field": "UUIDInvitation",
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "travailDeGroupeIdTravailDeGroupe": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "travailDeGroupe",
+                        "key": "idTravailDeGroupe"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "travailDeGroupeIdTravailDeGroupe",
+                    "primaryKey": true,
+                    "unique": "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
+                    "seqType": "Sequelize.INTEGER(1)"
+                },
+                "userEmailUser": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "user",
+                        "key": "emailUser"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "userEmailUser",
+                    "primaryKey": true,
+                    "unique": "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
+                    "seqType": "Sequelize.STRING(128)"
+                }
+            },
+            "indexes": []
+        },
         "note": {
             "tableName": "note",
             "schema": {
@@ -479,6 +526,43 @@
                     "allowNull": false,
                     "field": "couleurFond",
                     "seqType": "Sequelize.STRING(6)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "travailDeGroupe": {
+            "tableName": "travailDeGroupe",
+            "schema": {
+                "idTravailDeGroupe": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idTravailDeGroupe",
+                    "seqType": "Sequelize.INTEGER(1)"
+                },
+                "nomTravailDeGroupe": {
+                    "required": true,
+                    "field": "nomTravailDeGroupe",
+                    "seqType": "Sequelize.STRING(50)"
+                },
+                "membresMin": {
+                    "required": true,
+                    "field": "membresMin",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "membresMax": {
+                    "required": true,
+                    "field": "membresMax",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -776,10 +860,86 @@
                 }
             },
             "indexes": []
+        },
+        "concernerGroupe": {
+            "tableName": "concernerGroupe",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "nomGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupe",
+                        "key": "nomGroupe"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "nomGroupe",
+                    "seqType": "Sequelize.STRING(4)"
+                },
+                "idTravailDeGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "travailDeGroupe",
+                        "key": "idTravailDeGroupe"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "idTravailDeGroupe",
+                    "seqType": "Sequelize.INTEGER(1)"
+                }
+            },
+            "indexes": []
+        },
+        "travailler": {
+            "tableName": "travailler",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "emailUser": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "user",
+                        "key": "emailUser"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "emailUser",
+                    "seqType": "Sequelize.STRING(128)"
+                },
+                "travailDeGroupeIdTravailDeGroupe": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "travailDeGroupe",
+                        "key": "idTravailDeGroupe"
+                    },
+                    "onDelete": "cascade",
+                    "onUpdate": "CASCADE",
+                    "field": "travailDeGroupeIdTravailDeGroupe",
+                    "seqType": "Sequelize.INTEGER(1)"
+                }
+            },
+            "indexes": []
         }
     },
     "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 3
+    "exists": false,
+    "revision": 1
 }

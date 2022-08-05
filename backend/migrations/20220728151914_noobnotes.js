@@ -5,30 +5,34 @@ const Sequelize = require("sequelize");
  *
  * createTable() => "anneeUniv", deps: []
  * createTable() => "cours", deps: []
+ * createTable() => "ressource", deps: []
  * createTable() => "theme", deps: []
+ * createTable() => "travailDeGroupe", deps: []
  * createTable() => "travailAFaire", deps: []
  * createTable() => "classe", deps: [anneeUniv]
  * createTable() => "contenuCours", deps: [cours]
- * createTable() => "ressource", deps: [anneeUniv]
+ * createTable() => "devoir", deps: [ressource]
  * createTable() => "docsContenuCours", deps: [contenuCours]
  * createTable() => "docsTravailARendre", deps: [travailAFaire]
- * createTable() => "devoir", deps: [ressource]
+ * createTable() => "semestre", deps: [anneeUniv]
  * createTable() => "groupe", deps: [classe]
  * createTable() => "user", deps: [groupe, theme]
- * createTable() => "semestre", deps: [anneeUniv]
+ * createTable() => "invitationTravailDeGroupe", deps: [travailDeGroupe, user]
  * createTable() => "UE", deps: [semestre]
  * createTable() => "etreLieUE", deps: [ressource, UE]
  * createTable() => "note", deps: [devoir, user]
  * createTable() => "aFait", deps: [contenuCours, groupe]
  * createTable() => "aPourDevoir", deps: [devoir, groupe]
  * createTable() => "doitFaire", deps: [groupe, travailAFaire]
+ * createTable() => "concernerGroupe", deps: [groupe, travailDeGroupe]
+ * createTable() => "travailler", deps: [user, travailDeGroupe]
  *
  */
 
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-07-22T12:48:42.953Z",
+  created: "2022-07-28T15:19:14.672Z",
   comment: "",
 };
 
@@ -89,6 +93,36 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
+      "ressource",
+      {
+        idRessource: {
+          type: Sequelize.INTEGER,
+          field: "idRessource",
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        nomRessource: {
+          type: Sequelize.STRING(256),
+          field: "nomRessource",
+          allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
       "theme",
       {
         idTheme: {
@@ -116,6 +150,46 @@ const migrationCommands = (transaction) => [
           type: Sequelize.STRING(6),
           field: "couleurFond",
           allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "travailDeGroupe",
+      {
+        idTravailDeGroupe: {
+          type: Sequelize.INTEGER(1),
+          field: "idTravailDeGroupe",
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        nomTravailDeGroupe: {
+          type: Sequelize.STRING(50),
+          field: "nomTravailDeGroupe",
+          required: true,
+        },
+        membresMin: {
+          type: Sequelize.INTEGER,
+          field: "membresMin",
+          required: true,
+        },
+        membresMax: {
+          type: Sequelize.INTEGER,
+          field: "membresMax",
+          required: true,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -251,17 +325,28 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "ressource",
+      "devoir",
       {
-        idRessource: {
+        idDevoir: {
           type: Sequelize.INTEGER,
-          field: "idRessource",
+          field: "idDevoir",
           autoIncrement: true,
           primaryKey: true,
         },
-        nomRessource: {
-          type: Sequelize.STRING(256),
-          field: "nomRessource",
+        coeffDevoir: {
+          type: Sequelize.FLOAT,
+          field: "coeffDevoir",
+          allowNull: false,
+        },
+        nomDevoir: {
+          type: Sequelize.STRING,
+          field: "nomDevoir",
+          allowNull: false,
+        },
+        noteMaxDevoir: {
+          type: Sequelize.INTEGER,
+          field: "noteMaxDevoir",
+          defaultValue: 20,
           allowNull: false,
         },
         createdAt: {
@@ -274,13 +359,13 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        nomAnneeUniv: {
-          type: Sequelize.INTEGER(1),
-          field: "nomAnneeUniv",
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "anneeUniv", key: "nomAnneeUniv" },
-          name: "nomAnneeUniv",
+        idRessource: {
+          type: Sequelize.INTEGER,
+          field: "idRessource",
+          onUpdate: "cascade",
+          onDelete: "cascade",
+          references: { model: "ressource", key: "idRessource" },
+          name: "idRessource",
           allowNull: false,
         },
       },
@@ -370,29 +455,12 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "devoir",
+      "semestre",
       {
-        idDevoir: {
-          type: Sequelize.INTEGER,
-          field: "idDevoir",
-          autoIncrement: true,
+        nomSemestre: {
+          type: Sequelize.INTEGER(1),
+          field: "nomSemestre",
           primaryKey: true,
-        },
-        coeffDevoir: {
-          type: Sequelize.FLOAT,
-          field: "coeffDevoir",
-          allowNull: false,
-        },
-        nomDevoir: {
-          type: Sequelize.STRING,
-          field: "nomDevoir",
-          allowNull: false,
-        },
-        noteMaxDevoir: {
-          type: Sequelize.INTEGER,
-          field: "noteMaxDevoir",
-          defaultValue: 20,
-          allowNull: false,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -404,14 +472,13 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        idRessource: {
-          type: Sequelize.INTEGER,
-          field: "idRessource",
-          onUpdate: "cascade",
-          onDelete: "cascade",
-          references: { model: "ressource", key: "idRessource" },
-          name: "idRessource",
-          allowNull: false,
+        nomAnneeUniv: {
+          type: Sequelize.INTEGER(1),
+          field: "nomAnneeUniv",
+          onUpdate: "CASCADE",
+          onDelete: "SET NULL",
+          references: { model: "anneeUniv", key: "nomAnneeUniv" },
+          allowNull: true,
         },
       },
       { transaction },
@@ -533,12 +600,12 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "semestre",
+      "invitationTravailDeGroupe",
       {
-        nomSemestre: {
-          type: Sequelize.INTEGER(1),
-          field: "nomSemestre",
-          primaryKey: true,
+        UUIDInvitation: {
+          type: Sequelize.UUID,
+          field: "UUIDInvitation",
+          required: true,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -550,12 +617,26 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        nomAnneeUniv: {
+        travailDeGroupeIdTravailDeGroupe: {
           type: Sequelize.INTEGER(1),
-          field: "nomAnneeUniv",
+          unique:
+            "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
+          primaryKey: true,
+          field: "travailDeGroupeIdTravailDeGroupe",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
-          references: { model: "anneeUniv", key: "nomAnneeUniv" },
+          onDelete: "cascade",
+          references: { model: "travailDeGroupe", key: "idTravailDeGroupe" },
+          allowNull: true,
+        },
+        userEmailUser: {
+          type: Sequelize.STRING(128),
+          unique:
+            "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
+          primaryKey: true,
+          field: "userEmailUser",
+          onUpdate: "CASCADE",
+          onDelete: "cascade",
+          references: { model: "user", key: "emailUser" },
           allowNull: true,
         },
       },
@@ -593,9 +674,10 @@ const migrationCommands = (transaction) => [
           type: Sequelize.INTEGER(1),
           field: "nomSemestre",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
+          onDelete: "CASCADE",
           references: { model: "semestre", key: "nomSemestre" },
-          allowNull: true,
+          name: "nomSemestre",
+          allowNull: false,
         },
       },
       { transaction },
@@ -792,6 +874,76 @@ const migrationCommands = (transaction) => [
       { transaction },
     ],
   },
+  {
+    fn: "createTable",
+    params: [
+      "concernerGroupe",
+      {
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+        nomGroupe: {
+          type: Sequelize.STRING(4),
+          field: "nomGroupe",
+          onUpdate: "CASCADE",
+          onDelete: "cascade",
+          references: { model: "groupe", key: "nomGroupe" },
+          primaryKey: true,
+        },
+        idTravailDeGroupe: {
+          type: Sequelize.INTEGER(1),
+          field: "idTravailDeGroupe",
+          onUpdate: "CASCADE",
+          onDelete: "cascade",
+          references: { model: "travailDeGroupe", key: "idTravailDeGroupe" },
+          primaryKey: true,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "travailler",
+      {
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+        emailUser: {
+          type: Sequelize.STRING(128),
+          field: "emailUser",
+          onUpdate: "CASCADE",
+          onDelete: "cascade",
+          references: { model: "user", key: "emailUser" },
+          primaryKey: true,
+        },
+        travailDeGroupeIdTravailDeGroupe: {
+          type: Sequelize.INTEGER(1),
+          field: "travailDeGroupeIdTravailDeGroupe",
+          onUpdate: "CASCADE",
+          onDelete: "cascade",
+          references: { model: "travailDeGroupe", key: "idTravailDeGroupe" },
+          primaryKey: true,
+        },
+      },
+      { transaction },
+    ],
+  },
 ];
 
 const rollbackCommands = (transaction) => [
@@ -833,6 +985,10 @@ const rollbackCommands = (transaction) => [
   },
   {
     fn: "dropTable",
+    params: ["invitationTravailDeGroupe", { transaction }],
+  },
+  {
+    fn: "dropTable",
     params: ["note", { transaction }],
   },
   {
@@ -846,6 +1002,10 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["theme", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["travailDeGroupe", { transaction }],
   },
   {
     fn: "dropTable",
@@ -870,6 +1030,14 @@ const rollbackCommands = (transaction) => [
   {
     fn: "dropTable",
     params: ["doitFaire", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["concernerGroupe", { transaction }],
+  },
+  {
+    fn: "dropTable",
+    params: ["travailler", { transaction }],
   },
 ];
 
