@@ -3,7 +3,7 @@ const {
 	Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-	class invitationTravailDeGroupe extends Model {
+	class travailler extends Model {
 		/**
 		 * Helper method for defining associations.
 		 * This method is not a part of Sequelize lifecycle.
@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			this.belongsTo(models.travailDeGroupe, {
+			this.belongsTo(models.groupeDeTravail, {
 				onDelete: 'cascade'
 			})
 			this.belongsTo(models.user, {
@@ -19,15 +19,14 @@ module.exports = (sequelize, DataTypes) => {
 			})
 		}
 	}
-	invitationTravailDeGroupe.init({
+	travailler.init({
 		UUIDInvitation: {
-			type: DataTypes.UUID,
-			required:true
+			type: DataTypes.UUID
 		}
 	}, {
 		sequelize,
-		modelName: 'invitationTravailDeGroupe',
+		modelName: 'travailler',
 		freezeTableName: true
 	});
-	return invitationTravailDeGroupe;
+	return travailler;
 };

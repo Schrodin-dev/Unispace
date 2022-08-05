@@ -16,19 +16,8 @@ module.exports = (sequelize, DataTypes) => {
 				onDelete: 'cascade',
 				foreignKey: 'idTravailDeGroupe'
 			});
-
-			this.belongsToMany(models.user, {
-				through: 'travailler',
-				onDelete: 'cascade',
-				foreignKey: 'idTravailDeGroupe'
-			});
-
-			this.belongsToMany(models.user, {
-				through: models.invitationTravailDeGroupe,
-				onDelete: 'cascade'
-			});
-			this.hasMany(models.invitationTravailDeGroupe, {
-				onDelete: 'cascade'
+			this.hasMany(models.groupeDeTravail, {
+				foreignKey: 'idTravailDeGroupe',
 			})
 		}
 	}

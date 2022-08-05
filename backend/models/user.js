@@ -27,18 +27,11 @@ module.exports = (sequelize, DataTypes) => {
                 onUpdate: 'cascade'
             });
             user.hasMany(models.note);
-            this.belongsToMany(models.travailDeGroupe, {
-                through: 'travailler',
-                onDelete: 'cascade',
-                foreignKey: 'emailUser'
+
+            this.belongsToMany(models.groupeDeTravail, {
+                through: models.travailler
             });
-            this.belongsToMany(models.travailDeGroupe, {
-                through: models.invitationTravailDeGroupe,
-                onDelete: 'cascade'
-            });
-            this.hasMany(models.invitationTravailDeGroupe, {
-                onDelete: 'cascade'
-            })
+            this.hasMany(models.travailler);
         }
     }
     user.init({

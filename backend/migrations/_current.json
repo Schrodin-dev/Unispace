@@ -347,13 +347,14 @@
             },
             "indexes": []
         },
-        "invitationTravailDeGroupe": {
-            "tableName": "invitationTravailDeGroupe",
+        "groupeDeTravail": {
+            "tableName": "groupeDeTravail",
             "schema": {
-                "UUIDInvitation": {
-                    "required": true,
-                    "field": "UUIDInvitation",
-                    "seqType": "Sequelize.UUID"
+                "idGroupeDeTravail": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "field": "idGroupeDeTravail",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "createdAt": {
                     "allowNull": false,
@@ -365,7 +366,7 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "travailDeGroupeIdTravailDeGroupe": {
+                "idTravailDeGroupe": {
                     "allowNull": true,
                     "references": {
                         "model": "travailDeGroupe",
@@ -373,23 +374,8 @@
                     },
                     "onDelete": "cascade",
                     "onUpdate": "CASCADE",
-                    "field": "travailDeGroupeIdTravailDeGroupe",
-                    "primaryKey": true,
-                    "unique": "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
+                    "field": "idTravailDeGroupe",
                     "seqType": "Sequelize.INTEGER(1)"
-                },
-                "userEmailUser": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "user",
-                        "key": "emailUser"
-                    },
-                    "onDelete": "cascade",
-                    "onUpdate": "CASCADE",
-                    "field": "userEmailUser",
-                    "primaryKey": true,
-                    "unique": "invitationTravailDeGroupe_userEmailUser_travailDeGroupeIdTravailDeGroupe_unique",
-                    "seqType": "Sequelize.STRING(128)"
                 }
             },
             "indexes": []
@@ -610,6 +596,50 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "travailler": {
+            "tableName": "travailler",
+            "schema": {
+                "UUIDInvitation": {
+                    "field": "UUIDInvitation",
+                    "seqType": "Sequelize.UUID"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "groupeDeTravailIdGroupeDeTravail": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "groupeDeTravail",
+                        "key": "idGroupeDeTravail"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "groupeDeTravailIdGroupeDeTravail",
+                    "allowNull": true,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userEmailUser": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "user",
+                        "key": "emailUser"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "userEmailUser",
+                    "allowNull": true,
+                    "seqType": "Sequelize.STRING(128)"
                 }
             },
             "indexes": []
@@ -894,44 +924,6 @@
                     "onDelete": "cascade",
                     "onUpdate": "CASCADE",
                     "field": "idTravailDeGroupe",
-                    "seqType": "Sequelize.INTEGER(1)"
-                }
-            },
-            "indexes": []
-        },
-        "travailler": {
-            "tableName": "travailler",
-            "schema": {
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "emailUser": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "user",
-                        "key": "emailUser"
-                    },
-                    "onDelete": "cascade",
-                    "onUpdate": "CASCADE",
-                    "field": "emailUser",
-                    "seqType": "Sequelize.STRING(128)"
-                },
-                "travailDeGroupeIdTravailDeGroupe": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "travailDeGroupe",
-                        "key": "idTravailDeGroupe"
-                    },
-                    "onDelete": "cascade",
-                    "onUpdate": "CASCADE",
-                    "field": "travailDeGroupeIdTravailDeGroupe",
                     "seqType": "Sequelize.INTEGER(1)"
                 }
             },
