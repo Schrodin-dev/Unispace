@@ -2,6 +2,7 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {AuthService} from "./auth.service";
 import {Subject} from "rxjs";
+import backend from "../../assets/config/backend.json";
 
 @Injectable()
 export class RequestsService{
@@ -16,8 +17,8 @@ export class RequestsService{
     let email = this.authService.getEmail();
     let password = this.authService.getToken();
 
-    this.httpClient
-      .post('http://localhost:3000/users/userInfos', {
+    /*this.httpClient
+      .post(backend.url + '/users/userInfos', {
         email: email,
         password: password
       })
@@ -28,7 +29,7 @@ export class RequestsService{
         (error) => {
           console.log("error: " + error);
         }
-      );
+      );*/
   }
 
 }

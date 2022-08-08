@@ -11,13 +11,7 @@ import {Subscription} from "rxjs";
 })
 export class MenuComponent implements OnInit {
   auth:any;
-  usersInfos = {
-    nom: '',
-    prenom: '',
-    email: '',
-    classe: '',
-    groupe: ''
-  };
+  usersInfos = this.authService.getUserInfos();
   usersInfosSubscription: Subscription | undefined;
   path = "/";
   submenuRoutes = [

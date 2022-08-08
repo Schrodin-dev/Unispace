@@ -1,6 +1,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
+import backend from "../../assets/config/backend.json";
 
 @Injectable()
 export class AuthService{
@@ -12,7 +13,7 @@ export class AuthService{
 
   register(nom:String, prenom:String, email:String, password:String, classe:String, groupe:any){
     this.httpClient
-      .post('http://localhost:3001/users/register', {
+      .post(backend.url + '/api/auth/register', {
         nom: nom,
         prenom: prenom,
         email: email,
@@ -34,15 +35,20 @@ export class AuthService{
   login(email:String, password:String){
     console.log(email, password);
     this.httpClient
-      .post('http://localhost:3000/users/login', {
+      .post(backend.url + '/api/auth/login', {
         email: email,
         password: password
       })
       .subscribe(
         (res) => {
           this.loginRes = res;
-          sessionStorage.setItem("email", this.loginRes.userEmail);
+          // @ts-ignore
+          sessionStorage.setItem("email", email);
           sessionStorage.setItem("token", this.loginRes.token);
+          sessionStorage.setItem("groupe", this.loginRes.groupe);
+          sessionStorage.setItem("droits", this.loginRes.droitsUser);
+          sessionStorage.setItem("nom", this.loginRes.nom);
+          sessionStorage.setItem("prenom", this.loginRes.prenom);
           this.router.navigate(['']);
           console.log(res);
         },
@@ -61,13 +67,35 @@ export class AuthService{
   }
 
   getToken(){
-    //console.log(sessionStorage.getItem("token"));
     return sessionStorage.getItem("token");
   }
 
   isLogin(){
-    //console.log(sessionStorage.getItem("token"));
-    if(sessionStorage.getItem("token") === null) return false;
-    return true;
+    return (sessionStorage.getItem("token") !== null);
+  }
+
+  getNom(){
+    return sessionStorage.getItem("nom");
+  }
+
+  getPrenom(){
+    return sessionStorage.getItem("prenom");
+  }
+
+  getGroupe(){
+    return sessionStorage.getItem("groupe");
+  }
+
+  getDroits(){
+    return sessionStorage.getItem("droits");
+  }
+
+  getUserInfos(){
+    return {
+      nom: this.getNom(),
+      prenom: this.getPrenom(),
+      email: this.getEmail(),
+      groupe: this.getGroupe()
+    };
   }
 }
