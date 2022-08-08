@@ -412,7 +412,7 @@ exports.recupererGroupes = (req, res, next) => {
 						return res.status(400).json({message: "Impossible de trouver le travail de groupe."});
 					}
 
-					return res.status(200).json(groupesParser(groupes));
+					return res.status(200).json(groupesParser(groupes, req));
 				})
 				.catch(error => {
 					return res.status(500).json(error);
@@ -420,7 +420,7 @@ exports.recupererGroupes = (req, res, next) => {
 		})
 }
 
-function groupesParser(travail){
+function groupesParser(travail, req){
 	let parsed = {};
 
 	//infos du travail
@@ -442,11 +442,19 @@ function groupesParser(travail){
 		for(const membreIndex in groupe.travaillers){
 			const membre = groupe.travaillers[membreIndex];
 
-			parsed.groupes[groupeIndex].membres[membreIndex] = {
-				nom: membre.user.nomUser,
-				prenom: membre.user.prenomUser,
-				UUIDInvitation: membre.UUIDInvitation
+			if(membre.userEmailUser === req.auth.userEmail && membre.UUIDInvitation !== null){
+				parsed.groupes[groupeIndex].membres[membreIndex] = {
+					nom: membre.user.nomUser,
+					prenom: membre.user.prenomUser,
+					UUIDInvitation: membre.UUIDInvitation
+				}
+			}else{
+				parsed.groupes[groupeIndex].membres[membreIndex] = {
+					nom: membre.user.nomUser,
+					prenom: membre.user.prenomUser
+				}
 			}
+
 		}
 	}
 
