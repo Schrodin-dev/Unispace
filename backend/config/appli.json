@@ -1,3 +1,4 @@
 {
-  "lienVerification": "https://localhost:4200/verify/"
+  "lienVerification": "https://localhost:4200/verify/",
+  "lienInvitationGroupe": "https://localhost:4200/joinGroup/"
 }

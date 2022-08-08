@@ -103,13 +103,13 @@ exports.modifierTravailAFaire = (req, res, next) => {
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
-		.then(groupe => {
+		.then(userGroupe => {
 			db.travailAFaire.findOne({
 				where: {idTravailAFaire: req.body.travailAFaire},
 				include: {
 					model: db.groupe,
 					required:true,
-					where: {nomClasse: groupe.nomClasse}
+					where: {nomClasse: userGroupe.nomClasse}
 				}
 			})
 				.then(async travailAFaire => {
@@ -130,37 +130,30 @@ exports.modifierTravailAFaire = (req, res, next) => {
 					let erreurAjoutGroupe = false;
 					if (req.body.groupes.length > 0) {
 						travailAFaire.setGroupes([]);
-						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
-							.then(async userGroupe => {
-								for(const groupe of req.body.groupes){
-									await db.groupe.findOne({where: {
-										[Op.and]: {
-											nomClasse: userGroupe.nomClasse,
-											nomGroupe: groupe
-										}
-									}})
-										.then(async groupe => {
-											if(!groupe){
-												erreurAjoutGroupe = true;
-												return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
-											}
-
-											await travailAFaire.addGroupe(groupe.nomGroupe)
-												.catch(error => {
-													erreurAjoutGroupe = true;
-													return res.status(500).json(error);
-												})
-										})
-										.catch(error => {
+							for(const groupe of req.body.groupes){
+								await db.groupe.findOne({where: {
+									[Op.and]: {
+										nomClasse: userGroupe.nomClasse,
+										nomGroupe: groupe
+									}
+								}})
+									.then(async groupe => {
+										if(!groupe){
 											erreurAjoutGroupe = true;
-											return res.status(500).json(error);
-										});
-								}
-							})
-							.catch(error => {
-								erreurAjoutGroupe = true;
-								return res.status(500).json(error);
-							});
+											return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
+										}
+
+										await travailAFaire.addGroupe(groupe.nomGroupe)
+											.catch(error => {
+												erreurAjoutGroupe = true;
+												return res.status(500).json(error);
+											})
+									})
+									.catch(error => {
+										erreurAjoutGroupe = true;
+										return res.status(500).json(error);
+									});
+							}
 					}
 
 					if(!erreurAjoutGroupe) travailAFaire.save()
