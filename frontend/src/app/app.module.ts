@@ -21,18 +21,6 @@ import { DetailComponent } from './notes/detail/detail.component';
 import { GraphesComponent } from './notes/graphes/graphes.component';
 import { MainEdtComponent } from './edt/main-edt/main-edt.component';
 
-const appRoutes:Routes = [
-  { path: '', canActivate: [AuthGuard], component: MainPageComponent},
-  { path:'login', component: LoginPageComponent},
-  { path:'register', component: RegisterComponentComponent},
-  { path:'params', canActivate: [AuthGuard], component: MesDonneesComponent},
-  { path:'agenda/content', canActivate: [AuthGuard], component: ContentComponent},
-  { path:'agenda/todo', canActivate: [AuthGuard], component: TodoComponent},
-  { path:'notes/detail', canActivate: [AuthGuard], component: DetailComponent},
-  { path:'notes/graphes', canActivate: [AuthGuard], component: GraphesComponent},
-  { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent}
-]
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,7 +41,6 @@ const appRoutes:Routes = [
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
   ],
   providers: [
     AuthService,

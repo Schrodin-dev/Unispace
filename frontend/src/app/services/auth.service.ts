@@ -60,10 +60,11 @@ export class AuthService{
 
   disconnect(){
     sessionStorage.clear();
+    this.router.navigate(['login']);
   }
 
   getEmail(){
-    return sessionStorage.getItem("email")
+    return sessionStorage.getItem("email");
   }
 
   getToken(){

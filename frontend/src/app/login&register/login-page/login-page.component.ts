@@ -8,9 +8,10 @@ import {NgForm} from "@angular/forms";
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
-  auth:any;
 
-  constructor(private authService: AuthService) { this.auth = authService;}
+  constructor(private authService: AuthService) {
+
+  }
 
   ngOnInit(): void {
 

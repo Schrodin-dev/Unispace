@@ -10,9 +10,7 @@ import {Subscription} from "rxjs";
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
-  auth:any;
   usersInfos = this.authService.getUserInfos();
-  usersInfosSubscription: Subscription | undefined;
   path = "/";
   submenuRoutes = [
     {
@@ -86,17 +84,13 @@ export class MenuComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router, private requestService: RequestsService) {
     router.events.subscribe((url:any) => {
+      if(authService.isLogin()){
+        this.usersInfos = authService.getUserInfos();
+      }
+
       if(url instanceof NavigationEnd){
         console.log(router.url);
         this.path = router.url;
-        if(this.usersInfos.nom == ''){
-          this.requestService.userInfos();
-          this.usersInfosSubscription = this.requestService.userInfosContentSubject.subscribe(
-            (res:any) => {
-              this.usersInfos = res;
-            }
-          )
-        }
         for(let routes of this.submenuRoutes){
           if(routes.rootPath === this.path){
             this.currentSubmenuRoutes = routes.childs;
@@ -107,16 +101,11 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.auth = this.authService;
-    this.requestService.userInfos();
-    this.usersInfosSubscription = this.requestService.userInfosContentSubject.subscribe(
-      (res:any) => {
-        this.usersInfos = res;
-      }
-    )
 
 
   }
 
-
+  disconnect(){
+    this.authService.disconnect();
+  }
 }

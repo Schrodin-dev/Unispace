@@ -493,6 +493,11 @@
                     "field": "idTheme",
                     "seqType": "Sequelize.INTEGER"
                 },
+                "imageTheme": {
+                    "allowNull": false,
+                    "field": "imageTheme",
+                    "seqType": "Sequelize.BLOB"
+                },
                 "sourceTheme": {
                     "allowNull": false,
                     "field": "sourceTheme",
@@ -927,6 +932,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

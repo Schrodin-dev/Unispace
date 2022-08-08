@@ -1,17 +1,12 @@
 <!-- login form -->
 <form (ngSubmit)="onLogin(f)" #f="ngForm">
   <div id="fields">
-    <div>
-      <label for="email">email : </label>
-      <input type="email" name="email" id="email" ngModel required>
-    </div>
-    <div>
-      <label for="password" for="password">Mot de passe : </label>
-      <input type="password" name="password" id="password" ngModel required>
-    </div>
+      <input type="email" name="email" id="email" ngModel required class="inputText" placeholder="email">
+      <input type="password" name="password" id="password" ngModel required class="inputText" placeholder="mot de passe">
+
+      <button type="submit" [disabled]="f.invalid">se connecter</button>
+
+      <p id="inscription">pas inscrit ? <a routerLink="/register">S'enregistrer</a></p>
   </div>
 
-  <p>pas inscrit ? <a routerLink="/register">S'enregistrer</a></p>
-
-  <button type="submit" [disabled]="f.invalid">Se connecter</button>
 </form>

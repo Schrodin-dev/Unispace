@@ -1,0 +1,36 @@
+@import "../../../scss/composants/forms";
+
+form{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+#fields{
+	display: flex;
+	flex-direction: column;
+	width: 40%;
+	min-width: 250px;
+	max-width: 400px;
+}
+
+button{
+	background: transparent;
+	border: none;
+	outline: none;
+	color:white;
+	margin-top: 30px;
+	font-size: 1.2em;
+	cursor: pointer;
+
+	&:disabled{
+		color: darken(white, 20);
+		cursor: default;
+	}
+}
+
+#inscription{
+	align-self: flex-start;
+}

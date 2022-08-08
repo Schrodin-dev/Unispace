@@ -24,10 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
       autoIncrement: true
     },
-    imageTheme: {
-      type: DataTypes.BLOB,
-      allowNull: false
-    },
     sourceTheme: {
       type: DataTypes.STRING(512),
       allowNull: false

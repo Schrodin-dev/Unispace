@@ -1,7 +1,7 @@
 <div id="bandeau" *ngIf="path != '/login' && path != '/register'">
   <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.groupe}}</p>
   <!--<img src="assets/img/disconnect.png" id="disconnect">-->
-  <p id="disconnect">disconnectBtn</p>
+  <p id="disconnect" (click)="disconnect()">se déconnecter</p>
 
   <img src="assets/img/favicon.png" id="logo">
 </div>

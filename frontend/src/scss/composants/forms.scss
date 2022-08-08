@@ -1,0 +1,18 @@
+@import "../base/panels";
+$color : white;
+
+.inputText{
+  @include panel($color);
+
+  height: 50px;
+  outline: none;
+  border:none;
+  border-radius: 7px;
+  padding: 0 20px;
+  margin: 2.5px 0;
+  font-size: 20px;
+
+  &::placeholder{
+    color: darken($color, 20);
+  }
+}
