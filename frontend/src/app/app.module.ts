@@ -9,7 +9,7 @@ import { MainPageComponent } from './mainpageComponents/main-page/main-page.comp
 import { FooterComponent } from './footer/footer.component';
 import { LoginPageComponent } from './login&register/login-page/login-page.component';
 import { AuthService } from './services/auth.service';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponentComponent } from './login&register/register-component/register-component.component';
 import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "./services/auth-guard.service";
@@ -36,12 +36,13 @@ import { MainEdtComponent } from './edt/main-edt/main-edt.component';
     GraphesComponent,
     MainEdtComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    FormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+    ],
   providers: [
     AuthService,
     AuthGuard,

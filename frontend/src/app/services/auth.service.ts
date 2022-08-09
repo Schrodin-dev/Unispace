@@ -24,7 +24,6 @@ export class AuthService{
       .subscribe(
         (response) => {
           console.log(response);
-          this.login(email, password);
         },
         (error) => {
           console.log("error: " + error);
@@ -49,8 +48,8 @@ export class AuthService{
           sessionStorage.setItem("droits", this.loginRes.droitsUser);
           sessionStorage.setItem("nom", this.loginRes.nom);
           sessionStorage.setItem("prenom", this.loginRes.prenom);
+
           this.router.navigate(['']);
-          console.log(res);
         },
         (error) => {
           console.log("error: " + error);

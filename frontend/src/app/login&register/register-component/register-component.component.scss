@@ -1,0 +1,17 @@
+@import "../../../scss/composants/forms";
+
+#fields{
+	display:flex;
+	flex-direction: column;
+	width:40%;
+	max-width: 400px;
+	min-width: 250px;
+}
+
+form{
+	display:flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+}
+

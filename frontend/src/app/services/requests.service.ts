@@ -1,7 +1,7 @@
 import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {AuthService} from "./auth.service";
-import {Subject} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import backend from "../../assets/config/backend.json";
 
 @Injectable()
@@ -12,6 +12,8 @@ export class RequestsService{
 
   }
 
-
+  getClasses(): Observable<any>{
+	  return this.httpClient.get(backend.url + "/api/auth/visualiserClasses");
+  }
 
 }

@@ -1,34 +1,26 @@
-<form (ngSubmit)="onRegister(f)" #f="ngForm">
-  <div id="fields">
-    <div>
-      <label for="nom">nom : </label>
-      <input type="text" name="nom" id="nom" ngModel required>
-    </div>
-    <div>
-      <label for="prenom">prénom : </label>
-      <input type="text" name="prenom" id="prenom" ngModel required>
-    </div>
-    <div>
-      <label for="email">email : </label>
-      <input type="email" name="email" id="email" ngModel required>
-    </div>
-    <div>
-      <p>Sélectionnez votre classe : </p>
-      <input type="radio" name="classe" id="S3" checked required/>
-      <label for="S3">S3</label>
-    </div>
-    <div>
-      <p>Sélectionnez votre groupe : </p>
-      <input type="radio" name="groupe" id="g1" value="1" ngModel required/>
-      <label for="g1">groupe 1</label>
-      <input type="radio" name="groupe" id="g2" value="2" ngModel required/>
-      <label for="g2">groupe 2</label>
-    </div>
-    <div>
-      <label for="password" for="password">Mot de passe : </label>
-      <input type="password" name="password" id="password" ngModel required>
-    </div>
-  </div>
+<form [formGroup]="form">
+	<div id="fields">
+		<input type="text" formControlName="nom" id="nom" ngModel required class="inputText" placeholder="nom">
+		<input type="text" formControlName="prenom" id="prenom" ngModel required class="inputText" placeholder="prenom">
+		<input type="email" formControlName="email" id="email" ngModel required class="inputText" placeholder="email">
 
-  <button type="submit" [disabled]="f.invalid">s'inscrire</button>
+		<div class="dualDropDown">
+			<select formControlName="classe" id="classe" class="dropDown">
+				<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
+			</select>
+			<select formControlName="groupe" id="groupe" class="dropDown">
+				<ng-container *ngIf="groupes$ | async as groupes">
+					<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
+				</ng-container>
+			</select>
+		</div>
+
+		<input type="password" formControlName="password" id="password" ngModel required placeholder="mot de passe" class="inputText">
+
+		<button type="submit" class="textButton" (click)="onRegister()">s'inscrire</button>
+		<!--[disabled]="f.invalid"-->
+
+		<p id="inscription">déjà inscrit ? <a routerLink="/login">Se connecter</a></p>
+	</div>
+
 </form>

@@ -1,7 +1,7 @@
 @import "../base/panels";
 $color : white;
 
-.inputText{
+.inputText, .dropDown{
   @include panel($color);
 
   height: 50px;
@@ -15,4 +15,42 @@ $color : white;
   &::placeholder{
     color: darken($color, 20);
   }
+}
+
+.textButton{
+	background: transparent;
+	border: none;
+	outline: none;
+	color:white;
+	margin-top: 30px;
+	font-size: 1.2em;
+	cursor: pointer;
+
+	&:disabled{
+		color: darken(white, 20);
+		cursor: default;
+	}
+}
+
+.dropDown{
+	@include panel($color);
+	color:$color;
+}
+
+.dualDropDown{
+	display: flex;
+	justify-content: space-between;
+
+	> .dropDown{
+		width: calc(50% - 1.5px);
+
+		&:nth-child(1){
+			border-bottom-right-radius: 0;
+			border-top-right-radius: 0;
+		}
+		&:nth-child(2){
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+		}
+	}
 }

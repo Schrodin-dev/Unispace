@@ -317,3 +317,22 @@ exports.modifierDroits = (req, res, next) => {
             return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier les droits d'autres utilisateurs."});
     }
 };
+
+exports.visualiserClasses = (req, res, next) => {
+  db.classe.findAll({
+      include: {
+          model: db.groupe,
+          attributes: ["nomGroupe"],
+          required: true
+      },
+      attributes: ["nomClasse"]
+  })
+      .then(classes => {
+          if(!classes){
+              return res.status(500).json({message: "Impossible de trouver les classes."});
+          }
+
+          return res.status(200).json(classes);
+      })
+      .catch(error => {return res.status(500).json(error);});
+};

@@ -13,5 +13,6 @@ router.post('/renvoyerCode', userCtrl.renvoyerCodeVerification);
 router.post('/changerMdp', userCtrl.changerMotDePasse);
 router.get('/afficher', auth, userCtrl.afficherUtilisateurs);
 router.post('/modifierDroits', auth, userCtrl.modifierDroits);
+router.get('/visualiserClasses', userCtrl.visualiserClasses);
 
 module.exports = router;
