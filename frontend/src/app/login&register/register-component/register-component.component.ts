@@ -24,8 +24,8 @@ export class RegisterComponentComponent implements OnInit {
 		  nom: [null],
 		  prenom: [null],
 		  email: [null],
-		  classe: [null],
-		  groupe: [null],
+		  classe: ["classe"],
+		  groupe: ["groupe"],
 		  password: [null]
 	  });
 

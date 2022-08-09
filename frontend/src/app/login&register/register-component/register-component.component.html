@@ -6,10 +6,12 @@
 
 		<div class="dualDropDown">
 			<select formControlName="classe" id="classe" class="dropDown">
+				<option disabled selected hidden>classe</option>
 				<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
 			</select>
 			<select formControlName="groupe" id="groupe" class="dropDown">
 				<ng-container *ngIf="groupes$ | async as groupes">
+					<option disabled selected hidden>groupe</option>
 					<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
 				</ng-container>
 			</select>
