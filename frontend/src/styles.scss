@@ -1,16 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 @font-face {
-  font-family: glacial_indifference-regular;
-  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Regular.otf");
+	font-family: glacial_indifference;
+	font-style: normal;
+	font-weight: normal;
+	src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Regular.otf");
 }
 @font-face {
-  font-family: glacial_indifference-bold;
-  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Bold.otf");
+	font-family: glacial_indifference;
+	font-style: normal;
+	font-weight: bold;
+	src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Bold.otf");
 }
 
 @font-face {
-  font-family: glacial_indifference-italic;
-  src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Italic.otf");
+	font-family: glacial_indifference;
+	font-style: italic;
+	font-weight: normal;
+	src: url("./assets/fonts/glacial-indifference/GlacialIndifference-Italic.otf");
 }
 
 body{
@@ -18,11 +24,12 @@ body{
 }
 
 p, li, a, h4, h5, h6, input{
-  font-family: glacial_indifference-regular, sans-serif;
+  font-family: glacial_indifference, sans-serif;
   color:white;
 }
 
 h1, h2, h3{
-  font-family: glacial_indifference-Bold, sans-serif;
-  color:white;
+	font-family: glacial_indifference, sans-serif;
+	font-weight: bold;
+	color:white;
 }

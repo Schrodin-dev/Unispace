@@ -1,0 +1,9 @@
+@import "../../../scss/composants/panelsComps";
+@import "../../../scss/composants/forms";
+
+#planning{
+	display:flex;
+	justify-content: space-between;
+	align-items: stretch;
+	flex-direction: column;
+}

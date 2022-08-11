@@ -20,6 +20,8 @@ import { TodoComponent } from './agenda/todo/todo.component';
 import { DetailComponent } from './notes/detail/detail.component';
 import { GraphesComponent } from './notes/graphes/graphes.component';
 import { MainEdtComponent } from './edt/main-edt/main-edt.component';
+import { CoursComponent } from './edt/cours/cours.component';
+import { EmbedEdtComponent } from './edt/embed-edt/embed-edt.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +37,8 @@ import { MainEdtComponent } from './edt/main-edt/main-edt.component';
     DetailComponent,
     GraphesComponent,
     MainEdtComponent,
+    CoursComponent,
+    EmbedEdtComponent,
   ],
     imports: [
         BrowserModule,

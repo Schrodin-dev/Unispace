@@ -1,0 +1,15 @@
+<div class="linkPanel">
+	<a routerLink="/planning">
+		<img class="linkToPage" src="assets/img/linkToPage.png" alt="link to a page"/>
+	</a>
+
+	<form [formGroup]="dateSelectionnee" id="dateSelector">
+		<input type="date" class="inputDate" formControlName="date"/>
+	</form>
+
+	<div id="planning">
+		<ng-container *ngFor="let cours of edt | async">
+			<app-cours [cours]="cours"></app-cours>
+		</ng-container>
+	</div>
+</div>

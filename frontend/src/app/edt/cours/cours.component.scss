@@ -1,0 +1,22 @@
+#cours{
+	border-radius: 5px;
+	background-color: rgba(#00BCCD, .4);
+	width:80%;
+	margin:5px 10%;
+	padding:5px 0;
+	display:flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	> p{
+		margin: 2.5px 0;
+	}
+	#nom{
+		font-weight: bold;
+	}
+	#horaire{
+		margin-top: 15px;
+	}
+
+}
