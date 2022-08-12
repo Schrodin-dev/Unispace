@@ -106,7 +106,13 @@ exports.changementsDonneesCompte = async (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-    db.user.findOne({where: {emailUser: req.body.email}})
+    db.user.findOne({
+        where: {emailUser: req.body.email},
+        include: {
+            model: db.theme,
+            required: true
+        }
+    })
         .then(user => {
             if(!user){
                 return res.status(400).json({message: 'paire email/mot de passe incorrecte'});
@@ -136,7 +142,11 @@ exports.login = (req, res, next) => {
                             },
                             'tokenMagique',//TODO: remplacer le token en production par un truc bien long comme il faut :)
                             {expiresIn: '24h'}
-                        )
+                        ),
+                        theme: user.theme.idTheme,
+                        sourceImageTheme: user.theme.sourceTheme,
+                        couleurPrincipale: user.theme.couleurPrincipaleTheme,
+                        couleurFond: user.theme.couleurFond
                     });
                 })
                 .catch(error => res.status(500).json({error}));
