@@ -8,24 +8,30 @@
 
 <nav id="mainMenu" *ngIf="path != '/login' && path != '/register'">
   <div routerLinkActive="mainActive" [routerLinkActiveOptions]="{exact:true}">
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/">accueil</a>
   </div>
   <div routerLinkActive="mainActive">
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/params">Mes données</a>
   </div>
   <div routerLinkActive="mainActive">
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/agenda">Cahier de texte</a>
   </div>
   <div routerLinkActive="mainActive">
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/notes">Notes</a>
   </div>
   <div routerLinkActive="mainActive">
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/edt">Emploi du temps</a>
   </div>
 </nav>
 
 <nav id="subMenu" *ngIf="path != '/login' && path != '/register'">
   <div routerLinkActive="subActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-    <a [routerLink]= routes.path>{{routes.name}}</a>
+	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+    <a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
   </div>
 </nav>

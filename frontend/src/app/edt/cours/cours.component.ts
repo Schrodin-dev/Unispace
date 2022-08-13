@@ -28,6 +28,7 @@ export class CoursComponent implements OnInit {
 		}
 
 		return result;
+
 	}
 
 }

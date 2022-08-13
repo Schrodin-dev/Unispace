@@ -24,6 +24,4 @@ export class EmbedEdtComponent implements OnInit {
 			this.edt = this.requests.getCours(newValue.date, newValue.date);
 		})
   }
-
-
 }

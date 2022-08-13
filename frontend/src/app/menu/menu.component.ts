@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {RequestsService} from "../services/requests.service";
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-menu',
@@ -81,6 +80,7 @@ export class MenuComponent implements OnInit {
     }
   ];
   currentSubmenuRoutes:any;
+  couleurPrincipale!: String;
 
   constructor(private authService: AuthService, private router: Router, private requestService: RequestsService) {
     router.events.subscribe((url:any) => {
@@ -101,8 +101,9 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
+	  this.authService.couleurPrincipale.subscribe(couleur => {
+		  this.couleurPrincipale = couleur;
+	  })
   }
 
   disconnect(){
