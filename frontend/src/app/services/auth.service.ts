@@ -7,16 +7,11 @@ import {BehaviorSubject, Observable, Subject} from "rxjs";
 @Injectable()
 export class AuthService{
   private loginRes:any;
-  // @ts-ignore
-	public couleurPrincipale: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurPrincipale"));
-  // @ts-ignore
-	public couleurFond: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurFond"));
-  // @ts-ignore
-	public sourceImageTheme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("sourceImageTheme"));
-	// @ts-ignore
-	public theme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("theme"));
-	// @ts-ignore
-	public textColor: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("textColor"));
+	public couleurPrincipale: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurPrincipale") || 'AD1FB7');
+	public couleurFond: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurFond") || 'ffffff');
+	public sourceImageTheme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("sourceImageTheme") || 'une source');
+	public theme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("theme") || '1');
+	public textColor: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("textColor") || 'light');
 
   constructor(private httpClient: HttpClient, private router: Router) {
 
