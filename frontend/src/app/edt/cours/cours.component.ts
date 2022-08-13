@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { Cours } from 'src/app/models/cours.model';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-cours',
@@ -9,14 +10,14 @@ import { Cours } from 'src/app/models/cours.model';
 export class CoursComponent implements OnInit {
 	@Input() cours!: Cours;
 	horaire!: String;
+	couleurTexte!: String;
 
-  constructor() { }
-	/*
-	* créer un model cours dans lequel on met tous les arguments des cours au même format que celui passé par
-	* la requête.
-	* */
+  constructor(private authService: AuthService) { }
   ngOnInit(): void {
 	this.horaire = this.dateToHoursString(this.cours.debut) + ' - ' + this.dateToHoursString(this.cours.fin);
+	this.authService.textColor.subscribe(couleur => {
+		this.couleurTexte = couleur;
+	})
   }
 
 	dateToHoursString(date: Date): String{

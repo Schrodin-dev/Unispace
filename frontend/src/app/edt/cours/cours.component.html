@@ -1,6 +1,6 @@
 <div id="cours" [ngStyle]="{'background-color': '#'+cours.couleur+'99'}">
-	<p id="nom">{{ cours.nom }}</p>
-	<p id="profs"><span *ngFor="let prof of cours.profs">{{ prof }}</span></p>
-	<p id="salles">{{ cours.salles }}</p>
-	<p id="horaire">{{ horaire }}</p>
+	<p id="nom" [ngClass]="couleurTexte">{{ cours.nom }}</p>
+	<p id="profs" [ngClass]="couleurTexte"><span *ngFor="let prof of cours.profs">{{ prof }}</span></p>
+	<p id="salles" [ngClass]="couleurTexte">{{ cours.salles }}</p>
+	<p id="horaire" [ngClass]="couleurTexte">{{ horaire }}</p>
 </div>
