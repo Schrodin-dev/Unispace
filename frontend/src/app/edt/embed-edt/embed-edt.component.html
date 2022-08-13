@@ -1,10 +1,10 @@
-<div class="linkPanel">
+<div class="linkPanel" [ngStyle]="{backgroundColor: this.couleurFond}">
 	<a routerLink="/planning">
 		<img class="linkToPage" src="assets/img/linkToPage.png" alt="link to a page"/>
 	</a>
 
 	<form [formGroup]="dateSelectionnee" id="dateSelector">
-		<input type="date" class="inputDate" formControlName="date"/>
+		<input type="date" class="inputDate" formControlName="date" [ngStyle]="{borderColor: '#'+this.couleurPrincipale}"/>
 	</form>
 
 	<div id="planning">

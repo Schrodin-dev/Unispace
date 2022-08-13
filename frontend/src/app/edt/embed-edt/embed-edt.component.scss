@@ -1,9 +1,20 @@
 @import "../../../scss/composants/panelsComps";
 @import "../../../scss/composants/forms";
 
+#dateSelector{
+	display: flex;
+	justify-content: center;
+	padding-bottom: 30px;
+	padding-top:20px;
+}
+
 #planning{
 	display:flex;
 	justify-content: space-between;
 	align-items: stretch;
 	flex-direction: column;
+}
+
+.linkPanel{
+	padding-bottom: 58px;
 }
