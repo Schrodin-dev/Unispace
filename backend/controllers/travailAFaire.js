@@ -243,3 +243,68 @@ exports.supprimerDocument = (req, res, next) => {
 		})
 		.catch(error => {return res.status(500).json(error);});
 };
+
+exports.recupererEmbed = (req, res, next) => {
+	if (req.auth.droitsUser === 'non validé') {
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
+	}
+
+	db.travailAFaire.min('dateTravailAFaire', {
+		where: {
+			dateTravailAFaire: {[Op.gte]: Date.now()}
+		}
+	})
+		.then(min => {
+			if(!min){
+				return res.status(200).json({});
+			}
+
+			db.travailAFaire.findAll({
+				include: {
+					model: db.groupe,
+					required: true,
+					where: {nomGroupe: req.auth.userGroupe},
+					attributes: []
+				},
+				where: {
+					dateTravailAFaire: min
+				},
+				limit: 3
+			})
+				.then(travails => {
+					return res.status(200).json(travails);
+				})
+				.catch(error => {
+					return res.status(500).json(error);
+				});
+		})
+		.catch(error => {
+			return res.status(500).json(error);
+		});
+};
+
+exports.afficher = (req, res, next) => {
+	if (req.auth.droitsUser === 'non validé') {
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
+	}
+
+	db.travailAFaire.findAll({
+		include: {
+			model: db.groupe,
+			required: true,
+			where: {nomGroupe: req.auth.userGroupe},
+			attributes: []
+		},
+		where: {
+			dateTravailAFaire: {[Op.gte]: req.body.dateMin}
+		},
+		limit: 10,
+		offset: req.body.pagination * 10
+	})
+		.then(travails => {
+			return res.status(200).json(travails);
+		})
+		.catch(error => {
+			return res.status(500).json(error);
+		});
+}
