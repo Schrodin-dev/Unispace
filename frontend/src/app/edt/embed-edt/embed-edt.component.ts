@@ -11,6 +11,7 @@ import {AuthService} from "../../services/auth.service";
 export class EmbedEdtComponent implements OnInit {
 
 	dateSelectionnee!: FormGroup;
+	date!: Date;
 	edt: any;
 	couleurFond!: String;
 	couleurPrincipale!: String;
@@ -19,12 +20,13 @@ export class EmbedEdtComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private requests: RequestsService, private authService: AuthService) { }
 
   ngOnInit(): void {
+	  this.date = new Date();
 		this.dateSelectionnee = this.formBuilder.group({
-			date: [new Date().toISOString().substr(0, 10)]
+			date: [this.date.toISOString().substr(0, 10)]
 		});
 
-
 		this.dateSelectionnee.valueChanges.forEach(newValue => {
+			this.date = new Date(newValue.date);
 			this.edt = this.requests.getCours(newValue.date, newValue.date);
 		});
 
@@ -38,4 +40,16 @@ export class EmbedEdtComponent implements OnInit {
 		  this.couleurTexte = couleur;
 	  });
   }
+
+  previousDay(){
+	  this.date.setDate(this.date.getDate()-1);
+
+	  this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});
+  }
+
+	nextDay(){
+		this.date.setDate(this.date.getDate()+1);
+
+		this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});
+	}
 }
