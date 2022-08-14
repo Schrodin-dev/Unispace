@@ -333,6 +333,10 @@ exports.supprimerDevoir = (req, res, next) => {
 };
 
 exports.ajouterNote = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter une note."});
+	}
+
 	db.devoir.findOne({where: {idDevoir: req.body.devoir}})
 		.then(devoir => {
 			devoir.getGroupes()
@@ -365,6 +369,10 @@ exports.ajouterNote = (req, res, next) => {
 };
 
 exports.modifierNote = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier une note."});
+	}
+
 	db.note.findOne({where: {
 		userEmailUser: req.auth.userEmail,
 		devoirIdDevoir: req.body.devoir
@@ -386,6 +394,10 @@ exports.modifierNote = (req, res, next) => {
 };
 
 exports.supprimerNote = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer une note."});
+	}
+
 	db.note.findOne({where: {
 			userEmailUser: req.auth.userEmail,
 			devoirIdDevoir: req.body.devoir
@@ -405,6 +417,10 @@ exports.supprimerNote = (req, res, next) => {
 };
 
 exports.detailDesNotes = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des notes."});
+	}
+
 	db.UE.findAll({
 		include: {
 			model: db.ressource,
@@ -431,6 +447,30 @@ exports.detailDesNotes = (req, res, next) => {
 			return res.status(201).json(calculateurMoyennes(detail));
 		})
 		.catch(error => {console.error(error);return res.status(500).json(error);});
+};
+
+exports.dernieresNotes = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher des notes."});
+	}
+
+	db.note.findAll({
+		where: {
+			userEmailUser: req.auth.userEmail
+		},
+		include:{
+			model: db.devoir,
+			required: true,
+			attributes: ['nomDevoir', 'noteMaxDevoir']
+		},
+		attributes: ['noteDevoir', 'createdAt'],
+		limit: 5,
+		order: [['createdAt', 'DESC']]
+	})
+		.then(notes => {
+			return res.status(200).json(notes);
+		})
+		.catch(error => {return res.status(500).json(error)});
 };
 
 function calculateurMoyennes(detail){

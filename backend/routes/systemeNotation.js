@@ -24,5 +24,6 @@ router.post('/note/modifier', systemeNotationCtrl.modifierNote);
 router.post('/note/supprimer', systemeNotationCtrl.supprimerNote);
 
 router.get('/detail', systemeNotationCtrl.detailDesNotes);
+router.get('/dernieresNotes', systemeNotationCtrl.dernieresNotes);
 
 module.exports = router;
