@@ -1,4 +1,5 @@
-<div id="background" [ngStyle]="{backgroundImage: 'url(assets/img/themes/' + (this.background) + '.jpg)'}">
+<div id="background" [ngStyle]="{backgroundImage: 'url(assets/img/themes/' + (this.background) + '.jpg)'}"></div>
+<div id="container">
   <app-menu></app-menu>
   <router-outlet></router-outlet>
 	<p id="source" [ngClass]="couleurTexte">source de l'image: {{ source }}</p>
