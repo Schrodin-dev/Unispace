@@ -3,9 +3,10 @@
 		<img class="linkToPage" src="assets/img/linkToPage.png" alt="link to a page"/>
 	</a>
 
-	<h1>Travail à faire</h1>
+	<h1 [ngClass]="couleurTexte">Travail à faire</h1>
 
-	<ng-container *ngFor="let travail of travails | async">
+	<ng-container *ngFor="let travail of travails | async; let index = index;">
+		<p id="date" *ngIf="index === 0" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}">Pour <span>{{ travail.date | date: 'EEEE d MMM'}}</span></p>
 		<app-travail-a-faire [travail]="travail"></app-travail-a-faire>
 	</ng-container>
 </div>

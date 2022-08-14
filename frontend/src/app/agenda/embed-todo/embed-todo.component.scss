@@ -1,1 +1,12 @@
 @import "../../../scss/composants/panelsComps";
+
+#date{
+	display: inline-block;
+	padding:2.5px 20% 2.5px 10px;
+	border-bottom-right-radius: 50px;
+	border-top-right-radius: 50px;
+
+	span{
+		font-weight: bold;
+	}
+}

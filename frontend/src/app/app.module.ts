@@ -1,6 +1,8 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import * as fr from '@angular/common/locales/fr';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -54,8 +56,13 @@ import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire
   providers: [
     AuthService,
     AuthGuard,
-    RequestsService
+    RequestsService,
+  	{ provide: LOCALE_ID, useValue: 'fr-FR'}
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+	constructor() {
+		registerLocaleData(fr.default);
+	}
+}

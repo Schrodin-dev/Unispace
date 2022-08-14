@@ -12,6 +12,7 @@ export class EmbedTodoComponent implements OnInit {
 	couleurFond!: String;
 	couleurPrincipale!: String;
 	couleurTexte!: String;
+
 	travails!: Promise<travailAFaire[]>;
 
   constructor(private authService: AuthService, private requestsService: RequestsService) { }

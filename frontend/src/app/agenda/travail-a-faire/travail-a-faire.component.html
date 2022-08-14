@@ -1,9 +1,9 @@
 <div id="container">
 	<div id="cours">
 		<div id="barreCours" [ngStyle]="{backgroundColor: '#'+travail.couleurCours}"></div>
-		<p>{{ travail.nomCours }}</p>
+		<p [ngClass]="couleurTexte">{{ travail.nomCours }}</p>
 	</div>
 	<p id="date">à faire pour: {{ dateToHoursString(travail.date)}}</p>
-	<p id="desc">{{ travail.desc }}</p>
+	<p id="desc" [ngClass]="couleurTexte">{{ travail.desc }}</p>
 </div>
 
