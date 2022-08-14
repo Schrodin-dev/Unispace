@@ -591,6 +591,18 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
+                },
+                "nomCours": {
+                    "allowNull": false,
+                    "name": "nomCours",
+                    "references": {
+                        "model": "cours",
+                        "key": "nomCours"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "field": "nomCours",
+                    "seqType": "Sequelize.STRING(100)"
                 }
             },
             "indexes": []
@@ -927,6 +939,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

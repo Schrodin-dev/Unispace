@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomCours',
         allowNull: false
       }});
+      cours.hasMany(models.travailAFaire, {foreignKey: {
+          name: 'nomCours',
+          allowNull: false
+        }});
     }
   }
   cours.init({

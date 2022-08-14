@@ -11,6 +11,7 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 		dateTravailAFaire: req.body.date,
 		descTravailAFaire: req.body.description,
 		estNote: req.body.estNote,
+		nomCours: req.body.cours
 	})
 		.then(async travailAFaire => {
 			try {
@@ -125,6 +126,9 @@ exports.modifierTravailAFaire = (req, res, next) => {
 					}
 					if (req.body.estNote.length > 0) {
 						travailAFaire.estNote = req.body.estNote;
+					}
+					if (req.body.cours.length > 0) {
+						travailAFaire.nomCours = req.body.cours;
 					}
 
 					let erreurAjoutGroupe = false;
@@ -260,16 +264,24 @@ exports.recupererEmbed = (req, res, next) => {
 			}
 
 			db.travailAFaire.findAll({
-				include: {
-					model: db.groupe,
-					required: true,
-					where: {nomGroupe: req.auth.userGroupe},
-					attributes: []
-				},
+				include: [
+					{
+						model: db.groupe,
+						required: true,
+						where: {nomGroupe: req.auth.userGroupe},
+						attributes: []
+					},
+					{
+						model: db.cours,
+						required: true,
+						attributes: ['couleurCours']
+					}
+				],
 				where: {
 					dateTravailAFaire: min
 				},
-				limit: 3
+				limit: 3,
+				order: ['dateTravailAFaire']
 			})
 				.then(travails => {
 					return res.status(200).json(travails);
@@ -289,17 +301,28 @@ exports.afficher = (req, res, next) => {
 	}
 
 	db.travailAFaire.findAll({
-		include: {
-			model: db.groupe,
-			required: true,
-			where: {nomGroupe: req.auth.userGroupe},
-			attributes: []
-		},
+		include: [
+			{
+				model: db.groupe,
+				required: true,
+				where: {nomGroupe: req.auth.userGroupe},
+				attributes: []
+			},
+			{
+				model: db.cours,
+				required: true,
+				attributes: ['couleurCours']
+			},
+			{
+				model: db.docsTravailARendre
+			}
+		],
 		where: {
 			dateTravailAFaire: {[Op.gte]: req.body.dateMin}
 		},
 		limit: 10,
-		offset: req.body.pagination * 10
+		offset: req.body.pagination * 10,
+		order: ['dateTravailAFaire']
 	})
 		.then(travails => {
 			return res.status(200).json(travails);

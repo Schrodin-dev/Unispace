@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         name: 'idTravailAFaire',
         allowNull: false
       }});
+
+      travailAFaire.belongsTo(models.cours, {foreignKey: {
+        name: 'nomCours',
+          allowNull: false
+        }});
     }
   }
   travailAFaire.init({
