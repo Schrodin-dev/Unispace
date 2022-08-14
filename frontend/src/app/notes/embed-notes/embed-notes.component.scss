@@ -6,4 +6,11 @@
 
 .linkPanel{
 	padding-bottom: 20px;
+	max-width: 500px;
+}
+
+@media screen and (min-width: 500px){
+	.linkPanel{
+		width: 500px;
+	}
 }
