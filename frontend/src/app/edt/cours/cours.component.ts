@@ -32,4 +32,24 @@ export class CoursComponent implements OnInit {
 
 	}
 
+	parseProfs(): String{
+	  let res: String = '';
+
+	  for(let i = 0; i < this.cours.profs.length; i++){
+		  if(i < this.cours.profs.length - 1){
+			  // @ts-ignore
+			  res += this.cours.profs[i] + ', ';
+		  }else{
+			  // @ts-ignore
+			  res += this.cours.profs[i];
+		  }
+	  }
+
+	  return res;
+	}
+
+	parseSalles(): String{
+	  return this.cours.salles.replace(/,/g, ', ');
+	}
+
 }
