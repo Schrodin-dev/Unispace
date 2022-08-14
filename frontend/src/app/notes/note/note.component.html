@@ -1,0 +1,7 @@
+<div id="container">
+	<div id="leftSide">
+		<p id="nomCours" [ngClass]="couleurTexte">{{ note.nomDevoir }}</p>
+		<p id="date" [ngClass]="couleurTexte">le {{ note.date | date: ' d MMM' }}</p>
+	</div>
+	<p id="note" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}">{{ note.note }}/{{ note.bareme }}</p>
+</div>

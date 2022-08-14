@@ -13,19 +13,19 @@ import { LoginPageComponent } from './login&register/login-page/login-page.compo
 import { AuthService } from './services/auth.service';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { RegisterComponentComponent } from './login&register/register-component/register-component.component';
-import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "./services/auth-guard.service";
 import {RequestsService} from "./services/requests.service";
 import { MesDonneesComponent } from './params/mes-donnees/mes-donnees.component';
 import { ContentComponent } from './agenda/content/content.component';
 import { TodoComponent } from './agenda/todo/todo.component';
 import { DetailComponent } from './notes/detail/detail.component';
-import { GraphesComponent } from './notes/graphes/graphes.component';
 import { MainEdtComponent } from './edt/main-edt/main-edt.component';
 import { CoursComponent } from './edt/cours/cours.component';
 import { EmbedEdtComponent } from './edt/embed-edt/embed-edt.component';
 import { EmbedTodoComponent } from './agenda/embed-todo/embed-todo.component';
 import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire.component';
+import { EmbedNotesComponent } from './notes/embed-notes/embed-notes.component';
+import { NoteComponent } from './notes/note/note.component';
 
 @NgModule({
   declarations: [
@@ -39,12 +39,13 @@ import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire
     ContentComponent,
     TodoComponent,
     DetailComponent,
-    GraphesComponent,
     MainEdtComponent,
     CoursComponent,
     EmbedEdtComponent,
     EmbedTodoComponent,
     TravailAFaireComponent,
+    EmbedNotesComponent,
+    NoteComponent,
   ],
     imports: [
         BrowserModule,

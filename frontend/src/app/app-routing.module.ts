@@ -8,7 +8,6 @@ import {MesDonneesComponent} from "./params/mes-donnees/mes-donnees.component";
 import {ContentComponent} from "./agenda/content/content.component";
 import {TodoComponent} from "./agenda/todo/todo.component";
 import {DetailComponent} from "./notes/detail/detail.component";
-import {GraphesComponent} from "./notes/graphes/graphes.component";
 import {MainEdtComponent} from "./edt/main-edt/main-edt.component";
 
 const routes: Routes = [
@@ -19,7 +18,6 @@ const routes: Routes = [
   { path:'agenda/content', canActivate: [AuthGuard], component: ContentComponent},
   { path:'agenda/todo', canActivate: [AuthGuard], component: TodoComponent},
   { path:'notes/detail', canActivate: [AuthGuard], component: DetailComponent},
-  { path:'notes/graphes', canActivate: [AuthGuard], component: GraphesComponent},
   { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent}
 ];
 

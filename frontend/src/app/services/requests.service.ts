@@ -5,6 +5,7 @@ import {Observable, Subject} from "rxjs";
 import backend from "../../assets/config/backend.json";
 import {Cours} from "../models/cours.model";
 import {travailAFaire} from "../models/travailAFaire.model";
+import {Note} from "../models/note.model";
 
 @Injectable()
 export class RequestsService{
@@ -62,6 +63,24 @@ export class RequestsService{
 		  })
 
 	  return travails;
+  }
+
+  async getNoteEmbed(){
+	  let notes: Note[] = [];
+
+	  await this.httpClient.get(backend.url + "/api/notation/dernieresNotes", RequestsService.getRequestOptions())
+		  .subscribe(listeNotes => {
+			  let i = 0;
+			  // @ts-ignore
+			  for(let note of listeNotes){
+				  notes[i] = new Note(note.noteDevoir, note.devoir.noteMaxDevoir, note.createdAt, note.devoir.nomDevoir);
+				  i++;
+			  }
+
+			  notes.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
+		  })
+
+	  return notes;
   }
 
 }

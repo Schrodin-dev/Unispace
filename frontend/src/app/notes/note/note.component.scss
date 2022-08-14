@@ -1,0 +1,21 @@
+#container{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 30px;
+	margin: 20px;
+}
+
+p{
+	margin: 0;
+}
+
+#nomCours{
+	font-weight: bold;
+}
+
+#note{
+	display: inline-block;
+	border-radius: 50px;
+	padding: 8px 20px;
+}

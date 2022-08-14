@@ -1,0 +1,9 @@
+@import "../../../scss/composants/panelsComps";
+
+.note + .note{
+	border-top: solid 1px;
+}
+
+.linkPanel{
+	padding-bottom: 20px;
+}
