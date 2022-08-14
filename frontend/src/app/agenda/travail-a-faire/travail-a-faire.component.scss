@@ -1,0 +1,32 @@
+#container{
+	padding: 0 20px;
+	margin: 10px 0;
+}
+
+#cours{
+	position: relative;
+	display: flex;
+	align-items: center;
+
+	#barreCours{
+		position: absolute;
+		width:3px;
+		height:1.3em;
+		border-radius: 2px;
+		left: -8px;
+	}
+
+	p{
+		margin: 0;
+	}
+}
+
+#date{
+	margin: 0;
+	color: #afafaf;
+	font-size: .8em;
+}
+
+#desc{
+	margin-top: 8px;
+}

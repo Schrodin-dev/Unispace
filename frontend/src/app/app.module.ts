@@ -22,6 +22,8 @@ import { GraphesComponent } from './notes/graphes/graphes.component';
 import { MainEdtComponent } from './edt/main-edt/main-edt.component';
 import { CoursComponent } from './edt/cours/cours.component';
 import { EmbedEdtComponent } from './edt/embed-edt/embed-edt.component';
+import { EmbedTodoComponent } from './agenda/embed-todo/embed-todo.component';
+import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { EmbedEdtComponent } from './edt/embed-edt/embed-edt.component';
     MainEdtComponent,
     CoursComponent,
     EmbedEdtComponent,
+    EmbedTodoComponent,
+    TravailAFaireComponent,
   ],
     imports: [
         BrowserModule,

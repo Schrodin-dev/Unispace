@@ -4,6 +4,7 @@ import {AuthService} from "./auth.service";
 import {Observable, Subject} from "rxjs";
 import backend from "../../assets/config/backend.json";
 import {Cours} from "../models/cours.model";
+import {travailAFaire} from "../models/travailAFaire.model";
 
 @Injectable()
 export class RequestsService{
@@ -24,7 +25,7 @@ export class RequestsService{
 	  return this.httpClient.get(backend.url + "/api/auth/visualiserClasses");
   }
 
-  async getCours(debut: String, fin: String)/*: Observable<any>*/{
+  async getCours(debut: String, fin: String){
 	  let planning: Cours[] = []
 	  await this.httpClient.post(backend.url + "/api/groupe/recupererEdt",{
 		  debut: debut,
@@ -43,6 +44,24 @@ export class RequestsService{
 
 
 	  return planning;
+  }
+
+  async getTravailAFaireEmbed(){
+	  let travails: travailAFaire[] = [];
+
+	  await this.httpClient.post(backend.url + "/api/travailAFaire/afficherEmbed",{}, RequestsService.getRequestOptions())
+		  .subscribe(listeTravails => {
+			  let i = 0;
+			  // @ts-ignore
+			  for(let travail of listeTravails){
+				  travails[i] = new travailAFaire(travail.idTravailAFaire, travail.dateTravailAFaire, travail.descTravailAFaire, travail.estNote, travail.nomCours, travail.cour.couleurCours);
+				  i++;
+			  }
+
+			  travails.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
+		  })
+
+	  return travails;
   }
 
 }
