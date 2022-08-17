@@ -4,14 +4,14 @@
 	</a>
 
 	<div id="dateSelector">
-		<div [ngStyle]="{backgroundColor: '#'+couleurPrincipale}">
-			<img (click)="previousDay()" src="assets/img/previous.png" alt="jour précédent"/>
+		<div [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" (click)="previousDay()">
+			<img src="assets/img/previous.png" alt="jour précédent"/>
 		</div>
 		<form [formGroup]="dateSelectionnee">
 			<input type="date" class="inputDate" formControlName="date" [ngStyle]="{borderColor: '#'+this.couleurPrincipale}"/>
 		</form>
-		<div [ngStyle]="{backgroundColor: '#'+couleurPrincipale}">
-			<img (click)="nextDay()" src="assets/img/next.png" alt="jour suivant"/>
+		<div [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" (click)="nextDay()">
+			<img src="assets/img/next.png" alt="jour suivant"/>
 		</div>
 	</div>
 

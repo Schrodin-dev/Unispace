@@ -17,16 +17,20 @@
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/agenda">Cahier de texte</a>
+    <a routerLink="/agenda/content">Cahier de texte</a>
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/notes">Notes</a>
+    <a routerLink="/notes/detail">Notes</a>
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
     <a routerLink="/edt">Emploi du temps</a>
   </div>
+	<div routerLinkActive="mainActive">
+		<div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/edt">Emploi du temps</a>
+	</div>
 </nav>
 
 <nav id="subMenu" *ngIf="path != '/login' && path != '/register'">

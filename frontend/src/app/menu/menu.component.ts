@@ -92,7 +92,7 @@ export class MenuComponent implements OnInit {
         console.log(router.url);
         this.path = router.url;
         for(let routes of this.submenuRoutes){
-          if(routes.rootPath === this.path){
+          if(this.path.includes(routes.rootPath)){
             this.currentSubmenuRoutes = routes.childs;
           }
         }

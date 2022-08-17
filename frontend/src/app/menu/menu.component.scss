@@ -34,10 +34,13 @@
 
     a{
       margin: 0 15px;
-      color: #000000;
       text-decoration: none;
     }
   }
+
+	div:not(.subActive) a{
+		color: #000000 !important;
+	}
 }
 
 .mainActive, .subActive{
@@ -84,10 +87,10 @@
   justify-content:center;
   align-items:center;
 
-#disconnect{
-  margin-left:8px;
-  cursor: pointer;
-}
+	#disconnect{
+	  margin-left:8px;
+	  cursor: pointer;
+	}
 
   #logo{
     position: absolute;
