@@ -1,5 +1,8 @@
+@import "../../scss/base/panels";
+
 #bandeau p{
 	color: black;
+	z-index: 2;
 }
 
 #mainMenu{
@@ -98,4 +101,121 @@
     bottom:0;
     height:35px;
   }
+}
+
+#mobileMenu, #mobileBurger{
+	display: none;
+}
+
+#mobileBurger{
+	background-color: #313131;
+	width: calc(100% - 10px);
+	height: 45px;
+	justify-content: flex-end;
+	align-items: center;
+	padding:0 5px;
+
+	> div{
+		cursor: pointer;
+
+		> span{
+			width: 25px;
+			height: 3px;
+			border-radius: 2px;
+			background-color: white;
+			display: block;
+			margin:5px;
+		}
+	}
+}
+
+#cross{
+	cursor: pointer;
+	position: absolute;
+	right:20px;
+	top:30px;
+
+	> span{
+		width: 35px;
+		height: 3px;
+		border-radius: 2px;
+		background-color: black;
+		display: block;
+	}
+	:nth-child(1){
+		transform:translateY(1.5px) rotate(45deg);
+	}
+	:nth-child(2){
+		transform:translateY(-1.5px) rotate(135deg);
+	}
+}
+
+#mobileMenu{
+	@include panel(white);
+
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top:0;
+	left:0;
+	width: 100vw;
+	height:100vh;
+	z-index: 100;
+
+	a{
+		font-size: 25pt;
+	}
+
+	 div:not(.mobileActive){
+		> a{
+			color:white
+			!important;
+			text-decoration: none;
+		}
+		+ .mobileSubContainer{
+			display: none;
+		}
+	}
+}
+
+.mobileSubActive{
+	text-decoration: underline;
+}
+
+.mobileSubContainer {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	a{
+		font-size: 18pt !important;
+		text-decoration: none;
+	}
+}
+
+@media screen and (max-width: 600px){
+	#mainMenu, #subMenu{
+		display: none;
+	}
+
+	#mobileBurger{
+		display: flex;
+	}
+
+	#bandeau{
+		flex-direction: column;
+		height:auto;
+		min-height: 45px;
+
+		p{
+			margin:0;
+			text-align: center;
+		}
+	}
+}
+
+.activeMobileMenu{
+	//lorsque le menu est ouvert
+	display: flex !important;
 }

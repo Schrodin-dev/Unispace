@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { AuthService } from "../services/auth.service";
 import {NavigationEnd, Router} from "@angular/router";
 import {RequestsService} from "../services/requests.service";
@@ -9,6 +9,8 @@ import {RequestsService} from "../services/requests.service";
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+	@ViewChild("#mobileMenu") scrollTarget: ElementRef | undefined;
+
   usersInfos = this.authService.getUserInfos();
   path = "/";
   submenuRoutes = [
@@ -80,19 +82,24 @@ export class MenuComponent implements OnInit {
     }
   ];
   currentSubmenuRoutes:any;
+  currentRootPath!: String;
   couleurPrincipale!: String;
+  isOpenMenu!: boolean;
 
   constructor(private authService: AuthService, private router: Router, private requestService: RequestsService) {
     router.events.subscribe((url:any) => {
+		this.isOpenMenu = false;
+
       if(authService.isLogin()){
         this.usersInfos = authService.getUserInfos();
       }
 
       if(url instanceof NavigationEnd){
-        console.log(router.url);
-        this.path = router.url;
+        this.path = '/' + router.url.split('/')[1];
+		if(this.currentRootPath === this.path) return;
         for(let routes of this.submenuRoutes){
-          if(this.path.includes(routes.rootPath)){
+          if(this.path === routes.rootPath){
+			  this.currentRootPath = routes.rootPath;
             this.currentSubmenuRoutes = routes.childs;
           }
         }
@@ -108,5 +115,9 @@ export class MenuComponent implements OnInit {
 
   disconnect(){
     this.authService.disconnect();
+  }
+
+  onMenuBurger(){
+	  this.isOpenMenu = !this.isOpenMenu;
   }
 }

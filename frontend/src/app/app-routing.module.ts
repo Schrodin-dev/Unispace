@@ -18,7 +18,9 @@ const routes: Routes = [
   { path:'agenda/content', canActivate: [AuthGuard], component: ContentComponent},
   { path:'agenda/todo', canActivate: [AuthGuard], component: TodoComponent},
   { path:'notes/detail', canActivate: [AuthGuard], component: DetailComponent},
-  { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent}
+  { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent},
+	{path: 'agenda', redirectTo: 'agenda/content'},
+	{path: 'notes', redirectTo: 'notes/detail'}
 ];
 
 @NgModule({
