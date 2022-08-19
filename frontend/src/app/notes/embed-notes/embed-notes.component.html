@@ -3,7 +3,7 @@
 		<img class="linkToPage" src="assets/img/linkToPage.png" alt="link to a page"/>
 	</a>
 
-	<h1>Dernières notes</h1>
+	<h1 [ngClass]="couleurTexte">Dernières notes</h1>
 
 	<div id="notes">
 		<div class="note" *ngFor="let note of notes | async" [ngStyle]="{borderTopColor: '#'+couleurFond+'99'}">
