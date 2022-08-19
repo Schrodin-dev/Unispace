@@ -2,7 +2,7 @@
   <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.groupe}}</p>
   <p id="disconnect" (click)="disconnect()">se déconnecter</p>
 
-  <img src="assets/img/favicon.png" id="logo">
+	<a routerLink="/"><img src="assets/img/favicon.png" id="logo"></a>
 </div>
 <nav id="mobileBurger">
 	<div (click)="onMenuBurger()">
@@ -23,11 +23,11 @@
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/agenda/content">Cahier de texte</a>
+    <a routerLink="/agenda">Cahier de texte</a>
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/notes/detail">Notes</a>
+    <a routerLink="/notes">Notes</a>
   </div>
   <div routerLinkActive="mainActive">
 	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
