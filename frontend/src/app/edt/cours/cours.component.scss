@@ -1,9 +1,9 @@
 #cours{
 	border-radius: 5px;
 	background-color: rgba(#00BCCD, .4);
-	width:80%;
+	width:calc(80% - 20px);
 	margin:5px 10%;
-	padding:5px 0;
+	padding:5px 10px;
 	display:flex;
 	flex-direction: column;
 	justify-content: center;
