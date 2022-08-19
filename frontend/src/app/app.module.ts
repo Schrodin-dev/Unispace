@@ -1,6 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import * as fr from '@angular/common/locales/fr';
 
@@ -26,6 +26,7 @@ import { EmbedTodoComponent } from './agenda/embed-todo/embed-todo.component';
 import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire.component';
 import { EmbedNotesComponent } from './notes/embed-notes/embed-notes.component';
 import { NoteComponent } from './notes/note/note.component';
+import { ExceptionIntercept } from './exception.interceptor';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { NoteComponent } from './notes/note/note.component';
     AuthService,
     AuthGuard,
     RequestsService,
-  	{ provide: LOCALE_ID, useValue: 'fr-FR'}
+  	{ provide: LOCALE_ID, useValue: 'fr-FR'},
+	  {provide: HTTP_INTERCEPTORS, useClass: ExceptionIntercept, multi: true}
   ],
   bootstrap: [AppComponent]
 })
