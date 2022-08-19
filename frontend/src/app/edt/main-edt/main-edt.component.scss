@@ -1,0 +1,59 @@
+@import "../../../scss/composants/panelsComps";
+
+.panel{
+	margin:30px 20px;
+	padding:20px 10px;
+}
+
+#days{
+	display: grid;
+	/*justify-content: stretch;*/
+	grid-template-columns: calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7);
+
+	> div{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+
+		> div{
+			width:100%;
+			padding:0 2.5px;
+
+			::ng-deep #cours{
+				width:calc(100% - 25px);
+				margin-right: 0;
+				margin-left: 0;
+			}
+		}
+	}
+}
+
+h2{
+	font-size: 14pt;
+	font-weight: normal;
+}
+
+
+// gestion de la version mobile
+::ng-deep .linkPanel .linkToPage{
+	display: none;
+}
+
+@media screen and (min-width: 1200px) {
+	#littleScreen{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 1199px) {
+	#bigScreen{
+		display: none;
+	}
+}
+
+@media screen and (min-width: 500px) and (max-width: 1199px) {
+	#littleScreen{
+		display: flex;
+		justify-content: center;
+	}
+}

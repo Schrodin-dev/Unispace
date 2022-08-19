@@ -26,25 +26,27 @@ export class RequestsService{
 	  return this.httpClient.get(backend.url + "/api/auth/visualiserClasses");
   }
 
-  async getCours(debut: String, fin: String){
-	  let planning: Cours[] = []
-	  await this.httpClient.post(backend.url + "/api/groupe/recupererEdt",{
+  getCours(debut: String, fin: String): Promise<Cours[]>{
+	  return this.httpClient.post(backend.url + "/api/groupe/recupererEdt", {
 		  debut: debut,
 		  fin: fin
 	  }, RequestsService.getRequestOptions())
-		  .subscribe(edt => {
+		  .toPromise()
+		  .then(edt => {
+			  let planning: Cours[] = [];
 			  let i = 0;
 			  // @ts-ignore
-			  for(let cours of edt){
+			  for (let cours of edt) {
 				  planning[i] = new Cours(cours.nom, cours.debut, cours.fin, cours.profs, cours.couleur, cours.salles);
 				  i++;
 			  }
 
-			  planning.sort((a, b) => {return a.debut.getTime() - b.debut.getTime()});
-		  })
+			  planning.sort((a, b) => {
+				  return a.debut.getTime() - b.debut.getTime();
+			  });
 
-
-	  return planning;
+			  return planning;
+		  });
   }
 
   async getTravailAFaireEmbed(){

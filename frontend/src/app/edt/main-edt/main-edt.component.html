@@ -1,1 +1,69 @@
-<p>main-edt works!</p>
+<div id="bigScreen">
+	<div class="panel">
+		<div id="days">
+			<div id="lundi">
+				<h2>Lundi {{displayDates[0] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[0]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="mardi">
+				<h2>Mardi {{displayDates[1] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[1]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="mercredi">
+				<h2>Mercredi {{displayDates[2] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[2]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="jeudi">
+				<h2>Jeudi {{displayDates[3] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[3]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="vendredi">
+				<h2>Vendredi {{displayDates[4] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[4]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="samedi">
+				<h2>Samedi {{displayDates[5] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[5]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+			<div id="dimanche">
+				<h2>Dimanche {{displayDates[6] | date : 'dd MMM'}}</h2>
+				<div >
+					<ng-container *ngFor="let cours of cours[6]">
+						<app-cours [cours]="cours"></app-cours>
+					</ng-container>
+				</div>
+			</div>
+		</div>
+		<div id="weeksScroll">
+
+		</div>
+	</div>
+</div>
+
+<div id="littleScreen">
+	<app-embed-edt (updateDateOut)="setDate($event)" [updateDateIn]="updateDate"></app-embed-edt>
+</div>

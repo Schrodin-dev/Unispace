@@ -15,3 +15,7 @@ $color: white;
 		z-index:10;
 	}
 }
+
+.panel{
+	@include panel($color);
+}

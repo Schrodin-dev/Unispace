@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {RequestsService} from "../../services/requests.service";
 import {AuthService} from "../../services/auth.service";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-embed-edt',
@@ -9,6 +10,9 @@ import {AuthService} from "../../services/auth.service";
   styleUrls: ['./embed-edt.component.scss']
 })
 export class EmbedEdtComponent implements OnInit {
+	@Output() updateDateOut: EventEmitter<Date> = new EventEmitter<Date>();
+	@Input() updateDateIn!: BehaviorSubject<Date>;
+
 
 	dateSelectionnee!: FormGroup;
 	date!: Date;
@@ -27,8 +31,13 @@ export class EmbedEdtComponent implements OnInit {
 
 		this.dateSelectionnee.valueChanges.forEach(newValue => {
 			this.date = new Date(newValue.date);
+			this.updateParent(this.date);
 			this.edt = this.requests.getCours(newValue.date, newValue.date);
 		});
+
+		if(this.updateDateIn !== undefined){
+			this.updateDateIn.subscribe(date => { this.date = date; });
+		}
 
 		this.authService.couleurFond.subscribe(couleur => {
 			this.couleurFond = couleur;
@@ -51,5 +60,9 @@ export class EmbedEdtComponent implements OnInit {
 		this.date.setDate(this.date.getDate()+1);
 
 		this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});
+	}
+
+	updateParent(name: Date){
+		this.updateDateOut.emit(name);
 	}
 }
