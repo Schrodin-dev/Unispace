@@ -25,8 +25,6 @@ export class MainEdtComponent implements OnInit {
 
   ngOnInit(): void {
 	  this.selectStartDate();
-	  this.initialWeek = this.dateToMonday(new Date("2021-08-25 10:00:00.000"));
-	  /*this.initialWeek.setFullYear(new Date().getFullYear()); TODO: uncomment*/
 
 	  this.authService.textColor.subscribe(couleur => {this.couleurTexte = couleur;});
 	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
@@ -35,6 +33,11 @@ export class MainEdtComponent implements OnInit {
 
   selectStartDate(){
 	  this.date = new Date();
+	  this.initialWeek = this.dateToMonday(new Date("2021-08-25 10:00:00.000"));
+	  /*this.initialWeek.setFullYear(new Date().getFullYear()); TODO: uncomment*/
+	  if(this.date.getDate() < this.initialWeek.getDate()){
+		  this.date = this.initialWeek;
+	  }
 	  this.parseDate();
   }
 

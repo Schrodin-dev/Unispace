@@ -59,7 +59,7 @@
 			</div>
 		</div>
 		<div id="weeksScroll">
-			<div class="week"[ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}" *ngFor="let item of [].constructor(60); let i = index" (click)="changeWeek(i)">
+			<div class="week"[ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}" *ngFor="let item of [].constructor(50); let i = index" (click)="changeWeek(i)">
 				<p [ngClass]="couleurTexte">s{{i+1}}: {{getWeek(i) | date : 'dd MMM'}}</p>
 			</div>
 		</div>
