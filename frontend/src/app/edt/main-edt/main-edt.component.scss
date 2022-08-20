@@ -7,7 +7,6 @@
 
 #days{
 	display: grid;
-	/*justify-content: stretch;*/
 	grid-template-columns: calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7);
 
 	> div{
@@ -33,9 +32,38 @@ h2{
 	font-weight: normal;
 }
 
+#weeksScroll{
+	overflow-x: auto;
+	padding-bottom: 10px;
+	display: flex;
+
+	::-webkit-scrollbar-thumb{
+		border-radius:50px;
+		width:5px;
+	}
+
+	.week{
+		border-radius: 5px;
+		margin:5px;
+
+		p{
+			margin: 5px 20px;
+			white-space: nowrap;
+		}
+	}
+
+	:first-child{
+		margin-left: 0;
+	}
+
+	:nth-last-child{
+		margin-right:0;
+	}
+}
+
 
 // gestion de la version mobile
-::ng-deep .linkPanel .linkToPage{
+#littleScreen ::ng-deep .linkPanel .linkToPage{
 	display: none;
 }
 

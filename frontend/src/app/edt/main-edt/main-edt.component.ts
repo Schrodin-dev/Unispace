@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {Cours} from "../../models/cours.model";
 import {RequestsService} from "../../services/requests.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-main-edt',
@@ -13,12 +14,23 @@ export class MainEdtComponent implements OnInit {
 	displayDates: Date[] = [];
 	updateDate: BehaviorSubject<Date> = new BehaviorSubject<Date>(new Date());
 	cours: Cours[][] = [[], [], [], [], [], [], []];
-	test!: Cours[];
+	initialWeek!: Date;
 
-  constructor(private requestsService: RequestsService) { }
+	couleurTexte!: String;
+	couleurFond!: String;
+	couleurPrincipale!: String;
+
+
+  constructor(private requestsService: RequestsService, private authService: AuthService) { }
 
   ngOnInit(): void {
 	  this.selectStartDate();
+	  this.initialWeek = this.dateToMonday(new Date("2021-08-25 10:00:00.000"));
+	  /*this.initialWeek.setFullYear(new Date().getFullYear()); TODO: uncomment*/
+
+	  this.authService.textColor.subscribe(couleur => {this.couleurTexte = couleur;});
+	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
+	  this.authService.couleurPrincipale.subscribe(couleur => {this.couleurPrincipale = couleur;});
   }
 
   selectStartDate(){
@@ -26,14 +38,18 @@ export class MainEdtComponent implements OnInit {
 	  this.parseDate();
   }
 
-  parseDate(){
-	  if(this.date.getDay() === 0) {
-		  this.displayDates[0] = this.getDate(this.date,-6);
-	  }else if(this.date.getDay() !== 1){
-		  this.displayDates[0] = this.getDate(this.date, 1-this.date.getDay());
+  dateToMonday(date: Date){
+	  if(date.getDay() === 0) {
+		  return this.getDate(date,-6);
+	  }else if(date.getDay() !== 1){
+		  return this.getDate(date, 1-date.getDay());
 	  }else{
-		  this.displayDates[0] = this.date;
+		  return date;
 	  }
+  }
+
+  parseDate(){
+	  this.displayDates[0] = this.dateToMonday(this.date);
 
 	  for(let i = 1; i < 7; i++){
 		  this.displayDates[i] = this.getDate(this.displayDates[0], i);
@@ -52,6 +68,7 @@ export class MainEdtComponent implements OnInit {
 
   setDate(date: Date){
 	  if(isNaN(date.valueOf())) return;
+	  if(date === this.date) return;
 
 	  this.date = date;
 	  this.parseDate();
@@ -71,6 +88,14 @@ export class MainEdtComponent implements OnInit {
 				  })
 			  })
 
+  }
+
+  getWeek(weeksAfter: number){
+	  return this.getDate(this.initialWeek, 7*weeksAfter);
+  }
+
+  changeWeek(weeksAfter: number){
+	  this.setDate(this.getWeek(weeksAfter));
   }
 
 }

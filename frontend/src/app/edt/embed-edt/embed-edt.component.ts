@@ -36,7 +36,10 @@ export class EmbedEdtComponent implements OnInit {
 		});
 
 		if(this.updateDateIn !== undefined){
-			this.updateDateIn.subscribe(date => { this.date = date; });
+			this.updateDateIn.subscribe(date => {
+				if(date === this.date) return;
+				this.date = date;
+				this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});});
 		}
 
 		this.authService.couleurFond.subscribe(couleur => {

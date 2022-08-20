@@ -5,6 +5,7 @@ $color: white;
 	@include panel($color);
 	margin:10px;
 	padding-bottom: 58px;
+	position: relative;
 
 	.linkToPage{
 		position: absolute;
