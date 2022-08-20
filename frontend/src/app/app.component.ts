@@ -23,7 +23,7 @@ export class AppComponent implements OnInit{
 	  this.authService.sourceImageTheme.subscribe(source => {
 		  this.source = source;
 	  });
-	  this.authService.textColor.subscribe(color => {
+	  this.authService.couleurTexte.subscribe(color => {
 		  this.couleurTexte = color;
 	  });
   }

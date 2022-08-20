@@ -15,7 +15,7 @@ export class CoursComponent implements OnInit {
   constructor(private authService: AuthService) { }
   ngOnInit(): void {
 	this.horaire = this.dateToHoursString(this.cours.debut) + ' - ' + this.dateToHoursString(this.cours.fin);
-	this.authService.textColor.subscribe(couleur => {
+	this.authService.couleurTexte.subscribe(couleur => {
 		this.couleurTexte = couleur;
 	})
   }

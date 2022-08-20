@@ -48,7 +48,7 @@ export class EmbedEdtComponent implements OnInit {
 	  this.authService.couleurPrincipale.subscribe(couleur => {
 		  this.couleurPrincipale = couleur;
 	  });
-	  this.authService.textColor.subscribe(couleur => {
+	  this.authService.couleurTexte.subscribe(couleur => {
 		  this.couleurTexte = couleur;
 	  });
   }

@@ -8,13 +8,16 @@ import {NgForm} from "@angular/forms";
   styleUrls: ['./login-page.component.scss']
 })
 export class LoginPageComponent implements OnInit {
+	couleurTexte!: String;
+	couleurFond!: String;
 
   constructor(private authService: AuthService) {
 
   }
 
   ngOnInit(): void {
-
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
+	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
   }
 
   onLogin(f: NgForm){

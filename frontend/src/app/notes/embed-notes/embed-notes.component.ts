@@ -19,7 +19,7 @@ export class EmbedNotesComponent implements OnInit {
 
   ngOnInit(): void {
 	  this.authService.couleurFond.subscribe(couleur => this.couleurFond = couleur);
-	  this.authService.textColor.subscribe(couleur => this.couleurTexte = couleur);
+	  this.authService.couleurTexte.subscribe(couleur => this.couleurTexte = couleur);
 
 	  this.notes = this.requestsService.getNoteEmbed();
   }

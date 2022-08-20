@@ -1,15 +1,15 @@
 <form [formGroup]="form">
 	<div id="fields">
-		<input type="text" formControlName="nom" id="nom" ngModel required class="inputText" placeholder="nom">
-		<input type="text" formControlName="prenom" id="prenom" ngModel required class="inputText" placeholder="prenom">
-		<input type="email" formControlName="email" id="email" ngModel required class="inputText" placeholder="email">
+		<input type="text" formControlName="nom" id="nom" ngModel required class="inputText" placeholder="nom" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<input type="text" formControlName="prenom" id="prenom" ngModel required class="inputText" placeholder="prenom" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<input type="email" formControlName="email" id="email" ngModel required class="inputText" placeholder="email" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 
 		<div class="dualDropDown">
-			<select formControlName="classe" id="classe" class="dropDown">
+			<select formControlName="classe" id="classe" class="dropDown" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 				<option disabled selected hidden>classe</option>
 				<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
 			</select>
-			<select formControlName="groupe" id="groupe" class="dropDown">
+			<select formControlName="groupe" id="groupe" class="dropDown" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 				<ng-container *ngIf="groupes$ | async as groupes">
 					<option disabled selected hidden>groupe</option>
 					<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
@@ -17,12 +17,12 @@
 			</select>
 		</div>
 
-		<input type="password" formControlName="password" id="password" ngModel required placeholder="mot de passe" class="inputText">
+		<input type="password" formControlName="password" id="password" ngModel required placeholder="mot de passe" class="inputText" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 
-		<button type="submit" class="textButton" (click)="onRegister()">s'inscrire</button>
+		<button type="submit" class="textButton" (click)="onRegister()" [ngClass]="couleurTexte">s'inscrire</button>
 		<!--[disabled]="f.invalid"-->
 
-		<p id="inscription">déjà inscrit ? <a routerLink="/login">Se connecter</a></p>
+		<p id="inscription" [ngClass]="couleurTexte">déjà inscrit ? <a routerLink="/login" [ngClass]="couleurTexte">Se connecter</a></p>
 	</div>
 
 </form>

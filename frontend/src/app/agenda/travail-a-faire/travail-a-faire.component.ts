@@ -15,7 +15,7 @@ export class TravailAFaireComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-	  this.authService.textColor.subscribe(couleur => {this.couleurTexte = couleur;});
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
   }
 
 	dateToHoursString(date: Date): String{

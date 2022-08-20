@@ -11,30 +11,23 @@ $color : white;
   padding: 0 20px;
   margin: 2.5px 0;
   font-size: 20px;
-
-  &::placeholder{
-    color: darken($color, 20);
-  }
 }
 
 .textButton{
 	background: transparent;
 	border: none;
 	outline: none;
-	color:white;
 	margin-top: 30px;
 	font-size: 1.2em;
 	cursor: pointer;
 
 	&:disabled{
-		color: darken(white, 20);
 		cursor: default;
 	}
 }
 
 .dropDown{
 	@include panel($color);
-	color:$color;
 }
 
 .dualDropDown{

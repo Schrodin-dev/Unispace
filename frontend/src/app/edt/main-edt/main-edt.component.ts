@@ -26,7 +26,7 @@ export class MainEdtComponent implements OnInit {
   ngOnInit(): void {
 	  this.selectStartDate();
 
-	  this.authService.textColor.subscribe(couleur => {this.couleurTexte = couleur;});
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
 	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
 	  this.authService.couleurPrincipale.subscribe(couleur => {this.couleurPrincipale = couleur;});
   }

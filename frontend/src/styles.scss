@@ -43,8 +43,24 @@ h1{
 
 //couleurs de texte
 .light{
-	color: white;
+	$lightColor: white;
+	color: $lightColor;
+
+	&:disabled{
+		color: darken($lightColor, 20);
+	}
+	&::placeholder{
+		color: darken($lightColor, 20);
+	}
 }
 .dark{
-	color: black;
+	$darkColor: black;
+	color: $darkColor;
+
+	&:disabled{
+		color: darken($darkColor, 20);
+	}
+	&::placeholder{
+		color: darken($darkColor, 20);
+	}
 }

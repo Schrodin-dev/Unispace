@@ -11,7 +11,7 @@ export class AuthService{
 	public couleurFond: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurFond") || 'ffffff');
 	public sourceImageTheme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("sourceImageTheme") || 'une source');
 	public theme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("theme") || '1');
-	public textColor: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("textColor") || 'light');
+	public couleurTexte: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("textColor") || 'light');
 
   constructor(private httpClient: HttpClient, private router: Router) {
 
@@ -67,7 +67,7 @@ export class AuthService{
 
 			sessionStorage.setItem("textColor", this.lightOrDark(this.loginRes.couleurFond));
 			// @ts-ignore
-			this.textColor.next(sessionStorage.getItem("textColor"));
+			this.couleurTexte.next(sessionStorage.getItem("textColor"));
 
 
           this.router.navigate(['']);

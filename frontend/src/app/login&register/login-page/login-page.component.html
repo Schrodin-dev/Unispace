@@ -1,12 +1,12 @@
 <!-- login form -->
 <form (ngSubmit)="onLogin(f)" #f="ngForm">
   <div id="fields">
-      <input type="email" name="email" id="email" ngModel required class="inputText" placeholder="email">
-      <input type="password" name="password" id="password" ngModel required class="inputText" placeholder="mot de passe">
+      <input type="email" name="email" id="email" ngModel required class="inputText" placeholder="email" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+      <input type="password" name="password" id="password" ngModel required class="inputText" placeholder="mot de passe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 
-      <button type="submit" [disabled]="f.invalid" class="textButton">se connecter</button>
+      <button type="submit" [disabled]="f.invalid" class="textButton" [ngClass]="couleurTexte">se connecter</button>
 
-      <p id="inscription">pas inscrit ? <a routerLink="/register">S'enregistrer</a></p>
+      <p id="inscription" [ngClass]="couleurTexte">pas inscrit ? <a routerLink="/register" [ngClass]="couleurTexte">S'enregistrer</a></p>
   </div>
 
 </form>

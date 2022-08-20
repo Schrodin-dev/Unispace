@@ -17,7 +17,7 @@ export class NoteComponent implements OnInit {
 
   ngOnInit(): void {
 	  this.authService.couleurPrincipale.subscribe(couleur => {this.couleurPrincipale = couleur});
-	  this.authService.textColor.subscribe(couleur => {this.couleurTexte = couleur});
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur});
 
 
   }

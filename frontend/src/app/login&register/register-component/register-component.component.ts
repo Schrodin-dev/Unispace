@@ -11,6 +11,9 @@ import {filter, map} from "rxjs/operators";
   styleUrls: ['./register-component.component.scss']
 })
 export class RegisterComponentComponent implements OnInit {
+	couleurFond!: String;
+	couleurTexte!: String;
+
 	classes$!: Observable<any>;
 	form!: FormGroup;
 	groupes$!: Observable<any>;
@@ -18,6 +21,8 @@ export class RegisterComponentComponent implements OnInit {
   constructor(private authService: AuthService, private requests: RequestsService, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
 	  this.classes$ = this.requests.getClasses();
 
 	  this.form = this.formBuilder.group({
