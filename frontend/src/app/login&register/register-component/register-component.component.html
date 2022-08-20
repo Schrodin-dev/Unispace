@@ -19,7 +19,7 @@
 
 		<input type="password" formControlName="password" id="password" ngModel required placeholder="mot de passe" class="inputText" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 
-		<button type="submit" class="textButton" (click)="onRegister()" [ngClass]="couleurTexte">s'inscrire</button>
+		<button type="submit" class="textButton" (click)="onRegister()" [ngClass]="couleurTexte" [disabled]="form.invalid">s'inscrire</button>
 		<!--[disabled]="f.invalid"-->
 
 		<p id="inscription" [ngClass]="couleurTexte">déjà inscrit ? <a routerLink="/login" [ngClass]="couleurTexte">Se connecter</a></p>

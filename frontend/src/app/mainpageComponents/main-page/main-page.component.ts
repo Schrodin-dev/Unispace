@@ -7,7 +7,6 @@ import {HttpClient} from "@angular/common/http";
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent implements OnInit{
-  test:any;
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit(): void {

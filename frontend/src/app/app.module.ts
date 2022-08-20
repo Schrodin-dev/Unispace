@@ -27,6 +27,7 @@ import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire
 import { EmbedNotesComponent } from './notes/embed-notes/embed-notes.component';
 import { NoteComponent } from './notes/note/note.component';
 import { ExceptionIntercept } from './exception.interceptor';
+import { ErreurComponent } from './erreur/erreur.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { ExceptionIntercept } from './exception.interceptor';
     TravailAFaireComponent,
     EmbedNotesComponent,
     NoteComponent,
+    ErreurComponent,
   ],
     imports: [
         BrowserModule,

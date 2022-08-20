@@ -1,0 +1,41 @@
+@import "../../scss/composants/panelsComps";
+
+#container{
+	width:100%;
+	display: flex;
+	justify-content: center;
+}
+
+.panel{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width:90%;
+	max-width:400px;
+	min-height:50px;
+	background-color: rgba(255, 0, 0, 0.1);
+	padding:5px 10px;
+
+	p{
+		color:red;
+		margin:0 5px 0 0;
+	}
+
+	#cross{
+		cursor: pointer;
+
+		span{
+			display: block;
+			background-color: #770101;
+			width:22px;
+			height:3.5px;
+			border-radius: 30px;
+		}
+		:nth-child(1){
+			transform: translateY(1.75px) rotate(45deg);
+		}
+		:nth-child(2){
+			transform: translateY(-1.75px) rotate(135deg);
+		}
+	}
+}
