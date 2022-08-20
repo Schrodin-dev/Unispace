@@ -8,6 +8,7 @@
 #days{
 	display: grid;
 	grid-template-columns: calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7) calc(100% / 7);
+	min-height: calc(100vh - 300px);
 
 	> div{
 		display: flex;
