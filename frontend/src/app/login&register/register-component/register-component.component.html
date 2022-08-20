@@ -23,6 +23,12 @@
 		<!--[disabled]="f.invalid"-->
 
 		<p id="inscription" [ngClass]="couleurTexte">déjà inscrit ? <a routerLink="/login" [ngClass]="couleurTexte">Se connecter</a></p>
+
+		<p *ngIf="form.controls['nom'].hasError('maxlength')" class="errorText">Entrez un nom de moins de 40 caractères</p>
+		<p *ngIf="form.controls['prenom'].hasError('maxlength')" class="errorText">Entrez un prénom de moins de 40 caractères</p>
+		<p *ngIf="form.controls['email'].hasError('maxlength')" class="errorText">Entrez un email de moins de 128 caractères</p>
+		<p *ngIf="form.controls['email'].hasError('pattern')" class="errorText">Entrez une email universitaire de la forme: prénom.nom@etu.umontpellier.fr</p>
+		<p *ngIf="form.controls['email'].hasError('email')" class="errorText">Entrez un email valide</p>
 	</div>
 
 </form>

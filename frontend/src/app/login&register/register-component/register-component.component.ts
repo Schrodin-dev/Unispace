@@ -32,7 +32,7 @@ export class RegisterComponentComponent implements OnInit {
 		  classe: ["classe", [Validators.required, notValueValidator('classe')]],
 		  groupe: ["groupe", [Validators.required, notValueValidator('groupe')]],
 		  password: [null, [Validators.required]]
-	  });
+	  }, {updateOn: "blur"});
 
 	  this.groupes$ = this.form.valueChanges.pipe(
 		  map(async value => {
