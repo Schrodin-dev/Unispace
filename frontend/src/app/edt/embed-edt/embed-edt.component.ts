@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {RequestsService} from "../../services/requests.service";
 import {AuthService} from "../../services/auth.service";
 import {BehaviorSubject} from "rxjs";
+import {Cours} from "../../models/cours.model";
 
 @Component({
   selector: 'app-embed-edt',
@@ -11,12 +12,13 @@ import {BehaviorSubject} from "rxjs";
 })
 export class EmbedEdtComponent implements OnInit {
 	@Output() updateDateOut: EventEmitter<Date> = new EventEmitter<Date>();
+	@Output() error = new EventEmitter<String>();
 	@Input() updateDateIn!: BehaviorSubject<Date>;
 
 
 	dateSelectionnee!: FormGroup;
 	date!: Date;
-	edt: any;
+	edt!: Promise<Cours[]>;
 	couleurFond!: String;
 	couleurPrincipale!: String;
 	couleurTexte!: String;
@@ -28,11 +30,13 @@ export class EmbedEdtComponent implements OnInit {
 		this.dateSelectionnee = this.formBuilder.group({
 			date: [this.date.toISOString().substr(0, 10)]
 		});
+		this.chargerEdt(this.date.toISOString());
 
 		this.dateSelectionnee.valueChanges.forEach(newValue => {
+			console.log("change");
 			this.date = new Date(newValue.date);
 			this.updateParent(this.date);
-			this.edt = this.requests.getCours(newValue.date, newValue.date);
+			this.chargerEdt(newValue.date);
 		});
 
 		if(this.updateDateIn !== undefined){
@@ -50,6 +54,18 @@ export class EmbedEdtComponent implements OnInit {
 	  });
 	  this.authService.couleurTexte.subscribe(couleur => {
 		  this.couleurTexte = couleur;
+	  });
+  }
+
+  chargerEdt(date: String){
+	  this.edt = this.requests.getCours(date, date);
+	  this.edt
+		  .then(() => {
+			  this.error.emit('');
+		  })
+		  .catch(error => {
+		  console.log("yo");
+		  this.error.emit(error.error.message || 'Impossible de récupérer l\'emploi du temps, veuillez réessayer.');
 	  });
   }
 

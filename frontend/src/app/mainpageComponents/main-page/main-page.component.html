@@ -1,7 +1,13 @@
 <div id="container">
-	<app-embed-edt></app-embed-edt>
+	<app-embed-edt (error)="errors[0] = $event"></app-embed-edt>
 	<div>
-		<app-embed-todo></app-embed-todo>
-		<app-embed-notes></app-embed-notes>
+		<app-embed-todo (error)="errors[1] = $event"></app-embed-todo>
+		<app-embed-notes (error)="errors[2] = $event"></app-embed-notes>
 	</div>
+</div>
+
+<div id="errors">
+	<app-erreur *ngIf="errors[0]" (close)="errors[0] = ''" [message]="errors[0]"></app-erreur>
+	<app-erreur *ngIf="errors[1]" (close)="errors[1] = ''" [message]="errors[1]"></app-erreur>
+	<app-erreur *ngIf="errors[2]" (close)="errors[2] = ''" [message]="errors[2]"></app-erreur>
 </div>

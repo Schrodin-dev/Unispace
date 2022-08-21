@@ -1,7 +1,7 @@
 @import "../base/panels";
 $color : white;
 
-.inputText, .dropDown{
+.inputText, .dropDown > select{
   @include panel($color);
 
   height: 50px;
@@ -27,7 +27,28 @@ $color : white;
 }
 
 .dropDown{
-	@include panel($color);
+	display: grid;
+	grid-template-areas: "select";
+	align-items: center;
+
+	> select{
+		@include panel($color);
+		appearance: none;
+	}
+
+	&::after {
+		content: "";
+		width: 30px;
+		height: 15px;
+		background-color: white;
+		clip-path: polygon(25% 38%, 50% 90%, 75% 38%, 80% 40%, 50% 100%, 20% 40%);
+		justify-self: end;
+	}
+}
+
+.dropDown > select,
+.dropDown:after {
+	grid-area: select;
 }
 
 .dualDropDown{
@@ -37,15 +58,20 @@ $color : white;
 	> .dropDown{
 		width: calc(50% - 1.5px);
 
-		&:nth-child(1){
-			border-bottom-right-radius: 0;
-			border-top-right-radius: 0;
+		> select{
+			width: 100%;
 		}
-		&:nth-child(2){
-			border-bottom-left-radius: 0;
-			border-top-left-radius: 0;
+
+		&:nth-child(1) > select{
+			border-bottom-right-radius: 0 !important;
+			border-top-right-radius: 0 !important;
+		}
+		&:nth-child(2) > select{
+			border-bottom-left-radius: 0 !important;
+			border-top-left-radius: 0 !important;
 		}
 	}
+
 }
 
 .inputDate{

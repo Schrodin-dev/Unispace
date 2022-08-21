@@ -8,6 +8,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class MainPageComponent implements OnInit{
   constructor(private httpClient: HttpClient) { }
+	errors: String[] = [];
 
   ngOnInit(): void {
 

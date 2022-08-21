@@ -26,7 +26,8 @@ import { EmbedTodoComponent } from './agenda/embed-todo/embed-todo.component';
 import { TravailAFaireComponent } from './agenda/travail-a-faire/travail-a-faire.component';
 import { EmbedNotesComponent } from './notes/embed-notes/embed-notes.component';
 import { NoteComponent } from './notes/note/note.component';
-import { ExceptionIntercept } from './exception.interceptor';
+import { ExceptionIntercept } from './interceptors/exception.interceptor';
+import { AuthInterceptor } from "./interceptors/auth.interceptor";
 import { ErreurComponent } from './erreur/erreur.component';
 
 @NgModule({
@@ -62,7 +63,8 @@ import { ErreurComponent } from './erreur/erreur.component';
     AuthGuard,
     RequestsService,
   	{ provide: LOCALE_ID, useValue: 'fr-FR'},
-	  {provide: HTTP_INTERCEPTORS, useClass: ExceptionIntercept, multi: true}
+	  {provide: HTTP_INTERCEPTORS, useClass: ExceptionIntercept, multi: true},
+	  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

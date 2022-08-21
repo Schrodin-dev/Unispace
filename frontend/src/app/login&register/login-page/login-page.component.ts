@@ -10,6 +10,7 @@ import {NgForm} from "@angular/forms";
 export class LoginPageComponent implements OnInit {
 	couleurTexte!: String;
 	couleurFond!: String;
+	error!: String;
 
   constructor(private authService: AuthService) {
 
@@ -21,7 +22,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   onLogin(f: NgForm){
-    this.authService.login(f.value.email, f.value.password);
+    this.authService.login(f.value.email, f.value.password)
+		.catch(error => {
+			this.error = error.error.message;
+		})
   }
 
 }

@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {travailAFaire} from "../../models/travailAFaire.model";
+import {TravailAFaire} from "../../models/travailAFaire.model";
 import {AuthService} from "../../services/auth.service";
 
 @Component({
@@ -8,7 +8,7 @@ import {AuthService} from "../../services/auth.service";
   styleUrls: ['./travail-a-faire.component.scss']
 })
 export class TravailAFaireComponent implements OnInit {
-	@Input() travail!: travailAFaire;
+	@Input() travail!: TravailAFaire;
 
 	couleurTexte!: String;
 

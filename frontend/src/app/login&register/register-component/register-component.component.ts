@@ -13,6 +13,8 @@ import {filter, map} from "rxjs/operators";
 export class RegisterComponentComponent implements OnInit {
 	couleurFond!: String;
 	couleurTexte!: String;
+	error!: String;
+	message!: String;
 
 	classes$!: Observable<any>;
 	form!: FormGroup;
@@ -32,9 +34,10 @@ export class RegisterComponentComponent implements OnInit {
 		  classe: ["classe", [Validators.required, notValueValidator('classe')]],
 		  groupe: ["groupe", [Validators.required, notValueValidator('groupe')]],
 		  password: [null, [Validators.required]]
-	  }, {updateOn: "blur"});
+	  });
 
 	  this.groupes$ = this.form.valueChanges.pipe(
+		  filter(value => value.classe !== 'classe'),
 		  map(async value => {
 			  let res: any[] = [];
 			  await this.classes$.forEach(classes => {
@@ -50,7 +53,16 @@ export class RegisterComponentComponent implements OnInit {
   }
 
   onRegister(){
-    this.authService.register(this.form.value.nom, this.form.value.prenom, this.form.value.email, this.form.value.password, this.form.value.classe, this.form.value.groupe);
+	  this.authService.register(this.form.value.nom, this.form.value.prenom, this.form.value.email, this.form.value.password, this.form.value.classe, this.form.value.groupe)
+		  .then(value => {
+			  this.error = '';
+			  this.message = value.message;
+		  })
+		  .catch(error => {
+			  this.message = '';
+			  this.error = error.error.message;
+		  })
+
   }
 
 

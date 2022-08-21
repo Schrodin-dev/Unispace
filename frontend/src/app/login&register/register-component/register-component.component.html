@@ -5,16 +5,20 @@
 		<input type="email" formControlName="email" id="email" ngModel required class="inputText" placeholder="email" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 
 		<div class="dualDropDown">
-			<select formControlName="classe" id="classe" class="dropDown" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-				<option disabled selected hidden>classe</option>
-				<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
-			</select>
-			<select formControlName="groupe" id="groupe" class="dropDown" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-				<ng-container *ngIf="groupes$ | async as groupes">
-					<option disabled selected hidden>groupe</option>
-					<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
-				</ng-container>
-			</select>
+			<div class="dropDown">
+				<select formControlName="classe" id="classe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+					<option disabled selected hidden>classe</option>
+					<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
+				</select>
+			</div>
+			<div class="dropDown" >
+				<select formControlName="groupe" id="groupe"[ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+					<ng-container *ngIf="groupes$ | async as groupes">
+						<option disabled selected hidden>groupe</option>
+						<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
+					</ng-container>
+				</select>
+			</div>
 		</div>
 
 		<input type="password" formControlName="password" id="password" ngModel required placeholder="mot de passe" class="inputText" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
@@ -29,6 +33,8 @@
 		<p *ngIf="form.controls['email'].hasError('maxlength')" class="errorText">Entrez un email de moins de 128 caractères</p>
 		<p *ngIf="form.controls['email'].hasError('pattern')" class="errorText">Entrez une email universitaire de la forme: prénom.nom@etu.umontpellier.fr</p>
 		<p *ngIf="form.controls['email'].hasError('email')" class="errorText">Entrez un email valide</p>
-	</div>
 
+		<p *ngIf="message" class="message" [ngClass]="couleurTexte">{{message}}</p>
+		<app-erreur *ngIf="error" [message]="error" (close)="error = ''" class="message"></app-erreur>
+	</div>
 </form>

@@ -19,7 +19,7 @@ export class MainEdtComponent implements OnInit {
 	couleurTexte!: String;
 	couleurFond!: String;
 	couleurPrincipale!: String;
-
+	error!: String;
 
   constructor(private requestsService: RequestsService, private authService: AuthService) { }
 
@@ -91,8 +91,11 @@ export class MainEdtComponent implements OnInit {
 						  }
 					  }
 				  })
+			  this.error = '';
 			  })
-
+		  .catch(error => {
+			  this.error = error.error.message;
+		  });
   }
 
   getWeek(weeksAfter: number){

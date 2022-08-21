@@ -64,8 +64,10 @@
 			</div>
 		</div>
 	</div>
+	<app-erreur *ngIf="error" (close)="error= ''" [message]="error"></app-erreur>
 </div>
 
 <div id="littleScreen">
-	<app-embed-edt (updateDateOut)="setDate($event)" [updateDateIn]="updateDate"></app-embed-edt>
+	<app-embed-edt (updateDateOut)="setDate($event)" [updateDateIn]="updateDate" (error)="error = $event"></app-embed-edt>
+	<app-erreur *ngIf="error" (close)="error= ''" [message]="error"></app-erreur>
 </div>

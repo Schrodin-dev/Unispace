@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {RequestsService} from "../../services/requests.service";
 import {Note} from "../../models/note.model";
 import {Subject} from "rxjs";
@@ -10,6 +10,7 @@ import {AuthService} from "../../services/auth.service";
   styleUrls: ['./embed-notes.component.scss']
 })
 export class EmbedNotesComponent implements OnInit {
+	@Output() error = new EventEmitter<String>();
 	couleurFond!: String;
 	couleurTexte!: String;
 
@@ -22,6 +23,13 @@ export class EmbedNotesComponent implements OnInit {
 	  this.authService.couleurTexte.subscribe(couleur => this.couleurTexte = couleur);
 
 	  this.notes = this.requestsService.getNoteEmbed();
+	  this.notes
+		  .then(() => {
+			  this.error.emit('');
+		  })
+		  .catch(error => {
+		  this.error.emit(error.error.message || 'Impossible de récupérer les notes, veuillez réessayer.');
+	  });
   }
 
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
-import {travailAFaire} from "../../models/travailAFaire.model";
+import {TravailAFaire} from "../../models/travailAFaire.model";
 import {RequestsService} from "../../services/requests.service";
 
 @Component({
@@ -9,11 +9,12 @@ import {RequestsService} from "../../services/requests.service";
   styleUrls: ['./embed-todo.component.scss']
 })
 export class EmbedTodoComponent implements OnInit {
+	@Output() error = new EventEmitter<String>();
 	couleurFond!: String;
 	couleurPrincipale!: String;
 	couleurTexte!: String;
 
-	travails!: Promise<travailAFaire[]>;
+	travails!: Promise<TravailAFaire[]>;
 
   constructor(private authService: AuthService, private requestsService: RequestsService) { }
 
@@ -23,6 +24,13 @@ export class EmbedTodoComponent implements OnInit {
 	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur});
 
 	  this.travails = this.requestsService.getTravailAFaireEmbed();
+	  this.travails
+		  .then(() => {
+			  this.error.emit('');
+		  })
+		  .catch(error => {
+		this.error.emit(error.error.message || 'Impossible de récupérer les travails à faire, veuillez réessayer.');
+	  });
   }
 
 }

@@ -2,7 +2,8 @@ import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
 import {Router} from "@angular/router";
 import backend from "../../assets/config/backend.json";
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable, ObservableInput, Subject, throwError} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Injectable()
 export class AuthService{
@@ -17,8 +18,8 @@ export class AuthService{
 
   }
 
-  register(nom:String, prenom:String, email:String, password:String, classe:String, groupe:any){
-    this.httpClient
+  register(nom:String, prenom:String, email:String, password:String, classe:String, groupe:any): Promise<any>{
+    return this.httpClient
       .post(backend.url + '/api/auth/register', {
         nom: nom,
         prenom: prenom,
@@ -27,35 +28,27 @@ export class AuthService{
         classe: classe,
         groupe: groupe
       })
-      .subscribe(
-        (response) => {
-          console.log(response);
-        },
-        (error) => {
-          console.log("error: " + error);
-        }
-      );
+		.toPromise();
   }
 
-  login(email:String, password:String){
-    console.log(email, password);
-    this.httpClient
+  login(email:String, password:String):Promise<any>{
+    return this.httpClient
       .post(backend.url + '/api/auth/login', {
         email: email,
         password: password
       })
-      .subscribe(
-        (res) => {
-          this.loginRes = res;
-          // @ts-ignore
-          sessionStorage.setItem("email", email);
-          sessionStorage.setItem("token", this.loginRes.token);
-          sessionStorage.setItem("groupe", this.loginRes.groupe);
-          sessionStorage.setItem("droits", this.loginRes.droitsUser);
-          sessionStorage.setItem("nom", this.loginRes.nom);
-          sessionStorage.setItem("prenom", this.loginRes.prenom);
+		.toPromise()
+		.then((res) => {
+			this.loginRes = res;
+			// @ts-ignore
+			sessionStorage.setItem("email", email);
+			sessionStorage.setItem("token", this.loginRes.token);
+			sessionStorage.setItem("groupe", this.loginRes.groupe);
+			sessionStorage.setItem("droits", this.loginRes.droitsUser);
+			sessionStorage.setItem("nom", this.loginRes.nom);
+			sessionStorage.setItem("prenom", this.loginRes.prenom);
 
-		  //mise à jour du theme
+			//mise à jour du theme
 			this.couleurPrincipale.next(this.loginRes.couleurPrincipale);
 			sessionStorage.setItem("couleurPrincipale", this.loginRes.couleurPrincipale);
 			this.couleurFond.next(this.loginRes.couleurFond);
@@ -70,12 +63,8 @@ export class AuthService{
 			this.couleurTexte.next(sessionStorage.getItem("textColor"));
 
 
-          this.router.navigate(['']);
-        },
-        (error) => {
-          console.log("error: " + error);
-        }
-      );
+			this.router.navigate(['']);
+		});
   }
 
   disconnect(){

@@ -1,4 +1,4 @@
-export class travailAFaire{
+export class TravailAFaire {
 	id!: String;
 	date!: Date;
 	desc!: String;
@@ -6,9 +6,8 @@ export class travailAFaire{
 	nomCours!: String;
 	couleurCours!: String;
 
-	constructor(id: String, date: String, desc: String, estNote: boolean, nomCours: String, couleurCours: String) {
+	constructor(id: String, date: string, desc: String, estNote: boolean, nomCours: String, couleurCours: String) {
 		this.id = id;
-		// @ts-ignore
 		this.date = new Date(date);
 		this.desc = desc;
 		this.estNote = estNote;
