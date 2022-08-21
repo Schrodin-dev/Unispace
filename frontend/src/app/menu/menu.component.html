@@ -1,95 +1,97 @@
-<div id="bandeau" *ngIf="path != '/login' && path != '/register'">
-  <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.groupe}}</p>
-  <p id="disconnect" (click)="disconnect()">se déconnecter</p>
+<ng-container *ngIf="path != '/login' && path != '/register' && !path.includes('/verifyAccount')">
+	<div id="bandeau">
+	  <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.groupe}}</p>
+	  <p id="disconnect" (click)="disconnect()">se déconnecter</p>
 
-	<a routerLink="/"><img src="assets/img/favicon.png" id="logo"></a>
-</div>
-<nav id="mobileBurger">
-	<div (click)="onMenuBurger()">
-		<span></span>
-		<span></span>
-		<span></span>
+		<a routerLink="/"><img src="assets/img/favicon.png" id="logo"></a>
 	</div>
-</nav>
-
-<nav id="mainMenu" *ngIf="path != '/login' && path != '/register'">
-  <div routerLinkActive="mainActive" [routerLinkActiveOptions]="{exact:true}">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/">Accueil</a>
-  </div>
-  <div routerLinkActive="mainActive">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/params">Mes données</a>
-  </div>
-  <div routerLinkActive="mainActive">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/agenda">Cahier de texte</a>
-  </div>
-  <div routerLinkActive="mainActive">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/notes">Notes</a>
-  </div>
-  <div routerLinkActive="mainActive">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a routerLink="/edt">Emploi du temps</a>
-  </div>
-</nav>
-
-<nav id="subMenu" *ngIf="path != '/login' && path != '/register'">
-  <div routerLinkActive="subActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-	  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
-    <a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
-  </div>
-</nav>
-
-<nav id="mobileMenu" [ngClass]="isOpenMenu ? 'activeMobileMenu': ''">
-	<div id="cross" (click)="onMenuBurger()">
-		<span></span>
-		<span></span>
-	</div>
-
-	<div routerLinkActive="mobileActive" [routerLinkActiveOptions]="{exact:true}">
-		<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/">Accueil</a>
-	</div>
-	<div class="mobileSubContainer">
-		<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-			<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+	<nav id="mobileBurger">
+		<div (click)="onMenuBurger()">
+			<span></span>
+			<span></span>
+			<span></span>
 		</div>
-	</div>
+	</nav>
 
-	<div routerLinkActive="mobileActive">
-		<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/params">Mes données</a>
-	</div>
-	<div class="mobileSubContainer">
-		<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-			<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
-		</div>
-	</div>
+	<nav id="mainMenu">
+	  <div routerLinkActive="mainActive" [routerLinkActiveOptions]="{exact:true}">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/">Accueil</a>
+	  </div>
+	  <div routerLinkActive="mainActive">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/params">Mes données</a>
+	  </div>
+	  <div routerLinkActive="mainActive">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/agenda">Cahier de texte</a>
+	  </div>
+	  <div routerLinkActive="mainActive">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/notes">Notes</a>
+	  </div>
+	  <div routerLinkActive="mainActive">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a routerLink="/edt">Emploi du temps</a>
+	  </div>
+	</nav>
 
-	<div routerLinkActive="mobileActive">
-		<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/agenda">Cahier de texte</a>
-	</div>
-	<div class="mobileSubContainer">
-		<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-			<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
-		</div>
-	</div>
+	<nav id="subMenu">
+	  <div routerLinkActive="subActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+		<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+	  </div>
+	</nav>
 
-	<div routerLinkActive="mobileActive">
-		<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/notes">Notes</a>
-	</div>
-	<div class="mobileSubContainer">
-		<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-			<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+	<nav id="mobileMenu" [ngClass]="isOpenMenu ? 'activeMobileMenu': ''">
+		<div id="cross" (click)="onMenuBurger()">
+			<span></span>
+			<span></span>
 		</div>
-	</div>
 
-	<div routerLinkActive="mobileActive">
-		<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/edt">Emploi du temps</a>
-	</div>
-	<div class="mobileSubContainer">
-		<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
-			<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+		<div routerLinkActive="mobileActive" [routerLinkActiveOptions]="{exact:true}">
+			<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/">Accueil</a>
 		</div>
-	</div>
-</nav>
+		<div class="mobileSubContainer">
+			<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+			</div>
+		</div>
+
+		<div routerLinkActive="mobileActive">
+			<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/params">Mes données</a>
+		</div>
+		<div class="mobileSubContainer">
+			<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+			</div>
+		</div>
+
+		<div routerLinkActive="mobileActive">
+			<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/agenda">Cahier de texte</a>
+		</div>
+		<div class="mobileSubContainer">
+			<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+			</div>
+		</div>
+
+		<div routerLinkActive="mobileActive">
+			<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/notes">Notes</a>
+		</div>
+		<div class="mobileSubContainer">
+			<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+			</div>
+		</div>
+
+		<div routerLinkActive="mobileActive">
+			<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/edt">Emploi du temps</a>
+		</div>
+		<div class="mobileSubContainer">
+			<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+			</div>
+		</div>
+	</nav>
+</ng-container>

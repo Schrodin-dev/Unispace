@@ -9,6 +9,7 @@ import {ContentComponent} from "./agenda/content/content.component";
 import {TodoComponent} from "./agenda/todo/todo.component";
 import {DetailComponent} from "./notes/detail/detail.component";
 import {MainEdtComponent} from "./edt/main-edt/main-edt.component";
+import {VerifierCompteComponent} from "./login&register/verifier-compte/verifier-compte.component";
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuard], component: MainPageComponent},
@@ -20,7 +21,9 @@ const routes: Routes = [
   { path:'notes/detail', canActivate: [AuthGuard], component: DetailComponent},
   { path:'edt', canActivate: [AuthGuard], component: MainEdtComponent},
 	{path: 'agenda', redirectTo: 'agenda/content'},
-	{path: 'notes', redirectTo: 'notes/detail'}
+	{path: 'notes', redirectTo: 'notes/detail'},
+	{path: 'verifyAccount/:token', component: VerifierCompteComponent},
+	{path: 'verifyAccount', component: VerifierCompteComponent}
 ];
 
 @NgModule({

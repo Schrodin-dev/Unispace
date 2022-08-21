@@ -65,4 +65,15 @@ export class RequestsService{
 			  return notes.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
 		  });
   }
+
+  verifierCompte(code: String): Promise<String>{
+	  return this.httpClient.post(backend.url + '/api/auth/verify', {
+		  codeVerification: code
+	  })
+		  .toPromise()
+		  .then(message => {
+			  // @ts-ignore
+			  return message.message;
+		  });
+  }
 }

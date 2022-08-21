@@ -7,6 +7,7 @@
       <button type="submit" [disabled]="f.invalid" class="textButton" [ngClass]="couleurTexte">se connecter</button>
 
       <p id="inscription" [ngClass]="couleurTexte">pas inscrit ? <a routerLink="/register" [ngClass]="couleurTexte">S'enregistrer</a></p>
+	  <app-erreur *ngIf="error" [message]="error" (close)="error = ''" class="message"></app-erreur>
   </div>
 
 </form>

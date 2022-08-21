@@ -29,6 +29,7 @@ import { NoteComponent } from './notes/note/note.component';
 import { ExceptionIntercept } from './interceptors/exception.interceptor';
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
 import { ErreurComponent } from './erreur/erreur.component';
+import { VerifierCompteComponent } from './login&register/verifier-compte/verifier-compte.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { ErreurComponent } from './erreur/erreur.component';
     EmbedNotesComponent,
     NoteComponent,
     ErreurComponent,
+    VerifierCompteComponent,
   ],
     imports: [
         BrowserModule,
