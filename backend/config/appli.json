@@ -1,5 +1,5 @@
 {
   "frontend": "http://localhost:4200",
-  "lienVerification": "https://localhost:4200/verify/",
+  "lienVerification": "http://localhost:4200/verifyAccount/",
   "lienInvitationGroupe": "https://localhost:4200/joinGroup/"
 }

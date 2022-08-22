@@ -119,7 +119,8 @@ exports.login = (req, res, next) => {
             }
 
             if(user.droitsUser === 'non validé'){
-                return res.status(401).json({message: "Veuillez vérifier votre compte avant de vous connecter."});
+                return this.renvoyerCodeVerification(req, res, next);
+                //return res.status(401).json({message: "Veuillez vérifier votre compte avant de vous connecter."});
             }
 
             bcrypt.compare(req.body.password, user.mdpUser)
@@ -198,7 +199,7 @@ exports.renvoyerCodeVerification = (req, res, next) => {
               .then(() => {
                   require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
               })
-              .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'})) //TODO: validation du compte par email avant de lui donner lde droit d'accéder au site
+              .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'}))
               .catch(error => {
                   res.status(400).json({error});
               });

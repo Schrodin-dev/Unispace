@@ -11,6 +11,7 @@ export class LoginPageComponent implements OnInit {
 	couleurTexte!: String;
 	couleurFond!: String;
 	error!: String;
+	message!: String;
 
   constructor(private authService: AuthService) {
 
@@ -23,7 +24,12 @@ export class LoginPageComponent implements OnInit {
 
   onLogin(f: NgForm){
     this.authService.login(f.value.email, f.value.password)
+		.then(res => {
+			this.error = '';
+			this.message = res.message;
+		})
 		.catch(error => {
+			this.message = '';
 			this.error = error.error.message;
 		})
   }

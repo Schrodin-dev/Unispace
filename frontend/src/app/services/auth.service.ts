@@ -39,6 +39,11 @@ export class AuthService{
       })
 		.toPromise()
 		.then((res) => {
+			// @ts-ignore
+			if(res.message){
+				return res;
+			}
+
 			this.loginRes = res;
 			// @ts-ignore
 			sessionStorage.setItem("email", email);
@@ -64,6 +69,8 @@ export class AuthService{
 
 
 			this.router.navigate(['']);
+
+			return res;
 		});
   }
 
