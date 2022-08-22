@@ -1,3 +1,4 @@
 <div id="container">
+	<p *ngIf="message" class="panel" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor:'#'+couleurFond+'1A'}">Votre compte a été vérifié. <a routerLink="/login">Se connecter</a></p>
 	<app-erreur *ngIf="error" [message]="error" (close)="redirect()" class="message"></app-erreur>
 </div>

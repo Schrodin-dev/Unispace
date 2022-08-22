@@ -1,7 +1,13 @@
+@import "../../../scss/composants/panelsComps";
+
 #container{
 	min-height: 100vh;
 	width:100%;
 	display:flex;
 	justify-content: center;
 	align-items: center;
+}
+
+.panel{
+	padding: 10px 20px;
 }
