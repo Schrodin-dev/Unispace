@@ -12,7 +12,7 @@
 				</select>
 			</div>
 			<div class="dropDown" >
-				<select formControlName="groupe" id="groupe"[ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+				<select formControlName="groupe" id="groupe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 					<ng-container *ngIf="groupes$ | async as groupes">
 						<option disabled selected hidden>groupe</option>
 						<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>

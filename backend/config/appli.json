@@ -1,5 +1,6 @@
 {
   "frontend": "http://localhost:4200",
   "lienVerification": "http://localhost:4200/verifyAccount/",
+  "lienMdpOublie": "http://localhost:4200/resetPassword/",
   "lienInvitationGroupe": "https://localhost:4200/joinGroup/"
 }

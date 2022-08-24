@@ -2,11 +2,14 @@
 <form (ngSubmit)="onLogin(f)" #f="ngForm">
   <div id="fields">
       <input type="email" name="email" id="email" ngModel required class="inputText" placeholder="email" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-      <input type="password" name="password" id="password" ngModel required class="inputText" placeholder="mot de passe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+      <input type="password" name="password" id="password" ngModel required class="inputText" placeholder="mot de passe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" *ngIf="!isForgotPwd">
 
-      <button type="submit" [disabled]="f.invalid" class="textButton" [ngClass]="couleurTexte">se connecter</button>
+      <button type="submit" [disabled]="f.invalid" class="textButton" [ngClass]="couleurTexte" *ngIf="!isForgotPwd">se connecter</button>
+	  <button type="submit" [disabled]="f.invalid" class="textButton" [ngClass]="couleurTexte" *ngIf="isForgotPwd">Modifier mon mot de passe</button>
 
-      <p id="inscription" [ngClass]="couleurTexte">pas inscrit ? <a routerLink="/register" [ngClass]="couleurTexte">S'enregistrer</a></p>
+      <p id="inscription" [ngClass]="couleurTexte" *ngIf="!isForgotPwd">pas inscrit ? <a routerLink="/register" [ngClass]="couleurTexte">S'enregistrer</a></p>
+	  <p [ngClass]="couleurTexte" *ngIf="!isForgotPwd">Mot de passe oublié ? <a (click)="isForgotPwd = true">Modifier mon mot de passe</a></p>
+	  <p [ngClass]="couleurTexte"  *ngIf="isForgotPwd">Revenir à la page de connexion ? <a (click)="isForgotPwd = false;">Se connecter</a></p>
 	  <p [ngClass]="couleurTexte" *ngIf="message">{{ message }}</p>
 	  <app-erreur *ngIf="error" [message]="error" (close)="error = ''" class="message"></app-erreur>
   </div>

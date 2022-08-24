@@ -1,7 +1,6 @@
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Injectable} from "@angular/core";
-import {AuthService} from "./auth.service";
-import {Observable, Subject} from "rxjs";
+import {Observable} from "rxjs";
 import backend from "../../assets/config/backend.json";
 import {Cours} from "../models/cours.model";
 import {TravailAFaire} from "../models/travailAFaire.model";
@@ -9,9 +8,8 @@ import {Note} from "../models/note.model";
 
 @Injectable()
 export class RequestsService{
-  userInfosContent:any;
 
-  constructor(private httpClient: HttpClient, private authService: AuthService) {
+  constructor(private httpClient: HttpClient) {
 
   }
 
@@ -69,6 +67,29 @@ export class RequestsService{
   verifierCompte(code: String): Promise<String>{
 	  return this.httpClient.post(backend.url + '/api/auth/verify', {
 		  codeVerification: code
+	  })
+		  .toPromise()
+		  .then(message => {
+			  // @ts-ignore
+			  return message.message;
+		  });
+  }
+
+  renvoyerCodeVerification(email: String): Promise<String>{
+	  return this.httpClient.post(backend.url + '/api/auth/renvoyerCode', {
+		  email: email
+	  })
+		  .toPromise()
+		  .then(message => {
+			  // @ts-ignore
+			  return message.message;
+		  });
+  }
+
+  changerPassword(code:String, mdp: String): Promise<String>{
+	  return this.httpClient.post(backend.url + '/api/auth/changerMdp', {
+		  codeVerification: code,
+		  password: mdp
 	  })
 		  .toPromise()
 		  .then(message => {

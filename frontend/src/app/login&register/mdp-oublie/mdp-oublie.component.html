@@ -1,0 +1,7 @@
+<form [formGroup]="form">
+	<input type="password" class="inputText" formControlName="password" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" placeholder="nouveau mot de passe">
+	<button type="submit" class="textButton" [ngClass]="couleurTexte" (click)="changerMdp()" [disabled]="form.invalid">Modifier le mot de passe</button>
+
+	<p *ngIf="message" class="panel" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor:'#'+couleurFond+'1A'}">Votre mot de passe a été modifié. <a routerLink="/login">Se connecter</a></p>
+	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
+</form>

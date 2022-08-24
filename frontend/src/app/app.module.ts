@@ -30,6 +30,7 @@ import { ExceptionIntercept } from './interceptors/exception.interceptor';
 import { AuthInterceptor } from "./interceptors/auth.interceptor";
 import { ErreurComponent } from './erreur/erreur.component';
 import { VerifierCompteComponent } from './login&register/verifier-compte/verifier-compte.component';
+import { MdpOublieComponent } from './login&register/mdp-oublie/mdp-oublie.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { VerifierCompteComponent } from './login&register/verifier-compte/verifi
     NoteComponent,
     ErreurComponent,
     VerifierCompteComponent,
+    MdpOublieComponent,
   ],
     imports: [
         BrowserModule,

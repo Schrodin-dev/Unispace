@@ -197,9 +197,19 @@ exports.renvoyerCodeVerification = (req, res, next) => {
 
           await user.save()
               .then(() => {
-                  require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
+                  if(user.droitsUser === 'non validé'){
+                      require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
+                  }else{
+                      require('../mailsender').envoyerMailPersonne(req.body.email, 'Mot de passe oublié', '<p>Afin de modifier votre mot de passe, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienMdpOublie + uuid + '">' + require('../config/appli.json').lienMdpOublie + uuid + '</a></p>');
+                  }
               })
-              .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'}))
+              .then(() => {
+                  if(user.droitsUser === 'non validé'){
+                      res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'});
+                  }else{
+                      res.status(201).json({message: 'Un email a été envoyé pour modifier votre mot de passe.'});
+                  }
+              })
               .catch(error => {
                   res.status(400).json({error});
               });

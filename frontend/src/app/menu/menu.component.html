@@ -1,9 +1,9 @@
-<ng-container *ngIf="path != '/login' && path != '/register' && !path.includes('/verifyAccount')">
+<ng-container *ngIf="path != '/login' && path != '/register' && !path.includes('/verifyAccount') && !path.includes('/resetPassword')">
 	<div id="bandeau">
 	  <p>{{ usersInfos.nom }} {{usersInfos.prenom}} - {{usersInfos.groupe}}</p>
 	  <p id="disconnect" (click)="disconnect()">se déconnecter</p>
 
-		<a routerLink="/"><img src="assets/img/favicon.png" id="logo"></a>
+		<a routerLink="/"><img src="assets/img/favicon.png" alt="logo noobnote" id="logo"></a>
 	</div>
 	<nav id="mobileBurger">
 		<div (click)="onMenuBurger()">

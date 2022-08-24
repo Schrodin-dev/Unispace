@@ -1,0 +1,14 @@
+@import "../../../scss/composants/forms";
+@import "../../../scss/composants/panelsComps";
+
+form{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+.panel{
+	padding: 10px 20px;
+}
