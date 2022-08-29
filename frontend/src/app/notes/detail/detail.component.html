@@ -1,1 +1,57 @@
-<p>detail works!</p>
+<div id="bigContainer">
+	<div class="panel" id="container">
+		<div class="panel" id="resume">
+			<h1 [ngClass]="couleurTexte">Résumé des U.E.</h1>
+
+			<div class="noteContainer" *ngFor="let ue of detail" [ngClass]="getUEColor(ue.moyenne)">
+				<p [ngClass]="couleurTexte">{{ ue.nom }}</p>
+				<p [ngClass]="couleurTexte" *ngIf="ue.moyenne.toString() === '??'; else elseMoy">??/20</p>
+				<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ue.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
+			</div>
+			<span [ngStyle]="{backgroundColor: '#'+couleurFond}"></span>
+			<ng-container *ngIf="etatSemestre; else elseBlock">
+				<h2 class="UEValide">SEMESTRE VALIDÉ</h2>
+			</ng-container>
+			<ng-template #elseBlock>
+				<h2 class="UEInvalide">SEMESTRE NON VALIDÉ</h2>
+				<p [ngClass]="couleurTexte">Nous vous conseillons vivement de faire un tour au tutorat.
+					C'est un espace de travail calme où des étudiants de seconde année vous aideront à
+					comprendre vos cours et combler vos lacunes. Lien discord :
+					<a href="https://discord.com/channels/618375154421989386/761246241967177748">https://discord.com/channels/618375154421989386/761246241967177748</a></p>
+			</ng-template>
+		</div>
+
+		<div id="detail">
+			<h1 [ngClass]="couleurTexte">Détail des notes</h1>
+			<div *ngFor="let ue of detail" class="UE">
+				<div class="noteContainer" [ngClass]="getUEColor(ue.moyenne)">
+					<p [ngClass]="couleurTexte">{{ ue.nom }}</p>
+					<p [ngClass]="couleurTexte" *ngIf="ue.moyenne.toString() === '??'; else elseMoy">??/20</p>
+					<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ue.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
+				</div>
+
+				<div *ngFor="let ressource of ue.ressources" class="ressource">
+					<div class="noteContainer">
+						<p [ngClass]="couleurTexte">{{ ressource.nom }}</p>
+						<p [ngClass]="couleurTexte" *ngIf="ressource.moyenne.toString() === '??'; else elseMoy">??/20</p>
+						<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ressource.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
+					</div>
+
+					<div *ngFor="let note of ressource.notes" class="note">
+						<div class="noteContainer" (click)="onModificationNote(ue, ressource, note)">
+							<p [ngClass]="couleurTexte">{{ note.nomDevoir }}</p>
+							<p [ngClass]="couleurTexte" *ngIf="note.note.toString() === '??'; else elseMoy">??/20</p>
+							<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ note.note | number: '1.0-2': 'fr' }}/20</p></ng-template>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<app-ajouter-modifier-note *ngIf="ajouterNote; else ajouterDevoir" [inputDetail]="sentDetail" [inputUe]="ue" [inputRessource]="ressource" [inputNote]="note" (modification)="loadDetail()"></app-ajouter-modifier-note>
+	<ng-template #ajouterDevoir>
+		
+	</ng-template>
+</div>

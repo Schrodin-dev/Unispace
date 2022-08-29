@@ -146,4 +146,16 @@ export class AuthService{
 			return 'dark';
 		}
 	}
+
+	isAdmin():boolean{
+		return this.getDroits() === 'admin';
+	}
+
+	isDelegue():boolean{
+	  	return this.getDroits() === 'délégué' || this.isAdmin();
+	}
+
+	isPublicateur():boolean{
+		return this.getDroits() === 'publicateur' || this.isDelegue();
+	}
 }

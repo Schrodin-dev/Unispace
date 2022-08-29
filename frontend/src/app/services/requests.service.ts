@@ -5,6 +5,8 @@ import backend from "../../assets/config/backend.json";
 import {Cours} from "../models/cours.model";
 import {TravailAFaire} from "../models/travailAFaire.model";
 import {Note} from "../models/note.model";
+import {UE} from "../models/UE.model";
+import {Ressource} from "../models/ressource.model";
 
 @Injectable()
 export class RequestsService{
@@ -57,7 +59,9 @@ export class RequestsService{
 			  let notes: Note[] = [];
 			  // @ts-ignore
 			  for(let note of listeNotes){
-				  notes.push(new Note(note.noteDevoir, note.devoir.noteMaxDevoir, note.createdAt, note.devoir.nomDevoir));
+				  let n = new Note(note.noteDevoir, note.devoir.noteMaxDevoir, note.devoir.nomDevoir);
+				  n.setDate(note.createdAt);
+				  notes.push(n);
 			  }
 
 			  return notes.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
@@ -97,4 +101,57 @@ export class RequestsService{
 			  return message.message;
 		  });
   }
+
+  getDetailNotes(): Promise<UE[]>{
+	  return this.httpClient.get(backend.url + '/api/notation/detail')
+		  .toPromise()
+		  .then(res => {
+			  let listeUE = [];
+
+			  // @ts-ignore
+			  for(let UETemp of res){
+				  let ue = new UE(UETemp.nom, UETemp.moyenne);
+
+				  for(let ressourceTemp of UETemp.ressources){
+					  let ressource = new Ressource(ressourceTemp.nom, ressourceTemp.moyenne);
+
+					  for(let noteTemp of ressourceTemp.devoirs){
+						  let note = new Note(noteTemp.note, noteTemp.bareme, noteTemp.nom);
+						  note.setId(noteTemp.id);
+						  ressource.addNote(note);
+					  }
+
+					  ue.addRessource(ressource);
+				  }
+
+				  listeUE.push(ue);
+			  }
+
+			  return listeUE;
+		  })
+  }
+
+  ajouterNote(idDevoir: Number, note: Number): Promise<String>{
+	  return this.httpClient.post(backend.url + '/api/notation/note/ajouter', {
+		  devoir: idDevoir,
+		  note: note
+	  })
+		  .toPromise()
+		  .then(message => {
+			  // @ts-ignore
+			  return message.message;
+		  });
+  }
+
+	modifierNote(idDevoir: Number, note: Number): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/note/modifier', {
+			devoir: idDevoir,
+			note: note
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
 }

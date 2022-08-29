@@ -339,6 +339,10 @@ exports.ajouterNote = (req, res, next) => {
 
 	db.devoir.findOne({where: {idDevoir: req.body.devoir}})
 		.then(devoir => {
+			if(devoir.noteMaxDevoir < req.body.note){
+				return res.status(500).json({message: "La note doit être inférieure au barème du devoir."});
+			}
+
 			devoir.getGroupes()
 				.then(groupes => {
 					let groupeValide = false;
@@ -373,14 +377,23 @@ exports.modifierNote = (req, res, next) => {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier une note."});
 	}
 
-	db.note.findOne({where: {
+	db.note.findOne({
+		where: {
 		userEmailUser: req.auth.userEmail,
 		devoirIdDevoir: req.body.devoir
-	}})
+	}, include: {
+			model: db.devoir,
+			attributes: ['noteMaxDevoir']
+		}
+	})
 		.then(note => {
 			if(note === null){
 				return res.status(400).json({message: "Impossible de trouver la note que vous souhaitez modifier."});
 			}
+			if(note.devoir.noteMaxDevoir < req.body.note){
+				return res.status(500).json({message: "La note doit être inférieure au barème du devoir."});
+			}
+
 
 			note.noteDevoir = req.body.note;
 
@@ -433,10 +446,11 @@ exports.detailDesNotes = (req, res, next) => {
 					where: {userEmailUser: req.auth.userEmail},
 					attributes: ['noteDevoir']
 				},
-				attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir']
+				attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir', 'idDevoir']
 			},
 		},
-		attributes : ['nomUE']
+		attributes : ['nomUE', 'numeroUE'],
+		order: ['numeroUE']
 	})
 		.then(detail => {
 			if(detail === null){
@@ -480,7 +494,7 @@ function calculateurMoyennes(detail){
 		const UE = detail[indexUE];
 
 		parsedNotes[indexUE] = {};
-		parsedNotes[indexUE].nom = UE.nomUE;
+		parsedNotes[indexUE].nom = 'C' + UE.numeroUE + ' ' + UE.nomUE;
 		parsedNotes[indexUE].ressources = [];
 
 		let sommePondereeRessources = 0.0;
@@ -499,13 +513,14 @@ function calculateurMoyennes(detail){
 
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir] = {};
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].nom = devoir.nomDevoir;
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].id = devoir.idDevoir;
 				if(devoir.notes[0] !== undefined){
-					sommePondereeDevoirs += devoir.notes[0].noteDevoir * devoir.coeffDevoir;
+					sommePondereeDevoirs += adjustTo20(devoir.notes[0].noteDevoir, devoir.noteMaxDevoir) * devoir.coeffDevoir;
 					sommePoidsDevoirs += devoir.coeffDevoir;
 
 					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = devoir.notes[0].noteDevoir;
 				}else{
-					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = "non renseigné";
+					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].note = "??";
 				}
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].bareme = devoir.noteMaxDevoir;
 			}
@@ -515,17 +530,21 @@ function calculateurMoyennes(detail){
 				sommePondereeRessources += parsedNotes[indexUE].ressources[indexRessource].moyenne * ressource.etreLieUE.coeffRessource;
 				sommePoidsRessources += ressource.etreLieUE.coeffRessource;
 			}else{
-				parsedNotes[indexUE].ressources[indexRessource].moyenne = "non renseigné";
+				parsedNotes[indexUE].ressources[indexRessource].moyenne = "??";
 			}
 		}
 		if(sommePoidsRessources !== 0){
 			parsedNotes[indexUE].moyenne = sommePondereeRessources/sommePoidsRessources;
 		}else{
-			parsedNotes[indexUE].moyenne = "non renseigné";
+			parsedNotes[indexUE].moyenne = "??";
 		}
 
 
 	}
 
 	return parsedNotes;
+}
+
+function adjustTo20(note, bareme){
+	return (note*20)/bareme;
 }

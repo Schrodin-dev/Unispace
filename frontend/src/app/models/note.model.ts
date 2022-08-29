@@ -3,12 +3,19 @@ export class Note{
 	bareme!: number;
 	date!: Date;
 	nomDevoir!: String;
+	id!: number;
 
-
-	constructor(note: number, bareme: number, date: string, nomDevoir: String) {
+	constructor(note: number, bareme: number, nomDevoir: String) {
 		this.note = note;
 		this.bareme = bareme;
-		this.date = new Date(date);
 		this.nomDevoir = nomDevoir;
+	}
+
+	setDate(date: string): void{
+		this.date = new Date(date);
+	}
+
+	setId(id: String){
+		this.id = Number(id);
 	}
 }

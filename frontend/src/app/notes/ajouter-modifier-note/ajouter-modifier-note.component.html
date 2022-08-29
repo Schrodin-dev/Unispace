@@ -1,0 +1,36 @@
+<form [formGroup]="form" class="panel">
+	<h1 [ngClass]="couleurTexte">{{ type | titlecase }} note</h1>
+
+	<label for="UE" [ngClass]="couleurTexte">UE</label>
+	<div class="dropDown">
+		<select formControlName="UE" id="UE" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+			<option *ngFor="let UE of detail" [value]="UE.nom">{{ UE.nom }}</option>
+		</select>
+	</div>
+
+	<label for="Ressource" [ngClass]="couleurTexte">Ressource</label>
+	<div class="dropDown">
+		<select formControlName="Ressource" id="Ressource" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+			<ng-container *ngIf="ue">
+				<option *ngFor="let Ressource of ue.ressources" [value]="Ressource.nom">{{ Ressource.nom }}</option>
+			</ng-container>
+		</select>
+	</div>
+
+	<label for="Devoir" [ngClass]="couleurTexte">Devoir</label>
+	<div class="dropDown">
+		<select formControlName="Devoir" id="Devoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+			<ng-container *ngIf="ressource">
+				<option *ngFor="let Note of ressource.notes" [value]="Note.id">{{ Note.nomDevoir }}</option>
+			</ng-container>
+		</select>
+	</div>
+
+	<label for="Note" [ngClass]="couleurTexte">Note</label>
+	<input formControlName="Note" type="number" class="inputText" id="Note" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+
+	<button type="submit" class="textButton" [disabled]="form.invalid" [ngClass]="couleurTexte" (click)="onSubmit()">Valider</button>
+
+	<p [ngClass]="couleurTexte" *ngIf="message">{{ message }}</p>
+	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
+</form>
