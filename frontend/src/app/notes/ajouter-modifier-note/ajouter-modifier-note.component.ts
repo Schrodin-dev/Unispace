@@ -1,11 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Note} from "../../models/note.model";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, ValidatorFn, AsyncValidatorFn} from "@angular/forms";
 import {UE} from "../../models/UE.model";
 import {AuthService} from "../../services/auth.service";
 import {Ressource} from "../../models/ressource.model";
 import {RequestsService} from "../../services/requests.service";
-import {Subject} from "rxjs";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Component({
   selector: 'app-ajouter-modifier-note',
@@ -19,7 +19,9 @@ export class AjouterModifierNoteComponent implements OnInit {
 	@Input() inputDetail!: Subject<UE[]>;
 	@Output() modification: EventEmitter<boolean> = new EventEmitter<boolean>();
 	type!: string; //(modifier ou ajouter)
+	mode: String = 'note'; // mode ajout/modification d'une note ou d'un devoir (note ou devoir)
 	form!: FormGroup;
+	isValidForm:boolean = false;
 
 	ue!: UE | undefined;
 	ressource!: Ressource | undefined;
@@ -28,6 +30,7 @@ export class AjouterModifierNoteComponent implements OnInit {
 
 	couleurFond!: String;
 	couleurTexte!: String;
+	isDelegue!: boolean;
 
 	error!: String;
 	message!: String;
@@ -37,6 +40,8 @@ export class AjouterModifierNoteComponent implements OnInit {
   ngOnInit(): void {
 	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
 	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
+	  this.isDelegue = this.authService.isDelegue();
+
 
 	  this.inputUe.subscribe(value => {this.form.patchValue({'UE': value.nom});});
 	  this.inputRessource.subscribe(value => {this.form.patchValue({'Ressource': value.nom});});
@@ -56,7 +61,15 @@ export class AjouterModifierNoteComponent implements OnInit {
 		  UE: [null, Validators.required],
 		  Ressource: [null, Validators.required],
 		  Devoir: [null, Validators.required],
-		  Note: [null, Validators.required]
+
+		  // arguments pour l'ajout/modification d'une note
+		  Note: [null, [Validators.min(0), this.requireModeValidator('note').bind(this)]],
+
+		  // arguments pour l'ajout/modification d'un devoir
+		  nomDevoir: [null, [Validators.minLength(1), this.requireModeValidator('devoir').bind(this)]]/*,
+		  coefficient: [null, [Validators.min(0), this.requireModeValidator('devoir').bind(this)]],
+		  bareme: [null, [Validators.min(0), this.requireModeValidator('devoir').bind(this)]],
+		  groupes: [null, this.requireModeValidator('devoir').bind(this)]*/
 	  });
 
       if(this.ue !== undefined) this.form.patchValue({'UE': this.ue.nom});
@@ -90,7 +103,14 @@ export class AjouterModifierNoteComponent implements OnInit {
 				  }
 			  }
 
-			  if(value.Devoir && this.ressource){
+			  if( value.Devoir && this.ressource && (this.note === undefined || value.Devoir !== this.note.id)){
+				  if(value.Devoir === 'x'){
+					  this.note = undefined;
+					  this.setType();
+					  this.mode = 'devoir';
+					  return;
+				  }
+
 				  for(let Note of this.ressource.notes){
 					  if(Note.id === Number(value.Devoir)){
 						  this.note = Note;
@@ -98,9 +118,16 @@ export class AjouterModifierNoteComponent implements OnInit {
 					  }
 				  }
 			  }
+
+			  this.isValidForm = this.form.invalid;
 		  })
 
 
+  }
+
+  changeMode(){
+	  this.form.controls.Note.updateValueAndValidity();
+	  this.form.controls.nomDevoir.updateValueAndValidity();
   }
 
   setType(){
@@ -157,4 +184,16 @@ export class AjouterModifierNoteComponent implements OnInit {
 				break;
 		}
     }
+
+	requireModeValidator = (modeRequis: String): ValidatorFn => (control) => {
+		const { value } = control;
+		const erreur = this.mode === modeRequis && value === null;
+
+		console.log(this.mode);
+		if(erreur){
+			return {erreur : ''}
+		}else{
+			return null;
+		}
+	}
 }

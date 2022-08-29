@@ -26,8 +26,6 @@ export class DetailComponent implements OnInit {
 	note: Subject<Note> = new Subject<Note>();
 	sentDetail: Subject<UE[]> = new Subject<UE[]>()
 
-	ajouterNote: boolean = true; //false ssi l'utilisateur souhaite ajouter/modifier un devoir.
-
   constructor(private requestsService: RequestsService, private authService: AuthService) { }
 
   ngOnInit(): void {

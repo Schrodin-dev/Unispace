@@ -47,11 +47,6 @@
 				</div>
 			</div>
 		</div>
-
 	</div>
-
-	<app-ajouter-modifier-note *ngIf="ajouterNote; else ajouterDevoir" [inputDetail]="sentDetail" [inputUe]="ue" [inputRessource]="ressource" [inputNote]="note" (modification)="loadDetail()"></app-ajouter-modifier-note>
-	<ng-template #ajouterDevoir>
-		
-	</ng-template>
+	<app-ajouter-modifier-note [inputDetail]="sentDetail" [inputUe]="ue" [inputRessource]="ressource" [inputNote]="note" (modification)="loadDetail()"></app-ajouter-modifier-note>
 </div>

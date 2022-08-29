@@ -49,7 +49,7 @@ export class AuthService{
 			sessionStorage.setItem("email", email);
 			sessionStorage.setItem("token", this.loginRes.token);
 			sessionStorage.setItem("groupe", this.loginRes.groupe);
-			sessionStorage.setItem("droits", this.loginRes.droitsUser);
+			sessionStorage.setItem("droits", this.loginRes.droits);
 			sessionStorage.setItem("nom", this.loginRes.nom);
 			sessionStorage.setItem("prenom", this.loginRes.prenom);
 

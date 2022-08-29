@@ -1,5 +1,5 @@
 <form [formGroup]="form" class="panel">
-	<h1 [ngClass]="couleurTexte">{{ type | titlecase }} note</h1>
+	<h1 [ngClass]="couleurTexte">{{ type | titlecase }} {{ mode }}</h1>
 
 	<label for="UE" [ngClass]="couleurTexte">UE</label>
 	<div class="dropDown">
@@ -22,14 +22,30 @@
 		<select formControlName="Devoir" id="Devoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
 			<ng-container *ngIf="ressource">
 				<option *ngFor="let Note of ressource.notes" [value]="Note.id">{{ Note.nomDevoir }}</option>
+				<option *ngIf="isDelegue" value="x">Ajouter un devoir</option>
 			</ng-container>
 		</select>
 	</div>
 
-	<label for="Note" [ngClass]="couleurTexte">Note</label>
-	<input formControlName="Note" type="number" class="inputText" id="Note" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+	<div id="modifierDevoir" *ngIf="isDelegue && note">
+		<p [ngClass]="couleurTexte">Souhaitez-vous modifier ce devoir ?</p>
+		<div>
+			<p [ngClass]="couleurTexte" (click)="mode = 'devoir'; changeMode()">oui</p>
+			<p [ngClass]="couleurTexte" (click)="mode = 'note'; changeMode()">non</p>
+		</div>
+	</div>
 
-	<button type="submit" class="textButton" [disabled]="form.invalid" [ngClass]="couleurTexte" (click)="onSubmit()">Valider</button>
+	<ng-container *ngIf="mode === 'note'">
+		<label for="Note" [ngClass]="couleurTexte">Note</label>
+		<input formControlName="Note" type="number" class="inputText" id="Note" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+	</ng-container>
+
+	<ng-container *ngIf="mode === 'devoir'">
+		<label for="nomDevoir" [ngClass]="couleurTexte">Nom du devoir</label>
+		<input formControlName="nomDevoir" type="text" class="inputText" id="nomDevoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+	</ng-container>
+
+	<button type="submit" class="textButton" [disabled]="isValidForm" [ngClass]="couleurTexte" (click)="onSubmit()">Valider</button>
 
 	<p [ngClass]="couleurTexte" *ngIf="message">{{ message }}</p>
 	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
