@@ -1,52 +1,74 @@
-<form [formGroup]="form" class="panel">
-	<h1 [ngClass]="couleurTexte">{{ type | titlecase }} {{ mode }}</h1>
+<div id="container" class="panel">
+	<form [formGroup]="form" autocomplete="off">
+		<h1 [ngClass]="couleurTexte">{{ type | titlecase }} {{ mode }}</h1>
 
-	<label for="UE" [ngClass]="couleurTexte">UE</label>
-	<div class="dropDown">
-		<select formControlName="UE" id="UE" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-			<option *ngFor="let UE of detail" [value]="UE.nom">{{ UE.nom }}</option>
-		</select>
-	</div>
+		<label for="UE" [ngClass]="couleurTexte">UE</label>
+		<div class="dropDown">
+			<select formControlName="UE" id="UE" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+				<option selected *ngIf="ue === undefined"></option>
+				<option *ngFor="let UE of detail" [value]="UE.nom">{{ UE.nom }}</option>
+			</select>
+		</div>
 
-	<label for="Ressource" [ngClass]="couleurTexte">Ressource</label>
-	<div class="dropDown">
-		<select formControlName="Ressource" id="Ressource" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-			<ng-container *ngIf="ue">
-				<option *ngFor="let Ressource of ue.ressources" [value]="Ressource.nom">{{ Ressource.nom }}</option>
-			</ng-container>
-		</select>
-	</div>
+		<label for="Ressource" [ngClass]="couleurTexte">Ressource</label>
+		<div class="dropDown">
+			<select formControlName="Ressource" id="Ressource" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+				<ng-container *ngIf="ue">
+					<option selected *ngIf="ressource === undefined"></option>
+					<option *ngFor="let Ressource of ue.ressources" [value]="Ressource.nom">{{ Ressource.nom }}</option>
+				</ng-container>
+			</select>
+		</div>
 
-	<label for="Devoir" [ngClass]="couleurTexte">Devoir</label>
-	<div class="dropDown">
-		<select formControlName="Devoir" id="Devoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-			<ng-container *ngIf="ressource">
-				<option *ngFor="let Note of ressource.notes" [value]="Note.id">{{ Note.nomDevoir }}</option>
-				<option *ngIf="isDelegue" value="x">Ajouter un devoir</option>
-			</ng-container>
-		</select>
-	</div>
+		<label for="Devoir" [ngClass]="couleurTexte">Devoir</label>
+		<div class="dropDown">
+			<select formControlName="Devoir" id="Devoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+				<ng-container *ngIf="ressource">
+					<option selected *ngIf="note === undefined"></option>
+					<option *ngFor="let Note of ressource.notes" [value]="Note.id">{{ Note.nomDevoir }}</option>
+					<option *ngIf="isDelegue" value="x">Ajouter un devoir</option>
+				</ng-container>
+			</select>
+		</div>
+	</form>
 
 	<div id="modifierDevoir" *ngIf="isDelegue && note">
 		<p [ngClass]="couleurTexte">Souhaitez-vous modifier ce devoir ?</p>
 		<div>
-			<p [ngClass]="couleurTexte" (click)="mode = 'devoir'; changeMode()">oui</p>
-			<p [ngClass]="couleurTexte" (click)="mode = 'note'; changeMode()">non</p>
+			<p [ngClass]="couleurTexte" (click)="mode = 'devoir'; setType();">oui</p>
+			<p [ngClass]="couleurTexte" (click)="mode = 'note'; setType();">non</p>
 		</div>
 	</div>
 
-	<ng-container *ngIf="mode === 'note'">
+	<form [formGroup]="noteForm" *ngIf="mode === 'note'">
 		<label for="Note" [ngClass]="couleurTexte">Note</label>
 		<input formControlName="Note" type="number" class="inputText" id="Note" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
-	</ng-container>
+	</form>
 
-	<ng-container *ngIf="mode === 'devoir'">
+	<form [formGroup]="devoirForm" *ngIf="mode === 'devoir'">
 		<label for="nomDevoir" [ngClass]="couleurTexte">Nom du devoir</label>
 		<input formControlName="nomDevoir" type="text" class="inputText" id="nomDevoir" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
-	</ng-container>
 
-	<button type="submit" class="textButton" [disabled]="isValidForm" [ngClass]="couleurTexte" (click)="onSubmit()">Valider</button>
+		<label for="bareme" [ngClass]="couleurTexte">Barème</label>
+		<input formControlName="bareme" type="number" class="inputText" id="bareme" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+
+		<label for="coeff" [ngClass]="couleurTexte">Coefficient</label>
+		<input formControlName="coefficient" type="number" class="inputText" id="coeff" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte"/>
+
+		<div id="groupes" *ngIf="show">
+			<p [ngClass]="couleurTexte">Groupes</p>
+				<div *ngFor="let groupe of groupes">
+					<input type="checkbox" [value]="groupe" [id]="'groupe-' + groupe" (change)="onCbChange($event)" [checked]="this.note !== undefined && this.note.groupes.includes(groupe)"/>
+					<label [htmlFor]="'groupe-' + groupe" [ngClass]="couleurTexte">{{ groupe }} {{ this.note !== undefined && this.note.groupes.includes(groupe) }}</label>
+				</div>
+		</div>
+
+		<app-suppr-emitter [nomObjetASupprimer]="'le devoir'" (supprimer)="supprimerDevoir($event)"></app-suppr-emitter>
+	</form>
+
+	<button type="submit" class="textButton" [disabled]="form.invalid || (mode === 'note' && noteForm.invalid) || (mode === 'devoir' && devoirForm.invalid)" [ngClass]="couleurTexte" (click)="onSubmit()">Valider</button>
 
 	<p [ngClass]="couleurTexte" *ngIf="message">{{ message }}</p>
 	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
-</form>
+</div>
+

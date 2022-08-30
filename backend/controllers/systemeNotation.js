@@ -172,7 +172,7 @@ exports.ajouterDevoir = (req, res, next) => {
 	db.devoir.create({
 		nomDevoir: req.body.nom,
 		coeffDevoir: req.body.coeff,
-		noteMaxDevoir: req.body.bareme,
+		noteMaxDevoir: req.body.noteMaxDevoir,
 		idRessource: req.body.ressource
 	})
 		.then(async devoir => {
@@ -220,6 +220,8 @@ exports.ajouterDevoir = (req, res, next) => {
 };
 
 exports.modifierDevoir = (req, res, next) => {
+	console.log(req.body);
+
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un devoir."});
 	}
@@ -242,13 +244,14 @@ exports.modifierDevoir = (req, res, next) => {
 					if (req.body.nom.length > 0) {
 						devoir.nomDevoir = req.body.nom;
 					}
-					if (req.body.coeff.length > 0) {
+					if (req.body.coeff !== undefined) {
 						devoir.coeffDevoir = req.body.coeff;
 					}
-					if (req.body.noteMaxDevoir.length > 0) {
+					if (req.body.noteMaxDevoir !== undefined) {
 						devoir.noteMaxDevoir = req.body.noteMaxDevoir;
+						console.log(devoir);
 					}
-					if (req.body.ressource.length > 0) {
+					if (req.body.ressource.length !== undefined) {
 						devoir.idRessource = req.body.ressource;
 					}
 
@@ -437,15 +440,22 @@ exports.detailDesNotes = (req, res, next) => {
 	db.UE.findAll({
 		include: {
 			model: db.ressource,
-			//required: true,
 			include: {
 				model: db.devoir,
-				include: {
-					required: false,
-					model: db.note,
-					where: {userEmailUser: req.auth.userEmail},
-					attributes: ['noteDevoir']
-				},
+				include: [
+					{
+						required: false,
+						model: db.note,
+						where: {userEmailUser: req.auth.userEmail},
+						attributes: ['noteDevoir']
+					},
+					{
+						required: true,
+						model: db.groupe,
+						attributes: ['nomGroupe'],
+						where: {nomGroupe: req.auth.userGroupe}
+					}
+				],
 				attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir', 'idDevoir']
 			},
 		},
@@ -504,6 +514,7 @@ function calculateurMoyennes(detail){
 
 			parsedNotes[indexUE].ressources[indexRessource] = {};
 			parsedNotes[indexUE].ressources[indexRessource].nom = ressource.nomRessource;
+			parsedNotes[indexUE].ressources[indexRessource].id = ressource.idRessource;
 			parsedNotes[indexUE].ressources[indexRessource].devoirs = [];
 
 			let sommePondereeDevoirs = 0.0;
@@ -514,6 +525,12 @@ function calculateurMoyennes(detail){
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir] = {};
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].nom = devoir.nomDevoir;
 				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].id = devoir.idDevoir;
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].coeff = devoir.coeffDevoir;
+				parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].groupes = []
+				for(const groupe of devoir.groupes){
+					parsedNotes[indexUE].ressources[indexRessource].devoirs[indexDevoir].groupes.push(groupe.nomGroupe);
+				}
+
 				if(devoir.notes[0] !== undefined){
 					sommePondereeDevoirs += adjustTo20(devoir.notes[0].noteDevoir, devoir.noteMaxDevoir) * devoir.coeffDevoir;
 					sommePoidsDevoirs += devoir.coeffDevoir;

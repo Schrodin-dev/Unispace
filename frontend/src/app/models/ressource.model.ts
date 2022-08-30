@@ -4,11 +4,13 @@ export class Ressource{
 	nom!: String;
 	moyenne!: number;
 	notes!: Note[];
+	id!: number;
 
-	constructor(nom: String, moyenne: number) {
+	constructor(nom: String, moyenne: number, id: number) {
 		this.nom = nom;
 		this.moyenne = moyenne;
 		this.notes = [];
+		this.id = id;
 	}
 
 	addNote(note: Note){

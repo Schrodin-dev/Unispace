@@ -33,7 +33,6 @@ export class EmbedEdtComponent implements OnInit {
 		this.chargerEdt(this.date.toISOString());
 
 		this.dateSelectionnee.valueChanges.forEach(newValue => {
-			console.log("change");
 			this.date = new Date(newValue.date);
 			this.updateParent(this.date);
 			this.chargerEdt(newValue.date);

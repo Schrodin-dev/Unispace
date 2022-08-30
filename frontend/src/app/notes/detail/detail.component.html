@@ -40,8 +40,8 @@
 					<div *ngFor="let note of ressource.notes" class="note">
 						<div class="noteContainer" (click)="onModificationNote(ue, ressource, note)">
 							<p [ngClass]="couleurTexte">{{ note.nomDevoir }}</p>
-							<p [ngClass]="couleurTexte" *ngIf="note.note.toString() === '??'; else elseMoy">??/20</p>
-							<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ note.note | number: '1.0-2': 'fr' }}/20</p></ng-template>
+							<p [ngClass]="couleurTexte" *ngIf="note.note.toString() === '??'; else elseMoy">??/{{ note.bareme }}</p>
+							<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ note.note | number: '1.0-2': 'fr' }}/{{ note.bareme }}</p></ng-template>
 						</div>
 					</div>
 				</div>

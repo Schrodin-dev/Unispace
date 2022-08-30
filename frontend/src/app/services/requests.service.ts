@@ -113,11 +113,13 @@ export class RequestsService{
 				  let ue = new UE(UETemp.nom, UETemp.moyenne);
 
 				  for(let ressourceTemp of UETemp.ressources){
-					  let ressource = new Ressource(ressourceTemp.nom, ressourceTemp.moyenne);
+					  let ressource = new Ressource(ressourceTemp.nom, ressourceTemp.moyenne, ressourceTemp.id);
 
 					  for(let noteTemp of ressourceTemp.devoirs){
 						  let note = new Note(noteTemp.note, noteTemp.bareme, noteTemp.nom);
 						  note.setId(noteTemp.id);
+						  note.setCoeff(noteTemp.coeff);
+						  note.setGroupes(noteTemp.groupes);
 						  ressource.addNote(note);
 					  }
 
@@ -147,6 +149,48 @@ export class RequestsService{
 		return this.httpClient.post(backend.url + '/api/notation/note/modifier', {
 			devoir: idDevoir,
 			note: note
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierDevoir(id: Number, nom: String, coeff: String, noteMaxDevoir: Number, ressource: Number, groupes: String[]): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/devoir/modifier', {
+			devoir: id,
+			nom: nom,
+			coeff: coeff,
+			noteMaxDevoir: noteMaxDevoir,
+			ressource: ressource,
+			groupes: groupes
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterDevoir(nom: String, coeff: String, noteMaxDevoir: Number, ressource: Number, groupes: String[]): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/devoir/ajouter', {
+			nom: nom,
+			coeff: coeff,
+			noteMaxDevoir: noteMaxDevoir,
+			ressource: ressource,
+			groupes: groupes
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerDevoir(id: Number): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/devoir/supprimer', {
+			devoir: id
 		})
 			.toPromise()
 			.then(message => {

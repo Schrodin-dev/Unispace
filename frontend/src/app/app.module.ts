@@ -32,6 +32,9 @@ import { ErreurComponent } from './erreur/erreur.component';
 import { VerifierCompteComponent } from './login&register/verifier-compte/verifier-compte.component';
 import { MdpOublieComponent } from './login&register/mdp-oublie/mdp-oublie.component';
 import { AjouterModifierNoteComponent } from './notes/ajouter-modifier-note/ajouter-modifier-note.component';
+import { SupprEmitterComponent } from './suppr/suppr-emitter/suppr-emitter.component';
+import { SupprReceiverComponent } from './suppr/suppr-receiver/suppr-receiver.component';
+import {SupprService} from "./services/suppr.service";
 
 @NgModule({
   declarations: [
@@ -56,6 +59,8 @@ import { AjouterModifierNoteComponent } from './notes/ajouter-modifier-note/ajou
     VerifierCompteComponent,
     MdpOublieComponent,
     AjouterModifierNoteComponent,
+    SupprEmitterComponent,
+    SupprReceiverComponent,
   ],
     imports: [
         BrowserModule,
@@ -68,6 +73,7 @@ import { AjouterModifierNoteComponent } from './notes/ajouter-modifier-note/ajou
     AuthService,
     AuthGuard,
     RequestsService,
+  	SupprService,
   	{ provide: LOCALE_ID, useValue: 'fr-FR'},
 	  {provide: HTTP_INTERCEPTORS, useClass: ExceptionIntercept, multi: true},
 	  {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
