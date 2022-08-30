@@ -14,5 +14,8 @@ router.post('/changerMdp', userCtrl.changerMotDePasse);
 router.get('/afficher', auth, userCtrl.afficherUtilisateurs);
 router.post('/modifierDroits', auth, userCtrl.modifierDroits);
 router.get('/visualiserClasses', userCtrl.visualiserClasses);
+router.get('/accepteAnnonces', auth, userCtrl.voirAccepteAnnonces);
+router.get('/themes', userCtrl.recupererThemes);
+router.post('/modifierTheme', auth, userCtrl.modifierTheme);
 
 module.exports = router;

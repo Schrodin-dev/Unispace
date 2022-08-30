@@ -64,43 +64,51 @@ exports.changementsDonneesCompte = async (req, res, next) => {
     db.user.findOne({where: {emailUser: req.auth.userEmail}})
         .then(async (user) => {
             if (user === null) {
-                return res.status(400).json({message: 'Vous n\'êtes pas inscrit, veuillez vous inscrire d\'abord.'});
+                throw(Error('Vous n\'êtes pas inscrit, veuillez vous inscrire d\'abord.'));
             }
             // vérification du format des données fournies par l'utilisateur
             if (req.body.nom.length > 40) {
-                return res.status(400).json({message: 'Le nouveau nom est trop long (40 caractères maximum).'});
+                throw(Error('Le nouveau nom est trop long (40 caractères maximum).'));
             }
             if (req.body.prenom.length > 40) {
-                return res.status(400).json({message: 'Le nouveau prénom est trop long (40 caractères maximum).'});
+                throw(Error('Le nouveau prénom est trop long (40 caractères maximum).'));
             }
             if (req.body.groupe.length > 0 && await db.groupe.findOne({where: {nomGroupe: req.body.groupe}}) === null) {
-                return res.status(400).json({message: 'Le nouveau groupe renseigné n\'existe pas.'});
+                throw(Error('Le nouveau groupe renseigné n\'existe pas.'));
             }
 
             if (req.body.nom.length > 0) user.set({nomUser: req.body.nom});
             if (req.body.prenom.length > 0) user.set({prenomUser: req.body.prenom});
             if (req.body.groupe.length > 0) user.set({nomGroupe: req.body.groupe});
-            if (req.body.password.length > 0) {
-                await bcrypt.hash(req.body.password, 10)
-                    .then(hash => {
-                        user.set({mdpUser: hash});
-                    })
-                    .catch(error => {
-                        res.status(500).json({error});
-                    });
+            if(req.body.annonces !== undefined){
+                user.set({accepteRecevoirAnnonces: req.body.annonces});
             }
             return user;
         })
+        .then(async user => {
+            console.log(req.body.password);
+            if(req.body.password.length === 0) return user;
+
+            return bcrypt.hash(req.body.password, 10)
+                .then(hash => {
+                    user.set({mdpUser: hash});
+                    console.log(user);
+                    return user;
+                })
+                .catch(error => {
+                    throw(error);
+                });
+        })
         .then(user => {
+            console.log(user);
             user.save()
                 .then(() => {
                     res.status(201).json({message: 'Les modifications ont été prises en compte.'})
                 })
-                .catch(error => res.status(400).json({error}));
+                .catch(error => {throw(error)});
         })
         .catch(error => {
-            console.error(error);
-            res.status(500).json({error})
+            res.status(500).json({message: error.message});
         });
 
 };
@@ -357,3 +365,52 @@ exports.visualiserClasses = (req, res, next) => {
       })
       .catch(error => {return res.status(500).json(error);});
 };
+
+exports.voirAccepteAnnonces = (req, res, next) => {
+    db.user.findOne({
+        where: {emailUser: req.auth.userEmail},
+        attributes: ['accepteRecevoirAnnonces']
+    })
+        .then(user => {
+            return res.status(200).json({accepteRecevoirAnnonces: user.accepteRecevoirAnnonces});
+        })
+        .catch(error => {return res.status(500).json(error);});
+};
+
+exports.recupererThemes = (req, res, next) => {
+    db.theme.findAll({
+        attributes: ['idTheme']
+    })
+        .then(themes => {
+            return res.status(200).json(themes);
+        })
+        .catch(error => {return res.status(500).json(error);});
+}
+
+exports.modifierTheme = (req, res, next) => {
+    db.user.findOne({where: {emailUser: req.auth.userEmail}})
+        .then(user => {
+            if(!user) throw(Error("Impossible de trouver l'utilisateur."));
+
+            db.theme.findOne({where: {idTheme: req.body.theme}, attributes: ['idTheme', 'sourceTheme', 'couleurPrincipaleTheme', 'couleurFond']})
+                .then(theme => {
+                    if(!theme) throw(Error("Impossible de trouver le thème."));
+
+                    user.set('idTheme', theme.idTheme);
+
+                    user.save()
+                        .then(() => {
+                            return res.status(200).json({message: "Le thème a été mis à jour.", theme: theme});
+                        })
+                        .catch(error => {
+                            return res.status(500).json({message: error.message});
+                        })
+                })
+                .catch(error => {
+                    return res.status(500).json({message: error.message});
+                })
+        })
+        .catch(error => {
+            return res.status(500).json({message: error.message});
+        })
+}

@@ -7,11 +7,12 @@ import {TravailAFaire} from "../models/travailAFaire.model";
 import {Note} from "../models/note.model";
 import {UE} from "../models/UE.model";
 import {Ressource} from "../models/ressource.model";
+import {AuthService} from "./auth.service";
 
 @Injectable()
 export class RequestsService{
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private authService: AuthService) {
 
   }
 
@@ -196,6 +197,69 @@ export class RequestsService{
 			.then(message => {
 				// @ts-ignore
 				return message.message;
+			});
+	}
+
+	getAccepteRecevoirAnnonces(): Promise<boolean>{
+		return this.httpClient.get(backend.url + '/api/auth/accepteAnnonces')
+			.toPromise()
+			.then(value => {
+				// @ts-ignore
+				return value.accepteRecevoirAnnonces;
+			});
+	}
+
+	modifierUserInfos(email: String, nom: String, prenom:String, mdp: String, groupe: String, annonces: boolean): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/modify', {
+			email: email,
+			nom: nom,
+			prenom: prenom,
+			password: mdp,
+			groupe: groupe,
+			annonces: annonces
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerCompte(): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/remove', {})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	recupererThemes(): Promise<number[]>{
+		return this.httpClient.get(backend.url + '/api/auth/themes', {})
+			.toPromise()
+			.then(themes => {
+				let idThemes: number[] = [];
+
+				// @ts-ignore
+				for(const theme of themes){
+					idThemes.push(theme.idTheme);
+				}
+
+				return idThemes;
+			});
+	}
+
+	modifierTheme(theme: number): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/modifierTheme', {
+			theme: theme
+		})
+			.toPromise()
+			.then(value => {
+				// @ts-ignore
+				this.authService.updateTheme(value.theme.couleurPrincipaleTheme, value.theme.couleurFond, value.theme.sourceTheme, value.theme.idTheme);
+
+				// @ts-ignore
+				return value.message;
 			});
 	}
 }

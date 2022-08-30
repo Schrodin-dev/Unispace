@@ -53,20 +53,7 @@ export class AuthService{
 			sessionStorage.setItem("nom", this.loginRes.nom);
 			sessionStorage.setItem("prenom", this.loginRes.prenom);
 
-			//mise à jour du theme
-			this.couleurPrincipale.next(this.loginRes.couleurPrincipale);
-			sessionStorage.setItem("couleurPrincipale", this.loginRes.couleurPrincipale);
-			this.couleurFond.next(this.loginRes.couleurFond);
-			sessionStorage.setItem("couleurFond", this.loginRes.couleurFond);
-			this.sourceImageTheme.next(this.loginRes.sourceImageTheme);
-			sessionStorage.setItem("sourceImageTheme", this.loginRes.sourceImageTheme);
-			this.theme.next(this.loginRes.theme);
-			sessionStorage.setItem("theme", this.loginRes.theme);
-
-			sessionStorage.setItem("textColor", this.lightOrDark(this.loginRes.couleurFond));
-			// @ts-ignore
-			this.couleurTexte.next(sessionStorage.getItem("textColor"));
-
+			this.updateTheme(this.loginRes.couleurPrincipale, this.loginRes.couleurFond, this.loginRes.sourceImageTheme, this.loginRes.theme)
 
 			this.router.navigate(['']);
 
@@ -115,6 +102,22 @@ export class AuthService{
       groupe: this.getGroupe()
     };
   }
+
+  	updateTheme(couleurPrincipale: string, couleurFond: string, source: string, theme: string){
+		//mise à jour du theme
+		this.couleurPrincipale.next(couleurPrincipale);
+		sessionStorage.setItem("couleurPrincipale", couleurPrincipale);
+		this.couleurFond.next(couleurFond);
+		sessionStorage.setItem("couleurFond", couleurFond);
+		this.sourceImageTheme.next(source);
+		sessionStorage.setItem("sourceImageTheme", source);
+		this.theme.next(theme);
+		sessionStorage.setItem("theme", theme);
+
+		sessionStorage.setItem("textColor", this.lightOrDark(couleurFond));
+		// @ts-ignore
+		this.couleurTexte.next(sessionStorage.getItem("textColor"));
+	}
 
 	lightOrDark(color: any) {
 

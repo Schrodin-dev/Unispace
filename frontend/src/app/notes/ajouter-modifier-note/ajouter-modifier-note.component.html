@@ -1,4 +1,4 @@
-<div id="container" class="panel">
+<div id="container" class="panel"  [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 	<form [formGroup]="form" autocomplete="off">
 		<h1 [ngClass]="couleurTexte">{{ type | titlecase }} {{ mode }}</h1>
 

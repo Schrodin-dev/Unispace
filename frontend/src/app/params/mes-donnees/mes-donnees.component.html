@@ -1,1 +1,64 @@
-<p>mes-donnees works!</p>
+<div id="container">
+	<div id="parametres" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<h1 [ngClass]="couleurTexte">Paramètres</h1>
+
+		<form [formGroup]="form">
+			<label for="prenom" [ngClass]="couleurTexte">Changer de prénom</label>
+			<input type="text" id="prenom" formControlName="prenom" class="inputText" placeholder="Entrez un nouveau prénom" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"/>
+
+			<label for="nom" [ngClass]="couleurTexte">Changer de nom</label>
+			<input type="text" id="nom" formControlName="nom" class="inputText" placeholder="Entrez un nouveau nom" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"/>
+
+			<label for="email" [ngClass]="couleurTexte">Changer d'email</label>
+			<input type="email" id="email" formControlName="email" class="inputText" placeholder="Entrez un nouvel email" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"/>
+
+			<label [ngClass]="couleurTexte">Changer de classe/groupe</label>
+			<div class="dualDropDown">
+				<div class="dropDown">
+					<select formControlName="classe" id="classe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+						<option disabled selected hidden>classe</option>
+						<option *ngFor="let classe of classes" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
+					</select>
+				</div>
+				<div class="dropDown" >
+					<select formControlName="groupe" id="groupe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+						<ng-container *ngIf="form.value.classe">
+							<option disabled selected hidden>groupe</option>
+							<option *ngFor="let groupe of classe.groupes" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
+						</ng-container>
+					</select>
+				</div>
+			</div>
+
+			<label for="mdp" [ngClass]="couleurTexte">Changer de mot de passe</label>
+			<input type="password" id="mdp" formControlName="mdp" class="inputText" placeholder="Entrez un nouveau mot de passe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"/>
+
+			<div id="annoncesContainer">
+				<input type="checkbox" id="annonces" formControlName="annonces"/>
+				<label for="annonces" [ngClass]="couleurTexte">Recevoir des mails contenants des annonces</label>
+			</div>
+
+			<app-suppr-emitter [nomObjetASupprimer]="'le compte'" (supprimer)="supprimerCompte($event)" id="suppr"></app-suppr-emitter>
+			<button type="submit" [disabled]="form.invalid" class="textButton" [ngClass]="couleurTexte" (click)="modifierCompte()">Valider</button>
+
+			<p *ngIf="messageParametres" [ngClass]="couleurTexte">{{ messageParametres }}</p>
+			<app-erreur *ngIf="errorParametres" [message]="errorParametres" (close)="errorParametres = ''" ></app-erreur>
+		</form>
+	</div>
+
+	<div id="theme" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<h1 [ngClass]="couleurTexte">Thème</h1>
+
+		<div>
+			<ng-container *ngFor="let theme of themes">
+				<div *ngIf="theme === selectedTheme; else elseBlock" [ngStyle]="{backgroundImage: 'url(./assets/img/themes/' + theme + '.jpg)', border: 'solid #' + couleurPrincipale + ' 4px'}" id="selectedTheme"></div>
+				<ng-template #elseBlock>
+					<div [ngStyle]="{backgroundImage: 'url(./assets/img/themes/' + theme + '.jpg)'}" (click)="selectionnerTheme(theme)"></div>
+				</ng-template>
+			</ng-container>
+
+		</div>
+
+		<button type="submit" (click)="modifierTheme()" class="textButton" [ngClass]="couleurTexte">Valider</button>
+	</div>
+</div>
