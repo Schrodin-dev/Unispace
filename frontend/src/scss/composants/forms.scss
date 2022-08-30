@@ -33,6 +33,8 @@ $color : white;
 
 	> select{
 		@include panel($color);
+		padding: 0 30px;
+		width:calc(100% - 60px);
 		appearance: none;
 	}
 
