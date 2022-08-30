@@ -1,0 +1,38 @@
+@import "../../../scss/composants/panelsComps";
+
+#container{
+	width:100vw;
+	height:100vh;
+	position:fixed;
+	left:0;
+	top:0;
+	display:flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#supprimer{
+	width:100%;
+}
+
+#confirmationBox{
+	left:50%;
+	top:50%;
+	background-color: rgba(255, 0, 0, 0.1);
+	padding:5px 10px;
+
+	> div{
+		display:flex;
+		width:100%;
+		justify-content: space-around;
+
+		> p{
+			text-decoration: underline;
+		}
+	}
+}
+
+p{
+	color:red;
+	margin:0;
+}

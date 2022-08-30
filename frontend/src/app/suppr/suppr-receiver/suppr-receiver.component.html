@@ -1,0 +1,10 @@
+<div id="container" *ngIf="nomObjetASupprimer">
+	<div id="confirmationBox" class="panel">
+		<p>Êtes-vous sûr de vouloir supprimer {{ nomObjetASupprimer }} ?</p>
+
+		<div>
+			<p (click)="onSupprimer(false)">non</p>
+			<p (click)="onSupprimer(true)">oui</p>
+		</div>
+	</div>
+</div>
