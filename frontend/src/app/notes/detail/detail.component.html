@@ -3,7 +3,7 @@
 		<div class="panel" id="resume">
 			<h1 [ngClass]="couleurTexte">Résumé des U.E.</h1>
 
-			<div class="noteContainer" *ngFor="let ue of detail" [ngClass]="getUEColor(ue.moyenne)">
+			<div class="noteContainer" *ngFor="let ue of resumeUE" [ngClass]="getUEColor(ue.moyenne)">
 				<p [ngClass]="couleurTexte">{{ ue.nom }}</p>
 				<p [ngClass]="couleurTexte" *ngIf="ue.moyenne.toString() === '??'; else elseMoy">??/20</p>
 				<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ue.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
@@ -23,30 +23,23 @@
 
 		<div id="detail">
 			<h1 [ngClass]="couleurTexte">Détail des notes</h1>
-			<div *ngFor="let ue of detail" class="UE">
-				<div class="noteContainer" [ngClass]="getUEColor(ue.moyenne)">
-					<p [ngClass]="couleurTexte">{{ ue.nom }}</p>
-					<p [ngClass]="couleurTexte" *ngIf="ue.moyenne.toString() === '??'; else elseMoy">??/20</p>
-					<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ue.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
+
+			<div *ngFor="let ressource of detail" class="ressource">
+				<div class="noteContainer">
+					<p [ngClass]="couleurTexte">{{ ressource.nom }}</p>
+					<p [ngClass]="couleurTexte" *ngIf="ressource.moyenne.toString() === '??'; else elseMoy">??/20</p>
+					<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ressource.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
 				</div>
 
-				<div *ngFor="let ressource of ue.ressources" class="ressource">
-					<div class="noteContainer">
-						<p [ngClass]="couleurTexte">{{ ressource.nom }}</p>
-						<p [ngClass]="couleurTexte" *ngIf="ressource.moyenne.toString() === '??'; else elseMoy">??/20</p>
-						<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ ressource.moyenne | number: '1.0-2': 'fr' }}/20</p></ng-template>
-					</div>
-
-					<div *ngFor="let note of ressource.notes" class="note">
-						<div class="noteContainer" (click)="onModificationNote(ue, ressource, note)">
-							<p [ngClass]="couleurTexte">{{ note.nomDevoir }}</p>
-							<p [ngClass]="couleurTexte" *ngIf="note.note.toString() === '??'; else elseMoy">??/{{ note.bareme }}</p>
-							<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ note.note | number: '1.0-2': 'fr' }}/{{ note.bareme }}</p></ng-template>
-						</div>
+				<div *ngFor="let note of ressource.notes" class="note">
+					<div class="noteContainer" (click)="onModificationNote(ressource, note)">
+						<p [ngClass]="couleurTexte">{{ note.nomDevoir }}</p>
+						<p [ngClass]="couleurTexte" *ngIf="note.note.toString() === '??'; else elseMoy">??/{{ note.bareme }}</p>
+						<ng-template #elseMoy><p [ngClass]="couleurTexte">{{ note.note | number: '1.0-2': 'fr' }}/{{ note.bareme }}</p></ng-template>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<app-ajouter-modifier-note [inputDetail]="sentDetail" [inputUe]="ue" [inputRessource]="ressource" [inputNote]="note" (modification)="loadDetail()"></app-ajouter-modifier-note>
+	<app-ajouter-modifier-note [inputDetail]="sentDetail" [inputRessource]="ressource" [inputNote]="note" (modification)="loadDetail()"></app-ajouter-modifier-note>
 </div>

@@ -2,20 +2,12 @@
 	<form [formGroup]="form" autocomplete="off">
 		<h1 [ngClass]="couleurTexte">{{ type | titlecase }} {{ mode }}</h1>
 
-		<label for="UE" [ngClass]="couleurTexte">UE</label>
-		<div class="dropDown">
-			<select formControlName="UE" id="UE" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-				<option selected *ngIf="ue === undefined"></option>
-				<option *ngFor="let UE of detail" [value]="UE.nom">{{ UE.nom }}</option>
-			</select>
-		</div>
-
 		<label for="Ressource" [ngClass]="couleurTexte">Ressource</label>
 		<div class="dropDown">
 			<select formControlName="Ressource" id="Ressource" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-				<ng-container *ngIf="ue">
+				<ng-container>
 					<option selected *ngIf="ressource === undefined"></option>
-					<option *ngFor="let Ressource of ue.ressources" [value]="Ressource.nom">{{ Ressource.nom }}</option>
+					<option *ngFor="let Ressource of detail" [value]="Ressource.nom">{{ Ressource.nom }}</option>
 				</ng-container>
 			</select>
 		</div>
@@ -59,7 +51,7 @@
 			<p [ngClass]="couleurTexte">Groupes</p>
 				<div *ngFor="let groupe of groupes">
 					<input type="checkbox" [value]="groupe" [id]="'groupe-' + groupe" (change)="onCbChange($event)" [checked]="this.note !== undefined && this.note.groupes.includes(groupe)"/>
-					<label [htmlFor]="'groupe-' + groupe" [ngClass]="couleurTexte">{{ groupe }} {{ this.note !== undefined && this.note.groupes.includes(groupe) }}</label>
+					<label [htmlFor]="'groupe-' + groupe" [ngClass]="couleurTexte">{{ groupe }}</label>
 				</div>
 		</div>
 

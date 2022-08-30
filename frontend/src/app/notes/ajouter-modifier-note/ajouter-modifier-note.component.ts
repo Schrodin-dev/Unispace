@@ -21,10 +21,9 @@ import {BehaviorSubject, Subject} from "rxjs";
   styleUrls: ['./ajouter-modifier-note.component.scss']
 })
 export class AjouterModifierNoteComponent implements OnInit {
-	@Input() inputUe!: Subject<UE>;
 	@Input() inputRessource!: Subject<Ressource>;
 	@Input() inputNote!: Subject<Note>;
-	@Input() inputDetail!: Subject<UE[]>;
+	@Input() inputDetail!: Subject<Ressource[]>;
 	@Output() modification: EventEmitter<boolean> = new EventEmitter<boolean>();
 	type!: string; //(modifier ou ajouter)
 	mode: String = 'note'; // mode ajout/modification d'une note ou d'un devoir (note ou devoir)
@@ -32,10 +31,9 @@ export class AjouterModifierNoteComponent implements OnInit {
 	noteForm!: FormGroup;
 	devoirForm!: FormGroup;
 
-	ue!: UE | undefined;
 	ressource!: Ressource | undefined;
 	note!: Note | undefined;
-	detail!: UE[];
+	detail!: Ressource[];
 	groupes: String[] = [];
 
 	couleurFond!: String;
@@ -72,7 +70,6 @@ export class AjouterModifierNoteComponent implements OnInit {
 		  })
 
 
-	  this.inputUe.subscribe(value => {this.form.patchValue({'UE': value.nom});});
 	  this.inputRessource.subscribe(value => {this.form.patchValue({'Ressource': value.nom});});
 	  this.inputNote.subscribe(value => {
 		  this.form.patchValue({'Devoir': value.id});
@@ -84,9 +81,8 @@ export class AjouterModifierNoteComponent implements OnInit {
 	  });
 	  this.inputDetail.subscribe(value => {
 		  this.detail = value;
-		  this.form.patchValue({'UE': null});
-		  this.ue = undefined;
 		  this.form.patchValue({'Ressource': null});
+		  this.ressource = undefined;
 		  this.form.patchValue({'Devoir': null});
 		  this.noteForm.patchValue({'Note': ''});
 	  });
@@ -94,7 +90,6 @@ export class AjouterModifierNoteComponent implements OnInit {
 	  this.setType();
 
 	  this.form = this.formBuilder.group({
-		  UE: [null, Validators.required],
 		  Ressource: [null, Validators.required],
 		  Devoir: [null, Validators.required],
 	  });
@@ -108,7 +103,6 @@ export class AjouterModifierNoteComponent implements OnInit {
 		  groupes: this.formBuilder.array([], Validators.required)
 	  });
 
-      if(this.ue !== undefined) this.form.patchValue({'UE': this.ue.nom});
       if(this.ressource !== undefined) this.form.patchValue({'Ressource': this.ressource.nom});
 	  if(this.note !== undefined) this.form.patchValue({'Devoir': this.note.id});
 	  if(this.type === 'modifier') { // @ts-ignore
@@ -117,7 +111,7 @@ export class AjouterModifierNoteComponent implements OnInit {
 
 	  this.form.valueChanges
 		  .subscribe(value => {
-			  if(value.UE && (this.ue === undefined || value.UE !== this.ue.nom)){
+			  /*if(value.UE && (this.ue === undefined || value.UE !== this.ue.nom)){
 				  for(let UE of this.detail){
 					  if(UE.nom === value.UE){
 						  this.ue = UE;
@@ -127,10 +121,10 @@ export class AjouterModifierNoteComponent implements OnInit {
                           this.noteForm.patchValue({'Note': undefined}, {emitEvent: false});
 					  }
 				  }
-			  }
+			  }*/
 
-			  if(value.Ressource && this.ue && (this.ressource === undefined || value.Ressource !== this.ressource.nom)){
-				  for(let Ressource of this.ue.ressources){
+			  if(value.Ressource && (this.ressource === undefined || value.Ressource !== this.ressource.nom)){
+				  for(let Ressource of this.detail){
 					  if(Ressource.nom === value.Ressource){
 						  this.ressource = Ressource;
                           this.note = undefined

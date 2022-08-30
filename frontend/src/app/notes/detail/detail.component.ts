@@ -12,7 +12,8 @@ import {Observable, Subject} from "rxjs";
   styleUrls: ['./detail.component.scss']
 })
 export class DetailComponent implements OnInit {
-	detail!: UE[];
+	resumeUE!: UE[];
+	detail!: Ressource[];
 	error!: String;
 	etatSemestre:boolean = false;
 
@@ -24,7 +25,7 @@ export class DetailComponent implements OnInit {
 	ue: Subject<UE> = new Subject<UE>();
 	ressource: Subject<Ressource> = new Subject<Ressource>();
 	note: Subject<Note> = new Subject<Note>();
-	sentDetail: Subject<UE[]> = new Subject<UE[]>()
+	sentDetail: Subject<Ressource[]> = new Subject<Ressource[]>()
 
   constructor(private requestsService: RequestsService, private authService: AuthService) { }
 
@@ -45,7 +46,7 @@ export class DetailComponent implements OnInit {
 
   semestreValide(): boolean{
 	  let nbUEValide = 0;
-	  for(const UE of this.detail){
+	  for(const UE of this.resumeUE){
 		  if(UE.moyenne > 10){
 			  nbUEValide++;
 		  }else if(UE.moyenne < 8){
@@ -56,8 +57,7 @@ export class DetailComponent implements OnInit {
 	  return nbUEValide >= 3;
   }
 
-  onModificationNote(ue: UE, ressource: Ressource, note: Note){
-	  this.ue.next(ue);
+  onModificationNote(ressource: Ressource, note: Note){
 	  this.ressource.next(ressource);
 	  this.note.next(note);
   }
@@ -66,8 +66,9 @@ export class DetailComponent implements OnInit {
 	  this.requestsService.getDetailNotes()
 		  .then(res => {
 			  this.error = '';
-			  this.detail = res;
-			  this.sentDetail.next(res);
+			  this.resumeUE = res.UE;
+			  this.detail = res.ressources;
+			  this.sentDetail.next(res.ressources);
 			  this.etatSemestre = this.semestreValide();
 		  })
 		  .catch(error => {

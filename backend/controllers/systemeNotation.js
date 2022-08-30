@@ -467,7 +467,6 @@ exports.detailDesNotes = (req, res, next) => {
 				return res.status(400).json({message: "Aucune note trouvée."});
 			}
 
-			//return res.status(201).json(detail);
 			return res.status(201).json(calculateurMoyennes(detail));
 		})
 		.catch(error => {console.error(error);return res.status(500).json(error);});
@@ -559,7 +558,27 @@ function calculateurMoyennes(detail){
 
 	}
 
-	return parsedNotes;
+	return lessDetailledNotes(parsedNotes);
+}
+
+function lessDetailledNotes(detail){
+	let result = {
+		UE: [],
+		ressources: []
+	};
+
+	for(const ue of detail){
+		result.UE.push({
+			nom: ue.nom,
+			moyenne: ue.moyenne
+		});
+
+		for(const ressource of ue.ressources){
+			result.ressources[ressource.id - 1] = ressource;
+		}
+	}
+
+	return result;
 }
 
 function adjustTo20(note, bareme){

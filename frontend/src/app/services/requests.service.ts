@@ -103,34 +103,37 @@ export class RequestsService{
 		  });
   }
 
-  getDetailNotes(): Promise<UE[]>{
+  getDetailNotes(): Promise<{UE: UE[], ressources: Ressource[]}>{
 	  return this.httpClient.get(backend.url + '/api/notation/detail')
 		  .toPromise()
 		  .then(res => {
-			  let listeUE = [];
+			  let result: { UE: UE[]; ressources: Ressource[] };
+			  result = {
+				  UE: [],
+				  ressources: []
+			  };
 
 			  // @ts-ignore
-			  for(let UETemp of res){
-				  let ue = new UE(UETemp.nom, UETemp.moyenne);
-
-				  for(let ressourceTemp of UETemp.ressources){
-					  let ressource = new Ressource(ressourceTemp.nom, ressourceTemp.moyenne, ressourceTemp.id);
-
-					  for(let noteTemp of ressourceTemp.devoirs){
-						  let note = new Note(noteTemp.note, noteTemp.bareme, noteTemp.nom);
-						  note.setId(noteTemp.id);
-						  note.setCoeff(noteTemp.coeff);
-						  note.setGroupes(noteTemp.groupes);
-						  ressource.addNote(note);
-					  }
-
-					  ue.addRessource(ressource);
-				  }
-
-				  listeUE.push(ue);
+			  for(let UETemp of res.UE){
+				  result.UE.push(new UE(UETemp.nom, UETemp.moyenne));
 			  }
 
-			  return listeUE;
+			  // @ts-ignore
+			  for(let ressourceTemp of res.ressources){
+				  let ressource = new Ressource(ressourceTemp.nom, ressourceTemp.moyenne, ressourceTemp.id);
+
+				  for(let noteTemp of ressourceTemp.devoirs){
+					  let note = new Note(noteTemp.note, noteTemp.bareme, noteTemp.nom);
+					  note.setId(noteTemp.id);
+					  note.setCoeff(noteTemp.coeff);
+					  note.setGroupes(noteTemp.groupes);
+					  ressource.addNote(note);
+				  }
+
+				  result.ressources.push(ressource);
+			  }
+
+			  return result;
 		  })
   }
 
