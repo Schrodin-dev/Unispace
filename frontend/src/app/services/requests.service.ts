@@ -33,9 +33,17 @@ export class RequestsService{
 				  planning.push(new Cours(cours.nom, cours.debut, cours.fin, cours.profs, cours.couleur, cours.salles));
 			  }
 
-			  return planning.sort((a, b) => {
+			  planning.sort((a, b) => {
 				  return a.debut.getTime() - b.debut.getTime();
 			  });
+
+			  for(let i = 1; i < planning.length; i++){
+				  if(planning[i].debut.getDate() === planning[i - 1].fin.getDate()){
+					  planning[i].setEcart((planning[i].debut.getTime()/60000 - planning[i - 1].fin.getTime()/60000)/15);
+				  }
+			  }
+
+			  return planning;
 		  });
   }
 

@@ -1,4 +1,4 @@
-<div id="cours" [ngStyle]="{'background-color': '#'+cours.couleur+'99'}">
+<div id="cours" [ngStyle]="{'backgroundColor': '#'+cours.couleur+'99', 'marginTop': 10*cours.ecartCourtPrecedant + 'px'}">
 	<p id="nom" [ngClass]="couleurTexte">{{ cours.nom }}</p>
 	<p id="profs" [ngClass]="couleurTexte">{{ parseProfs() }}</p>
 	<p id="salles" [ngClass]="couleurTexte">{{ parseSalles() }}</p>

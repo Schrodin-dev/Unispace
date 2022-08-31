@@ -111,18 +111,6 @@ export class AjouterModifierNoteComponent implements OnInit {
 
 	  this.form.valueChanges
 		  .subscribe(value => {
-			  /*if(value.UE && (this.ue === undefined || value.UE !== this.ue.nom)){
-				  for(let UE of this.detail){
-					  if(UE.nom === value.UE){
-						  this.ue = UE;
-						  this.ressource = undefined;
-						  this.form.patchValue({'Ressource': undefined}, {emitEvent: false});
-						  this.note = undefined
-                          this.noteForm.patchValue({'Note': undefined}, {emitEvent: false});
-					  }
-				  }
-			  }*/
-
 			  if(value.Ressource && (this.ressource === undefined || value.Ressource !== this.ressource.nom)){
 				  for(let Ressource of this.detail){
 					  if(Ressource.nom === value.Ressource){
@@ -155,7 +143,6 @@ export class AjouterModifierNoteComponent implements OnInit {
 						  for(let groupe of Note.groupes){
 							  groupesForm.push(new FormControl(groupe));
 						  }
-						  console.log(this.devoirForm.value);
 						  this.setType();
 					  }
 				  }
