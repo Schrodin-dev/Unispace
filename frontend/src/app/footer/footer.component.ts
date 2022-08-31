@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from "../services/auth.service";
 
 @Component({
   selector: 'app-footer',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
+	couleurFond!: String;
+	couleurTexte!: String;
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
+	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
+	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
   }
 
 }
