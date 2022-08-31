@@ -15,34 +15,31 @@ export class EmbedEdtComponent implements OnInit {
 	@Output() error = new EventEmitter<String>();
 	@Input() updateDateIn!: BehaviorSubject<Date>;
 
-
-	dateSelectionnee!: FormGroup;
 	date!: Date;
 	edt!: Promise<Cours[]>;
 	couleurFond!: String;
 	couleurPrincipale!: String;
 	couleurTexte!: String;
+	embedEdtDate!: BehaviorSubject<Date>;
 
   constructor(private formBuilder: FormBuilder, private requests: RequestsService, private authService: AuthService) { }
 
   ngOnInit(): void {
-	  this.date = new Date();
-		this.dateSelectionnee = this.formBuilder.group({
-			date: [this.date.toISOString().substr(0, 10)]
-		});
+	  this.embedEdtDate = new BehaviorSubject<Date>(new Date());
+	  this.embedEdtDate.subscribe(date => {
+		  this.date = date;
+		  this.chargerEdt(this.date.toISOString());
+		  this.updateParent(this.date);
+	  });
+
 		this.chargerEdt(this.date.toISOString());
 
-		this.dateSelectionnee.valueChanges.forEach(newValue => {
-			this.date = new Date(newValue.date);
-			this.updateParent(this.date);
-			this.chargerEdt(newValue.date);
-		});
 
 		if(this.updateDateIn !== undefined){
 			this.updateDateIn.subscribe(date => {
 				if(date === this.date) return;
-				this.date = date;
-				this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});});
+				this.embedEdtDate.next(date);
+				});
 		}
 
 		this.authService.couleurFond.subscribe(couleur => {
@@ -67,18 +64,6 @@ export class EmbedEdtComponent implements OnInit {
 		  this.error.emit(error.error.message || 'Impossible de récupérer l\'emploi du temps, veuillez réessayer.');
 	  });
   }
-
-  previousDay(){
-	  this.date.setDate(this.date.getDate()-1);
-
-	  this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});
-  }
-
-	nextDay(){
-		this.date.setDate(this.date.getDate()+1);
-
-		this.dateSelectionnee.patchValue({'date': this.date.toISOString().substr(0, 10)});
-	}
 
 	updateParent(name: Date){
 		this.updateDateOut.emit(name);

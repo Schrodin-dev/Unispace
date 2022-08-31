@@ -36,6 +36,7 @@ import { SupprEmitterComponent } from './suppr/suppr-emitter/suppr-emitter.compo
 import { SupprReceiverComponent } from './suppr/suppr-receiver/suppr-receiver.component';
 import {SupprService} from "./services/suppr.service";
 import { DetailContentTodoComponent } from './agenda/detail-content-todo/detail-content-todo.component';
+import { DateSelectorComponent } from './date-selector/date-selector.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +64,7 @@ import { DetailContentTodoComponent } from './agenda/detail-content-todo/detail-
     SupprEmitterComponent,
     SupprReceiverComponent,
     DetailContentTodoComponent,
+    DateSelectorComponent,
   ],
     imports: [
         BrowserModule,
