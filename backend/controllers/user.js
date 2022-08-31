@@ -73,17 +73,31 @@ exports.changementsDonneesCompte = async (req, res, next) => {
             if (req.body.prenom.length > 40) {
                 throw(Error('Le nouveau prénom est trop long (40 caractères maximum).'));
             }
-            if (req.body.groupe.length > 0 && await db.groupe.findOne({where: {nomGroupe: req.body.groupe}}) === null) {
-                throw(Error('Le nouveau groupe renseigné n\'existe pas.'));
-            }
 
             if (req.body.nom.length > 0) user.set({nomUser: req.body.nom});
             if (req.body.prenom.length > 0) user.set({prenomUser: req.body.prenom});
-            if (req.body.groupe.length > 0) user.set({nomGroupe: req.body.groupe});
             if(req.body.annonces !== undefined){
                 user.set({accepteRecevoirAnnonces: req.body.annonces});
             }
             return user;
+        })
+        .then(user => {
+            if (req.body.groupe.length <= 0) return user;
+
+            return db.groupe.findOne({where: {nomGroupe: req.body.groupe}}).then(groupe => {
+                if(!groupe) throw(Error('Le nouveau groupe renseigné n\'existe pas.'));
+
+                return db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+                    .then(userGroupe => {
+                        if(groupe.nomClasse !== userGroupe.nomClasse && (req.auth.droitsUser === 'délégué' || req.auth.droitsUser === 'publicateur')){
+                            user.set({droitsUser: 'élève'});
+                        }
+
+                        user.set({nomGroupe: req.body.groupe});
+
+                        return user;
+                    })
+            })
         })
         .then(async user => {
             console.log(req.body.password);
