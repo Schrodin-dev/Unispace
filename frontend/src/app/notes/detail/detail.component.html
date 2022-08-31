@@ -1,6 +1,6 @@
 <div id="bigContainer">
 	<div class="panel" id="container" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-		<div class="panel" id="resume">
+		<div class="panel" id="resume"  [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 			<h1 [ngClass]="couleurTexte">Résumé des U.E.</h1>
 
 			<div class="noteContainer" *ngFor="let ue of resumeUE" [ngClass]="getUEColor(ue.moyenne)">
