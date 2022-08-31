@@ -54,7 +54,9 @@ export class RequestsService{
 			  let travails: TravailAFaire[] = [];
 			  // @ts-ignore
 			  for(let travail of listeTravails){
-				  travails.push(new TravailAFaire(travail.idTravailAFaire, travail.dateTravailAFaire, travail.descTravailAFaire, travail.estNote, travail.nomCours, travail.cour.couleurCours));
+				  let travailAFaire = new TravailAFaire(travail.idTravailAFaire, travail.dateTravailAFaire, travail.descTravailAFaire, travail.nomCours, travail.cour.couleurCours)
+				  travailAFaire.setEstNote(travail.estNote);
+				  travails.push(travailAFaire);
 			  }
 
 			  return travails.sort((a, b) => {return a.date.getTime() - b.date.getTime()});

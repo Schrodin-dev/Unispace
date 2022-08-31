@@ -300,6 +300,13 @@ exports.afficher = (req, res, next) => {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
 	}
 
+	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
+	let whereStatement = {};
+	if(req.body.cours !== undefined && req.body.cours.length > 0){
+		whereStatement.nomCours = req.body.cours;
+	}
+
+
 	db.travailAFaire.findAll({
 		include: [
 			{
@@ -311,7 +318,8 @@ exports.afficher = (req, res, next) => {
 			{
 				model: db.cours,
 				required: true,
-				attributes: ['couleurCours']
+				attributes: ['couleurCours'],
+				where: whereStatement
 			},
 			{
 				model: db.docsTravailARendre

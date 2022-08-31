@@ -3,7 +3,7 @@
 		<div id="barreCours" [ngStyle]="{backgroundColor: '#'+travail.couleurCours}"></div>
 		<p [ngClass]="couleurTexte">{{ travail.nomCours }}</p>
 	</div>
-	<p id="date">à faire pour: {{ dateToHoursString(travail.date)}}</p>
+	<p id="date">à faire pour: {{ dateToHoursString(travail.date)}}<ng-container *ngIf="travail.estNote">, est noté.</ng-container></p>
 	<p id="desc" [ngClass]="couleurTexte">{{ travail.desc }}</p>
 </div>
 

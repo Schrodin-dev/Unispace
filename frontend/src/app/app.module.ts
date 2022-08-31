@@ -35,6 +35,7 @@ import { AjouterModifierNoteComponent } from './notes/ajouter-modifier-note/ajou
 import { SupprEmitterComponent } from './suppr/suppr-emitter/suppr-emitter.component';
 import { SupprReceiverComponent } from './suppr/suppr-receiver/suppr-receiver.component';
 import {SupprService} from "./services/suppr.service";
+import { DetailContentTodoComponent } from './agenda/detail-content-todo/detail-content-todo.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import {SupprService} from "./services/suppr.service";
     AjouterModifierNoteComponent,
     SupprEmitterComponent,
     SupprReceiverComponent,
+    DetailContentTodoComponent,
   ],
     imports: [
         BrowserModule,
