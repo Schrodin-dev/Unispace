@@ -1,6 +1,16 @@
 <div id="cours" [ngStyle]="{'backgroundColor': '#'+cours.couleur+'99', 'marginTop': 10*cours.ecartCourtPrecedant + 'px'}">
 	<p id="nom" [ngClass]="couleurTexte">{{ cours.nom }}</p>
-	<p id="profs" [ngClass]="couleurTexte">{{ parseProfs() }}</p>
+	<p id="profs">
+				<ng-container *ngFor="let prof of cours.profs; let index = index">
+					<span [ngClass]="couleurTexte">
+						{{prof}}
+						<img *ngIf="icones.includes(prof)" src="./assets/img/icones-profs/{{ prof }}.png" alt="icon de prof" class="icone"/>
+						<span *ngIf="index < cours.profs.length - 1">, </span>
+					</span>
+
+				</ng-container>
+	</p>
+
 	<p id="salles" [ngClass]="couleurTexte">{{ parseSalles() }}</p>
 	<p id="horaire" [ngClass]="couleurTexte">{{ horaire }}</p>
 </div>
