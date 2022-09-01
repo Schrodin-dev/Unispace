@@ -13,9 +13,10 @@
 
 .linkPanel{
 	max-width: 500px;
+	width: calc(100% - 20px);
 }
 
-@media screen and (min-width: 500px){
+@media screen and (min-width: 520px){
 	.linkPanel{
 		width: 500px;
 	}
