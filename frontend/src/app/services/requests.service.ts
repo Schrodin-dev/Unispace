@@ -8,6 +8,7 @@ import {Note} from "../models/note.model";
 import {UE} from "../models/UE.model";
 import {Ressource} from "../models/ressource.model";
 import {AuthService} from "./auth.service";
+import {Doc} from "../models/doc.model";
 
 @Injectable()
 export class RequestsService{
@@ -273,6 +274,251 @@ export class RequestsService{
 
 				// @ts-ignore
 				return value.message;
+			});
+	}
+
+	chargerListeCours():Promise<{nom: String, couleur: String}[]>{
+		return this.httpClient.get(backend.url + '/api/groupe/listeCours', {})
+			.toPromise()
+			.then(listeCoursTemp => {
+				let listeCours: {nom: String, couleur:String}[] = [];
+
+				// @ts-ignore
+				for(const cours of listeCoursTemp){
+					listeCours.push({
+						nom: cours.nom,
+						couleur: cours.couleur
+					})
+				}
+
+				return listeCours;
+			});
+	}
+
+	chargerPageTravailAFaire(dateMin: Date, pagination: number, cours: String): Promise<TravailAFaire[]>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/afficher', {
+			dateMin: dateMin,
+			pagination: pagination,
+			cours: cours
+		})
+			.toPromise()
+			.then(value => {
+				let travails: TravailAFaire[] = [];
+
+				// @ts-ignore
+				for(let t of value){
+					let travail = new TravailAFaire(t.idTravailAFaire, t.dateTravailAFaire, t.descTravailAFaire, t.nomCours, t.cour.couleurCours);
+					travail.setEstNote(t.estNote);
+					for(let doc of t.docsTravailARendres){
+						travail.ajouterDocument(new Doc(doc.idDoc, doc.nomDoc, doc.lienDoc));
+					}
+					for(let groupe of t.groupes){
+						travail.ajouterGroupe(groupe.nomGroupe);
+					}
+					travails.push(travail);
+				}
+
+				return travails.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
+			});
+	}
+
+	chargerPageContenuCours(dateMin: Date, pagination: number, cours: String): Promise<TravailAFaire[]>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/afficher', {
+			dateMin: dateMin,
+			pagination: pagination,
+			cours: cours
+		})
+			.toPromise()
+			.then(value => {
+				let travails: TravailAFaire[] = [];
+
+				// @ts-ignore
+				for(let t of value){
+					let travail = new TravailAFaire(t.idContenuCours, t.dateContenuCours, t.descContenuCours, t.nomCours, t.cour.couleurCours);
+					for(let doc of t.docsContenuCours){
+						travail.ajouterDocument(new Doc(doc.idDoc, doc.nomDoc, doc.lienDoc));
+					}
+					for(let groupe of t.groupes){
+						travail.ajouterGroupe(groupe.nomGroupe);
+					}
+					travails.push(travail);
+				}
+
+				return travails.sort((a, b) => {return a.date.getTime() - b.date.getTime()});
+			});
+	}
+
+	ajouterContenuCours(date: Date, desc: String, groupes: String[], cours: String, docs: Doc[]):Promise<String>{
+	  	let documents: {nom: String, lienDoc: String}[] = [];
+		  for(let doc of docs){
+			  documents.push({
+				  nom: doc.nom,
+				  lienDoc: doc.lien
+			  });
+		  }
+
+	  	return this.httpClient.post(backend.url + '/api/contenuCours/ajouter', {
+			date: date,
+			description: desc,
+			groupes: groupes,
+			cours: cours,
+			documents: documents
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierContenuCours(id:number, date: Date, desc: String, groupes: String[], cours: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/modifier', {
+			contenuCours: id,
+			date: date,
+			description: desc,
+			cours: cours,
+			groupes: groupes
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerContenuCours(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/supprimer', {
+			contenuCours: id
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterDocumentContenuCours(contenu: number, nom: String, lien: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/document/ajouter', {
+			contenuCours: contenu,
+			nom: nom,
+			lienDoc: lien
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierDocumentContenuCours(id: number, nom: String, lien: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/document/modifier', {
+			doc: id,
+			nom: nom,
+			lienDoc: lien
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerDocumentContenuCours(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/contenuCours/document/supprimer', {
+			doc: id,
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterTravailAFaire(date: Date, desc: String, estNote: boolean, groupes: String[], cours: String, docs: Doc[]):Promise<String>{
+		let documents: {nom: String, lienDoc: String}[] = [];
+		for(let doc of docs){
+			documents.push({
+				nom: doc.nom,
+				lienDoc: doc.lien
+			});
+		}
+
+		return this.httpClient.post(backend.url + '/api/travailAFaire/ajouter', {
+			date: date,
+			description: desc,
+			estNote: estNote,
+			groupes: groupes,
+			cours: cours,
+			documents: documents
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierTravailAFaire(id:number, date: Date, desc: String, estNote: boolean, groupes: String[], cours: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/modifier', {
+			travailAFaire: id,
+			date: date,
+			description: desc,
+			estNote: estNote,
+			cours: cours,
+			groupes: groupes
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerTravailAFaire(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/supprimer', {
+			travailAFaire: id
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterDocumentTravailAFaire(travail: number, nom: String, lien: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/document/ajouter', {
+			travailAFaire: travail,
+			nom: nom,
+			lienDoc: lien
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierDocumentTravailAFaire(id: number, nom: String, lien: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/document/modifier', {
+			doc: id,
+			nom: nom,
+			lienDoc: lien
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerDocumentTravailAFaire(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/travailAFaire/document/supprimer', {
+			doc: id,
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
 			});
 	}
 }

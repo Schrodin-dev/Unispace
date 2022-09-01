@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const {Op} = require("sequelize");
+const {Op, literal} = require("sequelize");
 
 exports.ajouterUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
@@ -255,8 +255,8 @@ exports.modifierDevoir = (req, res, next) => {
 						devoir.idRessource = req.body.ressource;
 					}
 
+					console.log(devoir);
 					let groupesModifies = true;
-					devoir.setGroupes([]);
 					if (req.body.groupes.length > 0) {
 						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 							.then(async userGroupe => {
@@ -272,17 +272,16 @@ exports.modifierDevoir = (req, res, next) => {
 												groupesModifies = false;
 												return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
 											}
-
-											await devoir.addGroupe(groupe.nomGroupe)
-												.catch(error => {
-													groupesModifies = false;
-													return res.status(500).json(error);
-												})
 										})
 										.catch(error => {
 											groupesModifies = false;
 											return res.status(500).json(error);
 										})
+								}
+							})
+							.then(() => {
+								if(groupesModifies){
+									devoir.setGroupes(req.body.groupes);
 								}
 							})
 							.catch(error => {
@@ -442,6 +441,7 @@ exports.detailDesNotes = (req, res, next) => {
 			model: db.ressource,
 			include: {
 				model: db.devoir,
+				required: false,
 				include: [
 					{
 						required: false,
@@ -453,9 +453,9 @@ exports.detailDesNotes = (req, res, next) => {
 						required: true,
 						model: db.groupe,
 						attributes: ['nomGroupe'],
-						where: {nomGroupe: req.auth.userGroupe}
 					}
 				],
+				where: { idDevoir: {[Op.in]: literal("(SELECT DISTINCT idDevoir FROM aPourDevoir WHERE nomGroupe = '" + req.auth.userGroupe + "')")}},
 				attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir', 'idDevoir']
 			},
 		},

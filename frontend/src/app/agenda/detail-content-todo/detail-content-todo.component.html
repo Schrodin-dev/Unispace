@@ -1,1 +1,65 @@
-<p>test</p>
+<div id="bigContainer">
+	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<div id="dateSelector">
+			<p [ngClass]="couleurTexte">depuis</p>
+			<app-date-selector [dateSubject]="dateSelector"></app-date-selector>
+		</div>
+
+		<div id="main">
+			<div id="matieres" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+				<h1 [ngClass]="couleurTexte">Choix de la matière</h1>
+				<div class="cours" [ngStyle]="{borderTopColor: '#'+couleurFond+'99'}" (click)="changerMatiere('')">
+					<p [ngStyle]="{color: '#'+couleurPrincipale}" *ngIf="matiere === ''; else elseTtesMatieres">Toutes les matières</p>
+					<ng-template #elseTtesMatieres>
+						<p [ngClass]="couleurTexte">Toutes les matières</p>
+					</ng-template>
+				</div>
+				<ng-container *ngIf="afficherChoixMatiere">
+					<ng-container *ngFor="let cours of listeCours">
+						<div class="cours" [ngStyle]="{borderTopColor: '#'+couleurFond+'99'}" *ngIf="matiere === cours.nom; else elseMatiere" (click)="changerMatiere(cours.nom)">
+							<div class="barreCours" [ngStyle]="{backgroundColor: '#'+cours.couleur}"></div>
+							<p [ngStyle]="{color: '#'+couleurPrincipale}">{{ cours.nom }}</p>
+						</div>
+						<ng-template #elseMatiere>
+							<div class="cours" [ngStyle]="{borderTopColor: '#'+couleurFond+'99'}" (click)="changerMatiere(cours.nom)">
+								<div class="barreCours" [ngStyle]="{backgroundColor: '#'+cours.couleur}"></div>
+								<p [ngClass]="couleurTexte">{{ cours.nom }}</p>
+							</div>
+						</ng-template>
+					</ng-container>
+				</ng-container>
+
+				<div id="expend">
+					<img src="./assets/img/next.png" alt="agrandir le panneau du choix de la matière" (click)="afficherChoixMatiere = !afficherChoixMatiere" *ngIf="afficherChoixMatiere; else masquerMatieres"/>
+					<ng-template #masquerMatieres>
+						<img src="./assets/img/next.png" alt="agrandir le panneau du choix de la matière" id="closed" (click)="afficherChoixMatiere = !afficherChoixMatiere" />
+					</ng-template>
+				</div>
+			</div>
+
+			<div id="liste">
+				<ng-container *ngFor="let travail of listeTravails; let index = index">
+					<h2 *ngIf="(index === 0) || compareDates(travail.date, listeTravails[index - 1].date)" [ngClass]="couleurTexte">{{ travail.date | date: 'EEEE dd MMMM' | titlecase}}</h2>
+					<div [ngStyle]="{borderTopColor: '#'+couleurFond}">
+						<app-travail-a-faire [travail]="travail" [emitter]="receiver" [isEmbed]="false" [type]="type"></app-travail-a-faire>
+					</div>
+				</ng-container>
+
+				<div id="btns">
+					<button *ngIf="listeTravails && listeTravails.length > 0 && listeTravails.length % 10 === 0 && canLoadMore" class="button" [ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}" [ngClass]="couleurTexte" type="button" (click)="chargerPlus()">Charger plus</button>
+					<button *ngIf="isDelegue" class="button" [ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}" [ngClass]="couleurTexte" type="button" (click)="Ajouter()">Ajouter un {{ type }}</button>
+				</div>
+
+				<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
+			</div>
+		</div>
+
+
+	</div>
+
+	<div id="preview" *ngIf="previewMode">
+		<app-preview-agenda  [travail]="previewTravail" *ngIf="previewMode === 'preview'" [type]="type" (modifier)="modifier($event)"></app-preview-agenda>
+		<app-edit-agenda *ngIf="previewMode === 'ajouter'" [mode]="previewMode" [type]="type" [travail]="previewTravail" [matieres]="listeCours" (close)="closeEdit()"></app-edit-agenda>
+		<app-edit-agenda *ngIf="previewMode === 'modifier'" [mode]="previewMode" [type]="type" [travail]="previewTravail" [matieres]="listeCours" (close)="closeEdit()"></app-edit-agenda>
+	</div>
+</div>

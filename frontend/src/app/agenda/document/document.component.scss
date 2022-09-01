@@ -1,0 +1,10 @@
+@import "../../../scss/composants/forms";
+@import "../../../scss/composants/panelsComps";
+
+form{
+	display: flex;
+	flex-direction: column;
+	padding:10px;
+	margin:5px 0;
+}
+

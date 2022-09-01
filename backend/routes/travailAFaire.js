@@ -10,5 +10,6 @@ router.post('/afficherEmbed', travailAFaireCtl.recupererEmbed);
 router.post('/afficher', travailAFaireCtl.afficher);
 router.post('/document/ajouter', travailAFaireCtl.ajouterDocument);
 router.post('/document/supprimer', travailAFaireCtl.supprimerDocument);
+router.post('/document/modifier', travailAFaireCtl.modifierDocument);
 
 module.exports = router;

@@ -37,6 +37,10 @@ import { SupprReceiverComponent } from './suppr/suppr-receiver/suppr-receiver.co
 import {SupprService} from "./services/suppr.service";
 import { DetailContentTodoComponent } from './agenda/detail-content-todo/detail-content-todo.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
+import { PreviewAgendaComponent } from './agenda/preview-agenda/preview-agenda.component';
+import { AjouterAgendaComponent } from './agenda/ajouter-agenda/ajouter-agenda.component';
+import { EditAgendaComponent } from './agenda/edit-agenda/edit-agenda.component';
+import { DocumentComponent } from './agenda/document/document.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +69,10 @@ import { DateSelectorComponent } from './date-selector/date-selector.component';
     SupprReceiverComponent,
     DetailContentTodoComponent,
     DateSelectorComponent,
+    PreviewAgendaComponent,
+    AjouterAgendaComponent,
+    EditAgendaComponent,
+    DocumentComponent,
   ],
     imports: [
         BrowserModule,

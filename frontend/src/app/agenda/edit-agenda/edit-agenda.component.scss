@@ -1,0 +1,67 @@
+@import "../../../scss/composants/panelsComps";
+@import "../../../scss/composants/forms";
+
+#container{
+	margin:30px 10px;
+	padding: 10px 20px;
+}
+
+form{
+	display:flex;
+	flex-direction: column;
+
+	#date{
+		width:fit-content;
+	}
+
+	#matiere{
+		width:100%;
+	}
+
+	#desc{
+		font-size: 1em;
+		height:300px;
+		padding: 10px;
+		resize: none;
+	}
+
+}
+
+label, #checkbox{
+	margin-top: 5px;
+}
+
+#suppr{
+	width:100%;
+	display:flex;
+	justify-content: flex-end;
+}
+
+#docs{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	> *:not(button){
+		width:100%;
+	}
+}
+
+#submit{
+	display: flex;
+	justify-content: center;
+}
+
+#groupes{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+
+	> label{
+		margin:0;
+		grid-column: 1 / 3;
+	}
+
+	div{
+		margin-top:5px;
+	}
+}

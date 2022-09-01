@@ -60,8 +60,7 @@ export class EmbedEdtComponent implements OnInit {
 			  this.error.emit('');
 		  })
 		  .catch(error => {
-		  console.log("yo");
-		  this.error.emit(error.error.message || 'Impossible de récupérer l\'emploi du temps, veuillez réessayer.');
+		  this.error.emit('Impossible de récupérer l\'emploi du temps, veuillez réessayer.');
 	  });
   }
 

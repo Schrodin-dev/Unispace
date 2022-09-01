@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import { Cours } from 'src/app/models/cours.model';
 import {AuthService} from "../../services/auth.service";
+import icones from "../../../assets/config/profs.json"
 
 @Component({
   selector: 'app-cours',
@@ -11,13 +12,18 @@ export class CoursComponent implements OnInit {
 	@Input() cours!: Cours;
 	horaire!: String;
 	couleurTexte!: String;
+	icones: String[] = [];
 
   constructor(private authService: AuthService) { }
   ngOnInit(): void {
 	this.horaire = this.dateToHoursString(this.cours.debut) + ' - ' + this.dateToHoursString(this.cours.fin);
 	this.authService.couleurTexte.subscribe(couleur => {
 		this.couleurTexte = couleur;
-	})
+	});
+
+	for(const icon of icones.icones){
+		this.icones.push(String(icon));
+	}
   }
 
 	dateToHoursString(date: Date): String{

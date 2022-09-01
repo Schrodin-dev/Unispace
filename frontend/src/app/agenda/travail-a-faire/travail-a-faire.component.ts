@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {TravailAFaire} from "../../models/travailAFaire.model";
 import {AuthService} from "../../services/auth.service";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-travail-a-faire',
@@ -9,6 +10,9 @@ import {AuthService} from "../../services/auth.service";
 })
 export class TravailAFaireComponent implements OnInit {
 	@Input() travail!: TravailAFaire;
+	@Input() emitter!: Subject<TravailAFaire>;
+	@Input() isEmbed: boolean = true;
+	@Input() type!: String;
 
 	couleurTexte!: String;
 
@@ -28,5 +32,18 @@ export class TravailAFaireComponent implements OnInit {
 
 		return result;
 
+	}
+
+	afficher() {
+	  	if(this.isEmbed) return;
+		this.emitter.next(this.travail);
+	}
+
+	description(): String{
+	  if(this.travail.desc.length > 500){
+		  return this.travail.desc.slice(0, 500) + '[...]';
+	  }
+
+	  return this.travail.desc;
 	}
 }

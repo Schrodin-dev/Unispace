@@ -26,6 +26,13 @@ $color : white;
 	}
 }
 
+.button{
+	padding: 5px 15px;
+	border-radius: 50px;
+	border:none;
+	cursor: pointer;
+}
+
 .dropDown{
 	display: grid;
 	grid-template-areas: "select";

@@ -67,7 +67,7 @@ export class AjouterModifierNoteComponent implements OnInit {
 		  .catch(error => {
 			  this.message = '';
 			  this.error = error.error.message;
-		  })
+		  });
 
 
 	  this.inputRessource.subscribe(value => {this.form.patchValue({'Ressource': value.nom});});
@@ -220,6 +220,12 @@ export class AjouterModifierNoteComponent implements OnInit {
 							return;
 						}
 
+						if(this.devoirForm.value.groupes.length === 0){
+							this.message = '';
+							this.error = 'Veuillez sélectionner au moins un groupe.';
+							return;
+						}
+
 						this.requestsService.modifierDevoir(this.note.id, this.devoirForm.value.nomDevoir, this.devoirForm.value.coefficient, this.devoirForm.value.bareme, this.ressource.id, this.devoirForm.value.groupes)
 							.then(message => {
 								this.error = '';
@@ -235,6 +241,12 @@ export class AjouterModifierNoteComponent implements OnInit {
 						if(this.ressource === undefined){
 							this.message = '';
 							this.error = 'Une erreur est survenue, tentez de recharger la page.';
+							return;
+						}
+
+						if(this.devoirForm.value.groupes.length === 0){
+							this.message = '';
+							this.error = 'Veuillez sélectionner au moins un groupe.';
 							return;
 						}
 

@@ -94,7 +94,7 @@ export class MainEdtComponent implements OnInit {
 			  this.error = '';
 			  })
 		  .catch(error => {
-			  this.error = error.error.message;
+			  this.error = 'Impossible de récupérer l\'emploi du temps, veuillez réessayer.';
 		  });
   }
 
@@ -103,7 +103,7 @@ export class MainEdtComponent implements OnInit {
   }
 
   changeWeek(weeksAfter: number){
-	  this.setDate(this.getWeek(weeksAfter));
+	  this.setDate(this.getWeek(weeksAfter+1)); //je sais pas pourquoi il voulait un +1, je préfère ne pas savoir..
   }
 
 }

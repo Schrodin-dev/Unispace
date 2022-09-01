@@ -6,7 +6,7 @@ let plannings = {};
 let couleurCours = {};
 
 exports.chargerGroupes = () => {
-    plannings = {};
+    let newPlannings = {};
     db.groupe.findAll({attributes: ['nomGroupe', 'lienICalGroupe']})
         .then(async groupes => {
             for (const groupe of groupes) {
@@ -21,7 +21,7 @@ exports.chargerGroupes = () => {
                                 i++;
                             }
                         }
-                        plannings[groupe.nomGroupe] = planning;
+                        newPlannings[groupe.nomGroupe] = planning;
                     })
                     .catch(() => {
                         console.error('impossible de mettre à jour le planning du groupe ' + groupe.nomGroupe);
@@ -29,6 +29,7 @@ exports.chargerGroupes = () => {
 
             }
         }).then(() => {
+            plannings = newPlannings;
             console.log('groupes chargés');
     })
 
@@ -73,8 +74,7 @@ exports.recupererEdt = (req, res, next) => {
             let i = 0;
             const planning = plannings[req.auth.userGroupe];
 
-            for(const c in planning){
-                const cours = planning[c];
+            for(const cours of planning){
                 const finSansTemps = new Date(cours.fin);
                 finSansTemps.setHours(0,0,0,0);
                 if( cours.debut.getTime() >= new Date(req.body.debut).getTime() && finSansTemps.getTime() <= new Date(req.body.fin).getTime()){
@@ -86,11 +86,41 @@ exports.recupererEdt = (req, res, next) => {
             return res.status(200).json(edt);
         })
         .catch(error => {
-            res.status(500).json(error)
+            res.status(500).json({message: error});
         });
 
 
 };
+
+exports.recupererListeCours = (req, res, next) => {
+    db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+        .then(groupe => {
+            if(groupe === null){
+                res.status(400).json({message: 'Impossible de trouver votre groupe.'});
+            }
+
+            let i = 0;
+            const planning = plannings[req.auth.userGroupe];
+            let nomCours = [];
+            let listeCours = [];
+
+            for(const cours of planning){
+                if(!nomCours.includes(cours.nom)){
+                    nomCours.push(cours.nom);
+                    listeCours.push({
+                        nom: cours.nom,
+                        couleur: cours.couleur
+                    })
+                };
+            }
+
+            return res.status(200).json(listeCours);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).json({message: error});
+        });
+}
 
 async function chargerCouleur(nomCours) {
     if (! (nomCours in couleurCours)) {

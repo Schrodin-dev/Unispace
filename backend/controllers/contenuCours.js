@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const {Op} = require("sequelize");
+const {Op, literal} = require("sequelize");
 const groupeCtrl = require('../controllers/groupe');
 
 exports.ajouterContenuCours = async (req, res, next) => {
@@ -91,7 +91,7 @@ exports.supprimerContenuCours = (req, res, next) => {
 			})
 				.then(contenuCours => {
 					if(!contenuCours){
-						return res.status(400).json({message: "Impossible de trouver le contenu de cours."});
+						return res.status(500).json({message: "Impossible de trouver le contenu de cours."});
 					}
 
 					contenuCours.destroy()
@@ -142,7 +142,6 @@ exports.modifierContenuCours = (req, res, next) => {
 
 					let erreurAjoutGroupe = false;
 					if (req.body.groupes.length > 0) {
-						contenuCours.setGroupes([]);
 						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 							.then(async userGroupe => {
 								for(const groupe of req.body.groupes){
@@ -152,23 +151,14 @@ exports.modifierContenuCours = (req, res, next) => {
 												nomGroupe: groupe
 											}
 										}})
-										.then(async groupe => {
-											if(!groupe){
-												erreurAjoutGroupe = true;
-												return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
-											}
-
-											await contenuCours.addGroupe(groupe.nomGroupe)
-												.catch(error => {
-													erreurAjoutGroupe = true;
-													return res.status(500).json(error);
-												})
-										})
 										.catch(error => {
 											erreurAjoutGroupe = true;
 											return res.status(500).json(error);
 										});
 								}
+							})
+							.then(() => {
+								contenuCours.setGroupes(req.body.groupes);
 							})
 							.catch(error => {
 								erreurAjoutGroupe = true;
@@ -233,6 +223,44 @@ exports.ajouterDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+exports.modifierDocument = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours."});
+	}
+
+	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+		.then(userGroupe => {
+			db.docsContenuCours.findOne({
+				include: {
+					model: db.contenuCours,
+					required: true,
+					include: {
+						model: db.groupe,
+						required: true,
+						where: {nomclasse: userGroupe.nomClasse}
+					}
+				},
+				where: {idDoc: req.body.doc}
+			})
+				.then(doc => {
+					if(req.body.nom.length > 0){
+						doc.nomDoc = req.body.nom;
+					}
+					if(req.body.lienDoc.length > 0){
+						doc.lienDoc = req.body.lienDoc;
+					}
+
+					doc.save()
+						.then(() => {
+							return res.status(201).json({message: "Le document a bien été modifié."});
+						})
+						.catch(error => {return res.status(500).json(error);});
+				})
+				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à modifier."});});
+		})
+		.catch(error => {return res.status(500).json(error);});
+};
+
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours."});
@@ -263,3 +291,50 @@ exports.supprimerDocument = (req, res, next) => {
 		})
 		.catch(error => {return res.status(500).json(error);});
 };
+
+exports.afficher = (req, res, next) => {
+	if (req.auth.droitsUser === 'non validé') {
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les contenus de cours."});
+	}
+
+	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
+	let whereStatement = {};
+	if(req.body.cours !== undefined && req.body.cours.length > 0){
+		whereStatement.nomCours = req.body.cours;
+	}
+
+
+	db.contenuCours.findAll({
+		include: [
+			{
+				model: db.groupe,
+				required: true,
+				attributes: ['nomGroupe']
+			},
+			{
+				model: db.cours,
+				required: true,
+				attributes: ['couleurCours'],
+				where: whereStatement
+			},
+			{
+				model: db.docsContenuCours
+			}
+		],
+		where: {
+			[Op.and]: [
+				{dateContenuCours: {[Op.gte]: req.body.dateMin}},
+				{ idContenuCours: {[Op.in]: literal("(SELECT DISTINCT idContenuCours FROM aFait WHERE nomGroupe = '" + req.auth.userGroupe + "')")}}
+			]
+		},
+		limit: 10,
+		offset: req.body.pagination * 10,
+		order: ['dateContenuCours']
+	})
+		.then(contenu => {
+			return res.status(200).json(contenu);
+		})
+		.catch(error => {
+			return res.status(500).json({messsage: error});
+		});
+}

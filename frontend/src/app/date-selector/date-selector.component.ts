@@ -42,8 +42,11 @@ export class DateSelectorComponent implements OnInit {
 		});
 
 		this.dateSelectionnee.valueChanges.forEach(newValue => {
-			this.date = new Date(newValue.date);
-			this.dateSubject.next(this.date);
+			// @ts-ignore
+			if(new Date(newValue.date) !== "Invalid Date" && !isNaN(new Date(newValue.date).getDate())){
+				this.date = new Date(newValue.date);
+				this.dateSubject.next(this.date);
+			}
 		});
 	}
 

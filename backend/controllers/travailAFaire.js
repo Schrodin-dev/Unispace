@@ -1,5 +1,5 @@
 const db = require('../models/index');
-const {Op} = require("sequelize");
+const {Op, literal} = require("sequelize");
 
 exports.ajouterTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
@@ -60,7 +60,7 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 
 				return res.status(201).json({message: "Le travail à faire a bien été ajouté."});
 			} catch (error) {
-				return res.status(500).json(error);
+				return res.status(500).json({messsage: error});
 			}
 		})
 		.catch(error => {return res.status(500).json(error);});
@@ -118,22 +118,26 @@ exports.modifierTravailAFaire = (req, res, next) => {
 						return res.status(400).json({message: "Impossible de trouver le travail à faire."});
 					}
 
-					if (req.body.date.length > 0) {
+					if (req.body.date !== undefined && req.body.date.length > 0) {
 						travailAFaire.dateTravailAFaire = req.body.date;
 					}
-					if (req.body.description.length > 0) {
+					if (req.body.description !== undefined && req.body.description.length > 0) {
 						travailAFaire.descTravailAFaire = req.body.description;
 					}
-					if (req.body.estNote.length > 0) {
+					if (req.body.estNote !== undefined && req.body.estNote.length > 0) {
 						travailAFaire.estNote = req.body.estNote;
 					}
-					if (req.body.cours.length > 0) {
-						travailAFaire.nomCours = req.body.cours;
+					if (req.body.cours !== undefined && req.body.cours.length > 0) {
+						await db.cours.findOne({where: {nomCours: req.body.cours}})
+							.then(cours => {
+								if(cours){
+									travailAFaire.nomCours = cours.nomCours;
+								}
+							})
 					}
 
 					let erreurAjoutGroupe = false;
-					if (req.body.groupes.length > 0) {
-						travailAFaire.setGroupes([]);
+					if (req.body.groupes !== undefined && req.body.groupes.length > 0) {
 							for(const groupe of req.body.groupes){
 								await db.groupe.findOne({where: {
 									[Op.and]: {
@@ -147,13 +151,12 @@ exports.modifierTravailAFaire = (req, res, next) => {
 											return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
 										}
 
-										await travailAFaire.addGroupe(groupe.nomGroupe)
-											.catch(error => {
-												erreurAjoutGroupe = true;
-												return res.status(500).json(error);
-											})
+									})
+									.then(() => {
+										travailAFaire.setGroupes(req.body.groupes)
 									})
 									.catch(error => {
+										console.error(error);
 										erreurAjoutGroupe = true;
 										return res.status(500).json(error);
 									});
@@ -168,9 +171,9 @@ exports.modifierTravailAFaire = (req, res, next) => {
 							return res.status(500).json(error);
 						});
 				})
-				.catch(error => {return res.status(500).json(error);});
+				.catch(error => {console.error(error);return res.status(500).json(error);});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.catch(error => {console.error(error);return res.status(500).json(error);});
 };
 
 exports.ajouterDocument = (req, res, next) => {
@@ -213,6 +216,44 @@ exports.ajouterDocument = (req, res, next) => {
 						.catch(error => {return res.status(500).json(error);});
 				})
 				.catch(error => {return res.status(500).json(error);});
+		})
+		.catch(error => {return res.status(500).json(error);});
+};
+
+exports.modifierDocument = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
+		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire."});
+	}
+
+	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+		.then(userGroupe => {
+			db.docsTravailARendre.findOne({
+				include: {
+					model: db.travailAFaire,
+					required: true,
+					include: {
+						model: db.groupe,
+						required: true,
+						where: {nomclasse: userGroupe.nomClasse}
+					}
+				},
+				where: {idDoc: req.body.doc}
+			})
+				.then(doc => {
+					if(req.body.nom.length > 0){
+						doc.nomDoc = req.body.nom;
+					}
+					if(req.body.lienDoc.length > 0){
+						doc.lienDoc = req.body.lienDoc;
+					}
+
+					doc.save()
+						.then(() => {
+							return res.status(201).json({message: "Le document a bien été modifié."});
+						})
+						.catch(error => {return res.status(500).json(error);});
+				})
+				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à modifier."});});
 		})
 		.catch(error => {return res.status(500).json(error);});
 };
@@ -312,8 +353,8 @@ exports.afficher = (req, res, next) => {
 			{
 				model: db.groupe,
 				required: true,
-				where: {nomGroupe: req.auth.userGroupe},
-				attributes: []
+				/*where: {nomGroupe: req.auth.userGroupe},*/
+				attributes: ['nomGroupe']
 			},
 			{
 				model: db.cours,
@@ -326,7 +367,10 @@ exports.afficher = (req, res, next) => {
 			}
 		],
 		where: {
-			dateTravailAFaire: {[Op.gte]: req.body.dateMin}
+			[Op.and]: [
+				{dateTravailAFaire: {[Op.gte]: req.body.dateMin}},
+				{ idTravailAFaire: {[Op.in]: literal("(SELECT DISTINCT idTravailAFaire FROM doitFaire WHERE nomGroupe = '" + req.auth.userGroupe + "')")}}
+			]
 		},
 		limit: 10,
 		offset: req.body.pagination * 10,
@@ -336,6 +380,6 @@ exports.afficher = (req, res, next) => {
 			return res.status(200).json(travails);
 		})
 		.catch(error => {
-			return res.status(500).json(error);
+			return res.status(500).json({messsage: error});
 		});
 }

@@ -1,3 +1,5 @@
+import {Doc} from "./doc.model";
+
 export class TravailAFaire {
 	id!: String;
 	date!: Date;
@@ -5,7 +7,8 @@ export class TravailAFaire {
 	estNote!: boolean;
 	nomCours!: String;
 	couleurCours!: String;
-	documents!: String[];
+	documents!: Doc[];
+	groupes!: String[];
 
 	constructor(id: String, date: string, desc: String, nomCours: String, couleurCours: String) {
 		this.id = id;
@@ -14,13 +17,18 @@ export class TravailAFaire {
 		this.nomCours = nomCours;
 		this.couleurCours = couleurCours;
 		this.documents = [];
+		this.groupes = [];
 	}
 
-	ajouterDocument(lien: String){
-		this.documents.push(lien);
+	ajouterDocument(doc: Doc){
+		this.documents.push(doc);
 	}
 
 	setEstNote(estNote: boolean){
 		this.estNote = estNote;
+	}
+
+	ajouterGroupe(groupe: String){
+		this.groupes.push(groupe);
 	}
 }

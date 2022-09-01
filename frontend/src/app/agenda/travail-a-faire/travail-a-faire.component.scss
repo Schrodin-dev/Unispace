@@ -3,6 +3,10 @@
 	margin: 10px 0;
 }
 
+.clickable{
+	cursor: pointer;
+}
+
 #cours{
 	position: relative;
 	display: flex;
@@ -21,7 +25,7 @@
 	}
 }
 
-#date{
+#date, #docs{
 	margin: 0;
 	color: #afafaf;
 	font-size: .8em;

@@ -1,9 +1,11 @@
-<div id="container">
+<div id="container" (click)="afficher()" [ngClass]="{'clickable': !isEmbed}">
 	<div id="cours">
 		<div id="barreCours" [ngStyle]="{backgroundColor: '#'+travail.couleurCours}"></div>
 		<p [ngClass]="couleurTexte">{{ travail.nomCours }}</p>
 	</div>
-	<p id="date">à faire pour: {{ dateToHoursString(travail.date)}}<ng-container *ngIf="travail.estNote">, est noté.</ng-container></p>
-	<p id="desc" [ngClass]="couleurTexte">{{ travail.desc }}</p>
+	<p id="date" *ngIf="type === 'travail à faire'; else contenuCours">à faire pour: {{ dateToHoursString(travail.date)}}<ng-container *ngIf="travail.estNote">, est noté.</ng-container></p>
+	<ng-template #contenuCours><p id="date">Fait à: {{ dateToHoursString(travail.date)}}</p></ng-template>
+	<p id="desc" [ngClass]="couleurTexte">{{ description() }}</p>
+	<p *ngIf="travail.documents.length > 0" id="docs">Contient {{ travail.documents.length }} documents.</p>
 </div>
 

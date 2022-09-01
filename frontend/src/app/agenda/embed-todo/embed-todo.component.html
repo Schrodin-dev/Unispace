@@ -7,6 +7,6 @@
 
 	<ng-container *ngFor="let travail of travails | async; let index = index;">
 		<p id="date" *ngIf="index === 0" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}">Pour <span>{{ travail.date | date: 'EEEE d MMM'}}</span></p>
-		<app-travail-a-faire [travail]="travail"></app-travail-a-faire>
+		<app-travail-a-faire [travail]="travail" type="travail à faire"></app-travail-a-faire>
 	</ng-container>
 </div>

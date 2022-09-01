@@ -1,0 +1,23 @@
+<div id="container" class="panel">
+	<h1 [ngStyle]="{color: '#'+travail.couleurCours}">{{ travail.nomCours }}</h1>
+	<div id="edit">
+		<button class="textButton" *ngIf="isDelegue" (click)="edit()" [ngClass]="couleurTexte">modifier</button>
+	</div>
+
+	<div id="bandeau" class="panel">
+		<p [ngClass]="couleurTexte">
+			<ng-container *ngIf="type === 'travail à faire'; else elseDate">À rendre pour le </ng-container>
+			<ng-template #elseDate>Fait le </ng-template>
+			{{ travail.date | date: 'EEEE d MMMM YYYY'}} à {{ travail.date | date: 'H'}}h{{ travail.date | date: 'mm'}}.
+		</p>
+		<p *ngIf="type === 'travail à faire' && travail.estNote" [ngClass]="couleurTexte">Ce travail est noté.</p>
+	</div>
+
+	<p [ngClass]="couleurTexte">{{ travail.desc }}</p>
+
+	<div id="documents" *ngIf="travail.documents.length > 0">
+		<h3 [ngClass]="couleurTexte">Documents</h3>
+
+		<a *ngFor="let doc of travail.documents" [href]="doc.lien" [ngClass]="couleurTexte" target="_blank">{{ doc.nom }}</a>
+	</div>
+</div>

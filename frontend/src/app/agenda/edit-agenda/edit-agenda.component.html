@@ -1,0 +1,54 @@
+<div class="panel" id="container">
+	<h1 [ngClass]="couleurTexte">{{ mode.toString() | titlecase }}</h1>
+
+	<form [formGroup]="form">
+		<div id="suppr">
+			<app-suppr-emitter [nomObjetASupprimer]="'le ' + type" (supprimer)="onSupprimer($event)" *ngIf="mode === 'modifier'"></app-suppr-emitter>
+		</div>
+
+		<label for="date" [ngClass]="couleurTexte">Date</label>
+		<input type="datetime-local" class="inputDate" [ngStyle]="{borderColor: '#'+this.couleurPrincipale}" id="date" formControlName="date"/>
+
+		<label for="matiere" [ngClass]="couleurTexte">Matière</label>
+		<div class="dropDown">
+			<select formControlName="matiere" id="matiere" [ngClass]="couleurTexte">
+				<option selected *ngIf="form.value.matiere === null"></option>
+				<option *ngFor="let matiere of matieres" [value]="matiere.nom">{{ matiere.nom }}</option>
+			</select>
+		</div>
+
+		<label for="desc" *ngIf="type === 'travail à faire'; else descContenuCours" [ngClass]="couleurTexte">Description</label>
+		<ng-template #descContenuCours>
+			<label for="desc" [ngClass]="couleurTexte">Coutenu du cours</label>
+		</ng-template>
+		<textarea formControlName="desc" class="inputText" id="desc" [ngClass]="couleurTexte" placeholder="Entrez la description"></textarea>
+
+		<div id="checkbox" *ngIf="type === 'travail à faire'">
+			<input type="checkBox" formControlName="estNote" id="estNote">
+			<label for="estNote" [ngClass]="couleurTexte">Ce devoir est noté</label>
+		</div>
+
+		<label [ngClass]="couleurTexte">Documents</label>
+		<div id="docs">
+			<app-document *ngFor="let doc of editedDocs" [docSubject]="doc.subject" (supprimer)="supprimerDocument($event)"></app-document>
+			<app-document *ngFor="let doc of addedDocs" [docSubject]="doc.subject" (supprimer)="supprimerDocument($event)"></app-document>
+
+
+			<button type="button" class="textButton" [ngClass]="couleurTexte" (click)="nouveauDocument()">Ajouter un document</button>
+		</div>
+
+		<div id="groupes">
+			<label [ngClass]="couleurTexte">Groupes</label>
+			<div *ngFor="let groupe of groupes">
+				<input type="checkbox" [value]="groupe" [id]="'groupe-' + groupe" (change)="onCbChange($event)" [checked]="this.travail !== undefined && this.travail.groupes.includes(groupe) && mode === 'modifier'"/>
+				<label [htmlFor]="'groupe-' + groupe" [ngClass]="couleurTexte">{{ groupe }}</label>
+			</div>
+		</div>
+
+		<div id="submit">
+			<button type="submit" class="textButton" [ngClass]="couleurTexte" [disabled]="form.invalid" (click)="onSubmit()">Valider</button>
+		</div>
+
+		<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
+	</form>
+</div>

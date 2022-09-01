@@ -1,0 +1,9 @@
+<form [formGroup]="form" class="panel">
+	<label for="nom" [ngClass]="couleurTexte">Nom</label>
+	<input type="text" formControlName="nom" id="nom" class="inputText" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" placeholder="Entrez un nom pour le document"/>
+
+	<label for="lien" [ngClass]="couleurTexte">Lien</label>
+	<input type="text" formControlName="lien" id="lien" class="inputText" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" placeholder="Entrez le lien du document"/>
+
+	<app-suppr-emitter nomObjetASupprimer="le document" (supprimer)="onSupprimer($event)"></app-suppr-emitter>
+</form>
