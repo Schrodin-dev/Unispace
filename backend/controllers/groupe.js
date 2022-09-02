@@ -228,3 +228,29 @@ exports.verifierExistanceCours = async (dateDebut, nomCours, userGroupe) => {
 
     return returnValue;
 };
+
+exports.detailGroupes = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin'){
+        return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des groupes."});
+    }
+
+    db.anneeUniv.findAll({
+        include: {
+            model: db.classe,
+            required: false,
+            include: {
+                model: db.groupe,
+                required: false,
+                attributes: ['nomGroupe']
+            },
+            attributes: ['nomClasse']
+        },
+        attributes: ['nomAnneeUniv']
+    })
+        .then(liste => {
+            return res.status(200).json(liste);
+        })
+        .catch(() => {
+            return res.status(500).json({message: "Impossible de charger le détail des groupes."})
+        })
+};
