@@ -4,7 +4,7 @@
 			<label for="semestre" [ngClass]="couleurTexte">Semestre</label>
 			<div class="dropDown">
 				<select id="semestre" formControlName="semestre" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-					<option selected *ngIf="form.value.semestre === undefined"></option>
+					<option selected *ngIf="form.value.semestre === null"></option>
 					<option *ngFor="let semestre of semestres" [value]="semestre">semestre {{ semestre }}</option>
 				</select>
 			</div>

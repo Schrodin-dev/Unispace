@@ -37,7 +37,7 @@ export class AjouterRessourceUEComponent implements OnInit {
 	  if(this.type === 'UE'){
 		  this.form = this.formBuilder.group({
 			  nom: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
-			  numeroUE: [null, Validators.required]
+			  numeroUE: [null, [Validators.required, Validators.max(6), Validators.min(1)]]
 		  });
 	  }else{
 		  this.form = this.formBuilder.group({
