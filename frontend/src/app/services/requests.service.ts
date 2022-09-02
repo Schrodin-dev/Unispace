@@ -680,4 +680,42 @@ export class RequestsService{
 				return message.message;
 			});
 	}
+
+	getDetailGroupes(): Promise<{anneeUniv: String, classes: {classe: String, groupes: String[]}[]}[]>{
+		return this.httpClient.get(backend.url + '/api/groupe/detailGroupes')
+			.toPromise()
+			.then(detail => {
+				let res: {anneeUniv: String, classes: {classe: String, groupes: String[]}[]}[] = [];
+
+				// @ts-ignore
+				for(let a of detail){
+					let anneeUniv = {
+						anneeUniv: a.nomAnneeUniv,
+						classes: []
+					};
+
+					for(let c of a.classes){
+						let classe = {
+							classe: c.nomClasse,
+							groupes: []
+						};
+
+						for(let g of c.groupes){
+							// @ts-ignore
+							classe.groupes.push(g.nomGroupe);
+						}
+
+						// @ts-ignore
+						anneeUniv.classes.push(classe);
+					}
+
+					// @ts-ignore
+					res.push(anneeUniv);
+				}
+
+				return res;
+			});
+	}
+
+
 }

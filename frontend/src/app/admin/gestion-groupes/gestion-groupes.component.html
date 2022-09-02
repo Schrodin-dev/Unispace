@@ -1,5 +1,32 @@
 <div id="bigContainer">
 	<div id="container" class="panel">
+		<div class="anneeUniv" *ngFor="let anneeUniv of detail">
+			<div class="displayContainer">
+				<p [ngClass]="couleurTexte">A{{ anneeUniv.anneeUniv }}</p>
+				<app-suppr-emitter [nomObjetASupprimer]="'A'+anneeUniv.anneeUniv" (supprimer)="suppr('anneeUniv', anneeUniv.anneeUniv, $event)"></app-suppr-emitter>
+			</div>
 
+			<div class="classe" *ngFor="let classe of anneeUniv.classes">
+				<div class="displayContainer">
+					<p [ngClass]="couleurTexte">{{ classe.classe }}</p>
+					<app-suppr-emitter [nomObjetASupprimer]="classe.classe" (supprimer)="suppr('classe', classe.classe, $event)"></app-suppr-emitter>
+				</div>
+
+				<div class="groupes" *ngFor="let groupe of classe.groupes">
+					<div class="displayContainer">
+						<p [ngClass]="couleurTexte">{{ groupe }}</p>
+						<app-suppr-emitter [nomObjetASupprimer]="groupe" (supprimer)="suppr('groupe', groupe, $event)"></app-suppr-emitter>
+					</div>
+
+					<p class="add" [ngClass]="couleurTexte" (click)="add('groupe', classe.classe)">Ajouter un groupe</p>
+				</div>
+			</div>
+			<div class="classe">
+				<p class="add" [ngClass]="couleurTexte" (click)="add('classe', anneeUniv.anneeUniv)">Ajouter une classe</p>
+			</div>
+		</div>
+		<div class="anneeUniv">
+			<p class="add" [ngClass]="couleurTexte" (click)="add('anneeUniv')">Ajouter une année universitaire</p>
+		</div>
 	</div>
 </div>
