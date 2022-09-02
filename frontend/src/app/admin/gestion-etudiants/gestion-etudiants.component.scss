@@ -27,7 +27,15 @@
 			align-items: center;
 			border-radius: 20px;
 			margin:0 10px;
+
+			&:not(.boutonInvalide){
+				cursor:pointer;
+			}
+		}
+
+		.boutonInvalide{
 			background-color: #afafaf;
+			cursor:not-allowed;
 		}
 	}
 }

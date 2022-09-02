@@ -9,18 +9,18 @@
 			</tr>
 			<tr *ngFor="let user of users">
 				<td class="nom" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.nom }} {{user.prenom}}</td>
-				<td class="email" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.email }}</td>
+				<td class="email" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}"><a [href]="'mailto:'+ user.email">{{ user.email }}</a></td>
 				<td class="groupe" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.groupe }}</td>
 				<td class="droits" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">
 					<div>
 						<button class="textButton" [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" *ngIf="peutReduireRole(user.droits); else elseNePeutPasReduire;" (click)="diminuerDroits(user.email, user.droits)">-</button>
 						<ng-template #elseNePeutPasReduire>
-							<button class="textButton">-</button>
+							<button class="textButton boutonInvalide">-</button>
 						</ng-template>
 						{{ user.droits }}
 						<button class="textButton" [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" *ngIf="peutAugmenterRole(user.droits); else elseNePeutPasAugmenter;" (click)="augmenterDroits(user.email, user.droits)">+</button>
 						<ng-template #elseNePeutPasAugmenter>
-							<button class="textButton">+</button>
+							<button class="textButton boutonInvalide">+</button>
 						</ng-template>
 					</div>
 				</td>
