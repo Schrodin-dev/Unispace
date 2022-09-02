@@ -43,7 +43,7 @@ h1{
 
 //couleurs de texte
 .light{
-	$lightColor: white;
+	$lightColor: black;
 	color: $lightColor;
 
 	&:disabled{
@@ -57,7 +57,7 @@ h1{
 	}
 }
 .dark{
-	$darkColor: black;
+	$darkColor: white;
 	color: $darkColor;
 
 	&:disabled{

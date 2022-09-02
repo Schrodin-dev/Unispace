@@ -10,6 +10,9 @@ import {Ressource} from "../models/ressource.model";
 import {AuthService} from "./auth.service";
 import {Doc} from "../models/doc.model";
 import {User} from "../models/user.model";
+import {RessourceAdmin} from "../models/ressourceAdmin.model";
+import {UEAdmin} from "../models/UEAdmin.model";
+import {LienRessourceUE} from "../models/lienRessourceUE.model";
 
 @Injectable()
 export class RequestsService{
@@ -541,6 +544,135 @@ export class RequestsService{
 		return this.httpClient.post(backend.url + '/api/auth/modifierDroits', {
 			user: email,
 			droits: nouveauRole
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	getListeSemestres():Promise<Number[]>{
+		return this.httpClient.get(backend.url + '/api/notation/ressourceUE/listeSemestres').toPromise()
+			.then(semestres => {
+				let listeSemestres: Number[] = [];
+
+				// @ts-ignore
+				for(let s of semestres){
+					listeSemestres.push(s.nomSemestre);
+				}
+
+				return listeSemestres;
+			})
+	}
+
+	afficherRessourcesUE(semestre: number):Promise<{ressources: RessourceAdmin[], UE: UEAdmin[], liens: LienRessourceUE[]}>{
+		return this.httpClient.post(backend.url + '/api/notation/ressourceUE/afficher', {
+			semestre: semestre
+		})
+			.toPromise()
+			.then(objet => {
+				let res: {ressources: RessourceAdmin[], UE: UEAdmin[], liens: LienRessourceUE[]} = {
+					ressources: [],
+					UE: [],
+					liens: []
+				};
+
+				// @ts-ignore
+				for(let ressource of objet.ressources){
+					res.ressources.push(new RessourceAdmin(ressource.id, ressource.nom));
+				}
+
+				// @ts-ignore
+				for(let ue of objet.UE){
+					res.UE.push(new UEAdmin(ue.id, ue.nom));
+				}
+
+				// @ts-ignore
+				for(let lien of objet.coeffs){
+					res.liens.push(new LienRessourceUE(lien.ressource, lien.UE, lien.coeff));
+				}
+
+				return res;
+			});
+	}
+
+	ajouterUE(nom: String, numeroUE: number, semestre: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/UE/ajouter', {
+			nom: nom,
+			numeroUE: numeroUE,
+			semestre: semestre
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerUE(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/UE/supprimer', {
+			UE: id
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterRessource(nom: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/ressource/ajouter', {
+			nom: nom
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerRessource(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/ressource/supprimer', {
+			ressource: id
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	lierRessourceUE(idUE: number, idRessource: number, coeff: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/ressourceUE/lier', {
+			UE: idUE,
+			ressource: idRessource,
+			coeff: coeff
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierLienRessourceUE(idUE: number, idRessource: number, coeff: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/ressourceUE/modifierCoeff', {
+			UE: idUE,
+			ressource: idRessource,
+			coeff: coeff
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerLienRessourceUE(idUE: number, idRessource: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/ressourceUE/supprimer', {
+			UE: idUE,
+			ressource: idRessource
 		})
 			.toPromise()
 			.then(message => {

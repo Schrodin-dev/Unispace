@@ -1,6 +1,6 @@
 <div id="bigContainer">
-	<div id="container" class="panel">
-		<table class="table">
+	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<table class="table" [ngClass]="couleurTexte">
 			<tr>
 				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Nom prénom</th>
 				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Email</th>
@@ -26,6 +26,8 @@
 				</td>
 			</tr>
 		</table>
+
+		<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
 	</div>
 </div>
 

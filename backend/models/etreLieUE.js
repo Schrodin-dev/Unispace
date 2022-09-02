@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			//etreLieUE.belongsTo(models.ressource, {foreignKey: {name: 'idRessource'}});
-			//etreLieUE.belongsTo(models.UE, {foreignKey: {name: 'idUE'}});
+			etreLieUE.belongsTo(models.ressource, );
+			etreLieUE.belongsTo(models.UE, );
 		}
 	}
 	etreLieUE.init({

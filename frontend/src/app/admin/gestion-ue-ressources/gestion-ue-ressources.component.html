@@ -1,1 +1,49 @@
-<p>gestion-ue-ressources works!</p>
+<div id="bigContainer">
+	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<form id="semestreSelector" [formGroup]="form">
+			<label for="semestre" [ngClass]="couleurTexte">Semestre</label>
+			<div class="dropDown">
+				<select id="semestre" formControlName="semestre" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+					<option selected *ngIf="form.value.semestre === undefined"></option>
+					<option *ngFor="let semestre of semestres" [value]="semestre">semestre {{ semestre }}</option>
+				</select>
+			</div>
+		</form>
+
+		<table class="table">
+			<tr id="ressources">
+				<td></td>
+				<th [ngClass]="couleurTexte" *ngFor="let ressource of ressources" [ngStyle]="{borderColor: '#'+couleurFond}">
+					<p [ngClass]="couleurTexte">{{ ressource.nom }}</p>
+					<app-suppr-emitter nomObjetASupprimer="la ressource" (supprimer)="supprimerRessource(ressource, $event)" class="suppr"></app-suppr-emitter>
+				</th> <!--Ressources-->
+
+				<th [ngClass]="couleurTexte" class="ajouter" (click)="ajouterRessourceUE('ressource')" [ngStyle]="{borderColor: '#'+couleurFond}">Ajouter une ressource</th>
+			</tr>
+			<tr *ngFor="let ue of UE; let indexRessource = index;">
+				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">
+					<p [ngClass]="couleurTexte">{{ ue.nom }}</p>
+					<app-suppr-emitter nomObjetASupprimer="l'UE" (supprimer)="supprimerUE(ue, $event)" class="suppr"></app-suppr-emitter>
+				</th> <!--UE-->
+
+				<td [ngClass]="couleurTexte" *ngFor="let ressource of ressources" [ngStyle]="{borderColor: '#'+couleurFond}">
+					<input type="number" [ngClass]="couleurTexte" *ngIf="obtenirLien(ue, ressource) as lien; else nouveauLien;" [value]="lien.coeff" (input)="modificationLien($event, lien)"/>
+					<ng-template #nouveauLien>
+						<input type="number" [ngClass]="couleurTexte" (input)="ajoutLien($event, ressource, ue)"/>
+					</ng-template>
+				</td> <!--Ressource/UE-->
+			</tr>
+			<tr>
+				<th [ngClass]="couleurTexte" class="ajouter" (click)="ajouterRessourceUE('UE')" [ngStyle]="{borderColor: '#'+couleurFond}">Ajouter une U.E.</th>
+			</tr>
+		</table>
+
+		<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
+
+		<div class="center">
+			<button type="submit" class="textButton" [ngClass]="couleurTexte" (click)="submit()">Valider</button>
+		</div>
+	</div>
+
+	<app-ajouter-ressource-ue *ngIf="ajouterUERessource" [semestre]="form.value.semestre" [type]="ajouterUERessource" (ajout)="chargerTableau(form.value.semestre)"></app-ajouter-ressource-ue>
+</div>

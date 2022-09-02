@@ -14,6 +14,8 @@ router.get('/ressource/recuperer', systemeNotationCtrl.recupererRessource);
 router.post('/ressourceUE/lier', systemeNotationCtrl.lierRessourceUE);
 router.post('/ressourceUE/modifierCoeff', systemeNotationCtrl.modifierCoeffRessourceUE);
 router.post('/ressourceUE/supprimer', systemeNotationCtrl.supprimerLienRessourceUE);
+router.get('/ressourceUE/listeSemestres', systemeNotationCtrl.listeSemestres);
+router.post('/ressourceUE/afficher', systemeNotationCtrl.afficherRessourcesUE);
 
 router.post('/devoir/ajouter', systemeNotationCtrl.ajouterDevoir);
 router.post('/devoir/modifier', systemeNotationCtrl.modifierDevoir);

@@ -88,16 +88,16 @@ export class MenuComponent implements OnInit {
 				  name: "Gestion U.E./Ressources",
 			  },
 			  {
-				  path: "admin/annonce",
-				  name: "Faire une annonce"
-			  },
-			  {
 				  path: "admin/gestionGroupes",
 				  name: "Gestion groupes",
 			  },
 			  {
 				  path: "admin/gestionThemes",
 				  name: "Gestion thèmes",
+			  },
+			  {
+				  path: "admin/annonce",
+				  name: "Faire une annonce"
 			  }
 		  ]
 	  }

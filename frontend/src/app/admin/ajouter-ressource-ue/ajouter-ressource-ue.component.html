@@ -1,0 +1,20 @@
+<div id="container" class="panel">
+	<h1 *ngIf="semestre !== undefined; else ajouterRessource;" [ngClass]="couleurTexte">Ajouter UE</h1>
+	<ng-template #ajouterRessource>
+		<h1 [ngClass]="couleurTexte">Ajouter ressource</h1>
+	</ng-template>
+
+	<form [formGroup]="form">
+		<label for="nom" [ngClass]="couleurTexte">Nom</label>
+		<input type="text" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" id="nom" formControlName="nom" class="inputText"/>
+
+		<ng-container *ngIf="type === 'UE'">
+			<label for="numeroUE" [ngClass]="couleurTexte">numeroUE</label>
+			<input type="number" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" id="numeroUE" formControlName="numeroUE" class="inputText"/>
+		</ng-container>
+
+		<button type="submit" [disabled]="form.invalid" (click)="onSubmit()" class="textButton" [ngClass]="couleurTexte">Valider</button>
+	</form>
+
+	<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
+</div>
