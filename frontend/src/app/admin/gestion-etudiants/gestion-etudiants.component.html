@@ -1,1 +1,31 @@
-<p>gestion-etudiants works!</p>
+<div id="bigContainer">
+	<div id="container" class="panel">
+		<table class="table">
+			<tr>
+				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Nom prénom</th>
+				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Email</th>
+				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Groupe</th>
+				<th [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">Droits</th>
+			</tr>
+			<tr *ngFor="let user of users">
+				<td class="nom" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.nom }} {{user.prenom}}</td>
+				<td class="email" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.email }}</td>
+				<td class="groupe" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">{{ user.groupe }}</td>
+				<td class="droits" [ngClass]="couleurTexte" [ngStyle]="{borderColor: '#'+couleurFond}">
+					<div>
+						<button class="textButton" [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" *ngIf="peutReduireRole(user.droits); else elseNePeutPasReduire;" (click)="diminuerDroits(user.email, user.droits)">-</button>
+						<ng-template #elseNePeutPasReduire>
+							<button class="textButton">-</button>
+						</ng-template>
+						{{ user.droits }}
+						<button class="textButton" [ngStyle]="{backgroundColor: '#'+couleurPrincipale}" *ngIf="peutAugmenterRole(user.droits); else elseNePeutPasAugmenter;" (click)="augmenterDroits(user.email, user.droits)">+</button>
+						<ng-template #elseNePeutPasAugmenter>
+							<button class="textButton">+</button>
+						</ng-template>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+

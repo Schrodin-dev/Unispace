@@ -9,6 +9,7 @@ import {UE} from "../models/UE.model";
 import {Ressource} from "../models/ressource.model";
 import {AuthService} from "./auth.service";
 import {Doc} from "../models/doc.model";
+import {User} from "../models/user.model";
 
 @Injectable()
 export class RequestsService{
@@ -514,6 +515,32 @@ export class RequestsService{
 	supprimerDocumentTravailAFaire(id: number):Promise<String>{
 		return this.httpClient.post(backend.url + '/api/travailAFaire/document/supprimer', {
 			doc: id,
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	afficherUtilisateur():Promise<User[]>{
+	  return this.httpClient.get(backend.url + '/api/auth/afficher').toPromise()
+		  .then(users => {
+			  let listeUsers: User[] = [];
+
+			  // @ts-ignore
+			  for(let u of users){
+				  listeUsers.push(new User(u.droitsUser, u.emailUser, u.nomUser, u.prenomUser, u.nomGroupe));
+			  }
+
+			  return listeUsers;
+		  })
+	}
+
+	modifierDroits(email: string, nouveauRole: string): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/modifierDroits', {
+			user: email,
+			droits: nouveauRole
 		})
 			.toPromise()
 			.then(message => {

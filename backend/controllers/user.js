@@ -271,7 +271,7 @@ exports.afficherUtilisateurs = (req, res, next) => {
     switch(req.auth.droitsUser){
         case 'admin':
             db.user.findAll({
-                attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser']
+                attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser', 'nomGroupe']
             })
                 .then(users => {
                     return res.status(200).json(users);
@@ -282,7 +282,7 @@ exports.afficherUtilisateurs = (req, res, next) => {
             db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
                 .then(userGroupe => {
                     db.user.findAll({
-                        attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser'],
+                        attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser', 'nomGroupe'],
                         include: {
                             model: db.groupe,
                             required: true,
@@ -341,7 +341,7 @@ exports.modifierDroits = (req, res, next) => {
                                 return res.status(400).json({message: "Impossible de trouver l'utilisateur."});
                             }
 
-                            if(user.droitsUser === 'admin' || user.droitsUser === 'délégué'){
+                            if(user.droitsUser === 'admin' || user.droitsUser === 'délégué' || user.droitsUser === 'non validé'){
                                 return res.status(401).json({message: "Vous ne pouvez pas modifier les droits de cet utilisateur."});
                             }
 

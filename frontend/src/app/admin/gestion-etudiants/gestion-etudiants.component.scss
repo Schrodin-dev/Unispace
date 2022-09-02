@@ -1,0 +1,33 @@
+@import "../../../scss/composants/panelsComps";
+@import "../../../scss/composants/table";
+@import "../../../scss/composants/forms";
+
+#bigContainer{
+	display: flex;
+	justify-content: center;
+}
+
+#container{
+	padding:10px;
+	margin: 30px 10px;
+	max-width:calc(100vw - 40px);
+	overflow-x: auto;
+}
+
+.droits{
+	div{
+		display:flex;
+		align-items: center;
+
+		button{
+			width:20px;
+			height:20px;
+			display:flex;
+			justify-content: center;
+			align-items: center;
+			border-radius: 20px;
+			margin:0 10px;
+			background-color: #afafaf;
+		}
+	}
+}
