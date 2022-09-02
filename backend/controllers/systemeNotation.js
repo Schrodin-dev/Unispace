@@ -593,7 +593,13 @@ function lessDetailledNotes(detail){
 		});
 
 		for(const ressource of ue.ressources){
-			result.ressources[ressource.id - 1] = ressource;
+			let ressourceAlreadyExist = false;
+
+			for(const r of result.ressources){
+				if(ressource.id === r.id) ressourceAlreadyExist = true;
+			}
+
+			if(!ressourceAlreadyExist) result.ressources.push(ressource);
 		}
 	}
 
