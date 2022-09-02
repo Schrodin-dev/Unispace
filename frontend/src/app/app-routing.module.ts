@@ -11,6 +11,11 @@ import {DetailComponent} from "./notes/detail/detail.component";
 import {MainEdtComponent} from "./edt/main-edt/main-edt.component";
 import {VerifierCompteComponent} from "./login&register/verifier-compte/verifier-compte.component";
 import {MdpOublieComponent} from "./login&register/mdp-oublie/mdp-oublie.component";
+import {GestionEtudiantsComponent} from "./admin/gestion-etudiants/gestion-etudiants.component";
+import {GestionUeRessourcesComponent} from "./admin/gestion-ue-ressources/gestion-ue-ressources.component";
+import {AnnonceComponent} from "./admin/annonce/annonce.component";
+import {GestionGroupesComponent} from "./admin/gestion-groupes/gestion-groupes.component";
+import {GestionThemesComponent} from "./admin/gestion-themes/gestion-themes.component";
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuard], component: MainPageComponent},
@@ -26,7 +31,13 @@ const routes: Routes = [
 	{path: 'verifyAccount', component: VerifierCompteComponent},
 	{path: 'verifyAccount/:token', component: VerifierCompteComponent},
 	{path: 'resetPassword', component: MdpOublieComponent},
-	{path: 'resetPassword/:token', component: MdpOublieComponent}
+	{path: 'resetPassword/:token', component: MdpOublieComponent},
+	{path: 'admin', redirectTo: 'admin/gestionEtudiants'},
+	{ path:'admin/gestionEtudiants', canActivate: [AuthGuard], component: GestionEtudiantsComponent},
+	{ path:'admin/gestionUERessources', canActivate: [AuthGuard], component: GestionUeRessourcesComponent},
+	{ path:'admin/annonce', canActivate: [AuthGuard], component: AnnonceComponent},
+	{ path:'admin/gestionGroupes', canActivate: [AuthGuard], component: GestionGroupesComponent},
+	{ path:'admin/gestionThemes', canActivate: [AuthGuard], component: GestionThemesComponent}
 ];
 
 @NgModule({

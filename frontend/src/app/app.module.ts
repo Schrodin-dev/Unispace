@@ -41,6 +41,11 @@ import { PreviewAgendaComponent } from './agenda/preview-agenda/preview-agenda.c
 import { AjouterAgendaComponent } from './agenda/ajouter-agenda/ajouter-agenda.component';
 import { EditAgendaComponent } from './agenda/edit-agenda/edit-agenda.component';
 import { DocumentComponent } from './agenda/document/document.component';
+import { GestionEtudiantsComponent } from './admin/gestion-etudiants/gestion-etudiants.component';
+import { GestionUeRessourcesComponent } from './admin/gestion-ue-ressources/gestion-ue-ressources.component';
+import { AnnonceComponent } from './admin/annonce/annonce.component';
+import { GestionGroupesComponent } from './admin/gestion-groupes/gestion-groupes.component';
+import { GestionThemesComponent } from './admin/gestion-themes/gestion-themes.component';
 
 @NgModule({
   declarations: [
@@ -73,6 +78,11 @@ import { DocumentComponent } from './agenda/document/document.component';
     AjouterAgendaComponent,
     EditAgendaComponent,
     DocumentComponent,
+    GestionEtudiantsComponent,
+    GestionUeRessourcesComponent,
+    AnnonceComponent,
+    GestionGroupesComponent,
+    GestionThemesComponent,
   ],
     imports: [
         BrowserModule,

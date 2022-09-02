@@ -64,27 +64,49 @@ export class MenuComponent implements OnInit {
       ]
     },
     {
-      rootPath: "/admin",
+      rootPath: "/adminDelegue",
       childs: [
         {
-          path: "admin/gestionClasse",
-          name: "Gestion Classe"
-        },
-        {
-          path: "admin/gestionUE",
-          name: "Gestion U.E."
+          path: "admin/gestionEtudiants",
+          name: "Gestion Étudiants"
         },
         {
           path: "admin/annonce",
           name: "Faire une annonce"
         }
       ]
-    }
+    },
+	  {
+		  rootPath: "/admin",
+		  childs: [
+			  {
+				  path: "admin/gestionEtudiants",
+				  name: "Gestion Étudiants"
+			  },
+			  {
+				  path: "admin/gestionUERessources",
+				  name: "Gestion U.E./Ressources",
+			  },
+			  {
+				  path: "admin/annonce",
+				  name: "Faire une annonce"
+			  },
+			  {
+				  path: "admin/gestionGroupes",
+				  name: "Gestion groupes",
+			  },
+			  {
+				  path: "admin/gestionThemes",
+				  name: "Gestion thèmes",
+			  }
+		  ]
+	  }
   ];
   currentSubmenuRoutes:any;
   currentRootPath!: String;
   couleurPrincipale!: String;
   isOpenMenu!: boolean;
+	isDelegue!: boolean;
 
   constructor(private authService: AuthService, private router: Router, private requestService: RequestsService) {
     router.events.subscribe((url:any) => {
@@ -92,15 +114,17 @@ export class MenuComponent implements OnInit {
 
       if(authService.isLogin()){
         this.usersInfos = authService.getUserInfos();
+		this.isDelegue = this.authService.isDelegue();
       }
 
       if(url instanceof NavigationEnd){
         this.path = '/' + router.url.split('/')[1];
 		if(this.currentRootPath === this.path) return;
         for(let routes of this.submenuRoutes){
-          if(this.path === routes.rootPath){
+          if(this.path === routes.rootPath || (this.path + 'Delegue' === routes.rootPath && this.authService.isDelegue() && !this.authService.isAdmin())){
 			  this.currentRootPath = routes.rootPath;
             this.currentSubmenuRoutes = routes.childs;
+			return;
           }
         }
       }

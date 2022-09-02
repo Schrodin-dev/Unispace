@@ -34,6 +34,10 @@
 		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
 		<a routerLink="/edt">Emploi du temps</a>
 	  </div>
+		<div routerLinkActive="mainActive" *ngIf="isDelegue">
+			<div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
+			<a routerLink="/admin">Panel admin</a>
+		</div>
 	</nav>
 
 	<nav id="subMenu">
@@ -93,5 +97,18 @@
 				<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
 			</div>
 		</div>
+
+		<ng-container *ngIf="isDelegue">
+			<div routerLinkActive="mobileActive">
+				<a [ngStyle]="{color: '#'+this.couleurPrincipale}" routerLink="/admin">Panel admin</a>
+			</div>
+			<div class="mobileSubContainer">
+				<div class="mobileSubContainer">
+					<div routerLinkActive="mobileSubActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
+						<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>
+					</div>
+				</div>
+			</div>
+		</ng-container>
 	</nav>
 </ng-container>

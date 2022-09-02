@@ -14,7 +14,17 @@ export class AuthGuard implements CanActivate{
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
     if(this.authService.isLogin()){
-      return true;
+		if(!state.url.includes('/admin')) return true;
+
+		switch(state.url){
+			case '/admin/gestionUERessources':
+			case '/admin/gestionGroupes':
+			case '/admin/gestionThemes':
+				return this.authService.isAdmin();
+				break;
+			default:
+				return this.authService.isDelegue();
+		}
     }else{
       this.router.navigate(["login"]);
       return false;
