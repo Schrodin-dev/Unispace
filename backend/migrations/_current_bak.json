@@ -283,29 +283,27 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "ressourceIdRessource": {
-                    "allowNull": true,
+                    "primaryKey": true,
                     "references": {
                         "model": "ressource",
                         "key": "idRessource"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "ressourceIdRessource",
-                    "primaryKey": true,
-                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 },
                 "UEIdUE": {
-                    "allowNull": true,
+                    "primaryKey": true,
                     "references": {
                         "model": "UE",
                         "key": "idUE"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "UEIdUE",
-                    "primaryKey": true,
-                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -685,12 +683,12 @@
                 "nomSemestre": {
                     "allowNull": false,
                     "name": "nomSemestre",
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
                     "references": {
                         "model": "semestre",
                         "key": "nomSemestre"
                     },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
                     "field": "nomSemestre",
                     "seqType": "Sequelize.INTEGER(1)"
                 }
@@ -941,6 +939,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

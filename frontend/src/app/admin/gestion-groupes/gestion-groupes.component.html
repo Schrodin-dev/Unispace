@@ -14,10 +14,11 @@
 
 				<div class="groupes" *ngFor="let groupe of classe.groupes">
 					<div class="displayContainer">
-						<p [ngClass]="couleurTexte">{{ groupe }}</p>
+						<p [ngClass]="couleurTexte" (click)="add('modifierLienICal', groupe)">{{ groupe }}</p>
 						<app-suppr-emitter [nomObjetASupprimer]="groupe" (supprimer)="suppr('groupe', groupe, $event)"></app-suppr-emitter>
 					</div>
-
+				</div>
+				<div class="groupes">
 					<p class="add" [ngClass]="couleurTexte" (click)="add('groupe', classe.classe)">Ajouter un groupe</p>
 				</div>
 			</div>
@@ -29,4 +30,29 @@
 			<p class="add" [ngClass]="couleurTexte" (click)="add('anneeUniv')">Ajouter une année universitaire</p>
 		</div>
 	</div>
+
+	<form id="ajouter" *ngIf="ajouter !== undefined && ajouter !== null && ajouter !== ''" class="panel" [formGroup]="form">
+		<h1 [ngClass]="couleurTexte" *ngIf="ajouter !== 'modifierLienICal'; else otherTitle">Ajouter {{ ajouter | lowercase }}</h1>
+		<ng-template #otherTitle>
+			<h1 [ngClass]="couleurTexte">Modifier lien iCal {{ nMoinsUn }}</h1>
+		</ng-template>
+
+		<ng-container *ngIf="ajouter !== 'modifierLienICal'">
+			<label for="nom" [ngClass]="couleurTexte">Nom</label>
+			<input type="text" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: couleurFond}" class="inputText" *ngIf="ajouter !== 'anneeUniv'; else isAnneeUniv" id="nom" formControlName="nom">
+			<ng-template #isAnneeUniv>
+				<input type="number" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: couleurFond}" class="inputText" id="nom" formControlName="nom">
+			</ng-template>
+		</ng-container>
+
+		<ng-container *ngIf="ajouter === 'groupe' || ajouter === 'modifierLienICal'">
+			<label for="ical" [ngClass]="couleurTexte">Lien iCal</label>
+			<input type="text" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: couleurFond}" class="inputText" id="ical" formControlName="lienIcal">
+		</ng-container>
+
+		<button type="submit" [ngClass]="couleurTexte" [disabled]="form.invalid" (click)="validerAjout()" class="textButton">Valider</button>
+	</form>
+
+	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
 </div>
+

@@ -14,7 +14,9 @@ module.exports = (sequelize, DataTypes) => {
 			semestre.belongsTo(models.anneeUniv, {foreignKey: 'nomAnneeUniv'});
 			semestre.hasMany(models.UE, {foreignKey: {
 				name: 'nomSemestre',
-				allowNull: false
+				allowNull: false,
+				onDelete: 'cascade',
+				onUpdate: 'cascade'
 			}});
 		}
 	}

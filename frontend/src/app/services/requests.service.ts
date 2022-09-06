@@ -717,5 +717,84 @@ export class RequestsService{
 			});
 	}
 
+	ajouterAnneeUniv(nom: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/anneeUniv/ajouter', {
+			nom: nom
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
 
+	ajouterClasse(nom: String, anneeUniv: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/classe/ajouter', {
+			nomClasse: nom,
+			anneeUniv: anneeUniv
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	ajouterGroupe(nom: String, lien: String, classe: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/groupe/ajouter', {
+			nom: nom,
+			lienICal: lien,
+			classe: classe
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerAnneeUniv(anneeUniv: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/anneeUniv/supprimer', {
+			anneeUniv: anneeUniv
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerClasse(classe: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/classe/supprimer', {
+			classe: classe
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerGroupe(groupe: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/groupe/supprimer', {
+			groupe: groupe
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	modifierLienICal(nom: String, lien: String): Promise<String>{
+	  return this.httpClient.post(backend.url + '/api/groupe/modifierICal', {
+		  nom: nom,
+		  lienICal: lien
+	  })
+		  .toPromise()
+		  .then(message => {
+			  // @ts-ignore
+			  return message.message;
+		  })
+	}
 }
