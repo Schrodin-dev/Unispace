@@ -428,3 +428,42 @@ exports.modifierTheme = (req, res, next) => {
             return res.status(500).json({message: error.message});
         })
 }
+
+exports.recupererThemesAdmin = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour afficher le détail des thèmes."});
+
+    db.theme.findAll()
+        .then(themes => {
+            return res.status(200).json(themes);
+        })
+        .catch(error => {return res.status(500).json(error);});
+}
+
+exports.ajouterTheme = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour ajouter un thème."});
+
+    const theme = db.theme.build({
+        sourceTheme: req.body.source,
+        couleurPrincipaleTheme: req.body.couleurPrincipale,
+        couleurFond: req.body.couleurFond
+    });
+
+    theme.save()
+        .then(() => {
+            return res.status(200).json({message: "Le thème a bien été ajouté"})
+        })
+        .catch(error => {return res.status(500).json(error);});
+}
+
+exports.supprimerTheme = (req, res, next) => {
+    if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour supprimer un thème."});
+
+    db.theme.findOne({where: {idTheme: req.body.theme}})
+        .then(theme => {
+            return theme.destroy()
+        })
+        .then(() => {
+            return res.status(200).json({message: "Le thème a bien été supprimé."});
+        })
+        .catch(error => {return res.status(500).json(error);});
+}

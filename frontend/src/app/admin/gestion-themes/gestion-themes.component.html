@@ -1,1 +1,31 @@
-<p>gestion-themes works!</p>
+<div id="bigContainer">
+	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<div *ngFor="let theme of themes" class="theme panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+			<div [ngStyle]="{backgroundImage: 'url(./assets/img/themes/' + theme.id + '.jpg)'}"></div>
+			<ul>
+				<li [ngClass]="couleurTexte">Id: {{ theme.id }}</li>
+				<li [ngClass]="couleurTexte">Source: {{ theme.source }}</li>
+				<li [ngClass]="couleurTexte">Couleur principale: {{ theme.couleurPrincipale }}</li>
+				<li [ngClass]="couleurTexte">Couleur de fond: {{ theme.couleurFond }}</li>
+			</ul>
+			<app-suppr-emitter nomObjetASupprimer="le theme" (supprimer)="suppr($event, theme)"></app-suppr-emitter>
+		</div>
+
+		<button type="submit" (click)="ajouter()" [ngClass]="couleurTexte" class="textButton">Ajouter thème</button>
+	</div>
+
+	<form id="ajouterTheme" *ngIf="ajouterTheme" class="panel" [formGroup]="form">
+		<label for="source" [ngClass]="couleurTexte">Source</label>
+		<input type="text" id="source" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" class="inputText" formControlName="source" />
+
+		<label for="couleurPrincipale" [ngClass]="couleurTexte">Couleur principale</label>
+		<input type="color" id="couleurPrincipale" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" class="inputColor" formControlName="couleurPrincipale" />
+
+		<label for="couleurFond" [ngClass]="couleurTexte">Couleur fond</label>
+		<input type="color" id="couleurFond" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" class="inputColor" formControlName="couleurFond" />
+
+		<button type="submit" [ngClass]="couleurTexte" class="textButton" (click)="validerTheme()">Valider</button>
+	</form>
+
+	<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
+</div>

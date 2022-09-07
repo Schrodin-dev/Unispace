@@ -13,6 +13,7 @@ import {User} from "../models/user.model";
 import {RessourceAdmin} from "../models/ressourceAdmin.model";
 import {UEAdmin} from "../models/UEAdmin.model";
 import {LienRessourceUE} from "../models/lienRessourceUE.model";
+import {Theme} from "../models/theme.model";
 
 @Injectable()
 export class RequestsService{
@@ -795,6 +796,46 @@ export class RequestsService{
 		  .then(message => {
 			  // @ts-ignore
 			  return message.message;
-		  })
+		  });
+	}
+
+	afficherThemesAdmin(): Promise<Theme[]>{
+		return this.httpClient.get(backend.url + '/api/auth/themesAdmin')
+			.toPromise()
+			.then(themes => {
+				// @ts-ignore
+				let listeThemes:Theme[] = [];
+
+				// @ts-ignore
+				for(let theme of themes){
+					listeThemes.push(new Theme(theme.idTheme, theme.sourceTheme, theme.couleurPrincipaleTheme, theme.couleurFond));
+				}
+
+				return listeThemes;
+			});
+	}
+
+	ajouterTheme(source: String, couleurPrincipale: String, couleurFond: String):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/ajouterTheme', {
+			source: source,
+			couleurPrincipale: couleurPrincipale,
+			couleurFond: couleurFond
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerTheme(id: number):Promise<String>{
+		return this.httpClient.post(backend.url + '/api/auth/supprimerTheme', {
+			theme: id
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
 	}
 }

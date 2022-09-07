@@ -1,7 +1,7 @@
 @import "../base/panels";
 $color : white;
 
-.inputText, .dropDown > select{
+.inputText, .dropDown > select, .inputColor{
   @include panel($color);
 
   height: 50px;
@@ -11,6 +11,10 @@ $color : white;
   padding: 0 20px;
   margin: 2.5px 0;
   font-size: 20px;
+}
+
+.inputColor{
+	padding: 2px;
 }
 
 .textButton{
