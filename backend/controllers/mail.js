@@ -13,7 +13,10 @@ exports.annonce = async (req, res, next) => {
             return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
         }
 
-        db.user.findAll({attributes: ['emailUser']})
+        db.user.findAll({
+            where: {accepteRecevoirAnnonces: true},
+            attributes: ['emailUser']
+        })
             .then(users => {
                 envoyerMails(users, req, res);
             })
@@ -36,6 +39,7 @@ exports.annonce = async (req, res, next) => {
                     where: {nomAnneeUniv: req.body.destinataires}
                 }
             },
+            where: {accepteRecevoirAnnonces: true},
             attributes: ['emailUser'],
         })
             .then(users => {
@@ -71,7 +75,10 @@ exports.annonce = async (req, res, next) => {
 
         db.user.findAll({
             attributes: ['emailUser'],
-            where: {nomGroupe: req.body.destinataires}
+            where: {[Op.and]: [
+            {nomGroupe: req.body.destinataires},
+            {accepteRecevoirAnnonces: true}
+        ]}
         })
             .then(users => {
                 envoyerMails(users, req, res);
@@ -105,7 +112,8 @@ exports.annonce = async (req, res, next) => {
                 where: {nomClasse: req.body.destinataires},
                 attributes: []
             },
-            attributes: ['emailUser'],
+            where: {accepteRecevoirAnnonces: true},
+            attributes: ['emailUser']
         })
             .then(users => {
                 envoyerMails(users, req, res);
@@ -143,4 +151,74 @@ function envoyerMails(destinataires, req, res){
 
 
     res.status(201).json({message: 'Votre annonce a bien été envoyée'});
+}
+
+exports.listeDestinataires = (req, res, next) => {
+    let destinataires = [];
+
+    switch(req.auth.droitsUser){
+        case 'admin':
+            destinataires.push('promo');
+
+            db.anneeUniv.findAll({
+                include: {
+                    model: db.classe,
+                    required: false,
+                    include: {
+                        model: db.groupe,
+                        required: false,
+                        attributes: ['nomGroupe'],
+                        order: ['nomGroupe']
+                    },
+                    attributes: ['nomClasse'],
+                    order: ['nomClasse']
+                },
+                attributes: ['nomAnneeUniv'],
+                order: ['nomAnneeUniv']
+            })
+                .then(anneesUniv => {
+                    for(let anneeUniv of anneesUniv){
+                        destinataires.push(anneeUniv.nomAnneeUniv);
+                        for(let classe of anneeUniv.classes){
+                            destinataires.push(classe.nomClasse);
+                            for(let groupe of classe.groupes){
+                                destinataires.push(groupe.nomGroupe);
+                            }
+                        }
+                    }
+
+                    return res.status(200).json(destinataires);
+                });
+            break;
+        case 'délégué':
+            db.groupe.findOne({
+                where: {
+                    nomGroupe: req.auth.userGroupe
+                }
+            })
+                .then(userGroupe => {
+                    if(!userGroupe) return res.status(500).json({message: "Impossible de trouver votre classe."});
+
+                    destinataires.push(userGroupe.nomClasse);
+
+                    return db.groupe.findAll({
+                        where: {
+                            nomClasse: userGroupe.nomClasse
+                        },
+                        attributes: ['nomGroupe'],
+                        order: ['nomGroupe']
+                    })
+                })
+                .then(groupes => {
+                    for(let groupe of groupes){
+                        destinataires.push(groupe.nomGroupe);
+                    }
+
+                    return res.status(200).json(destinataires);
+                })
+            break;
+        default:
+            return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des destinataires."});
+            break;
+    }
 }

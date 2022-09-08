@@ -838,4 +838,32 @@ export class RequestsService{
 				return message.message;
 			});
 	}
+
+	chargerDestinatairesAnnonces(): Promise<String[]>{
+		return this.httpClient.get(backend.url + '/api/mail/destinataires')
+			.toPromise()
+			.then(destinataires => {
+				let liste: String[] = [];
+
+				// @ts-ignore
+				for(let dest of destinataires){
+					liste.push(dest);
+				}
+
+				return liste;
+			});
+	}
+
+	envoyerAnnonce(destinataires: String, sujet: String, contenu: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/mail/annonce', {
+			destinataires: destinataires,
+			subject: sujet,
+			contenu: contenu
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
 }

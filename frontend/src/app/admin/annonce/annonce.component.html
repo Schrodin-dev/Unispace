@@ -1,1 +1,25 @@
-<p>annonce works!</p>
+<div id="container">
+	<form class="panel" [formGroup]="form">
+		<h1 [ngClass]="couleurTexte">Faire une annonce</h1>
+
+		<div id="destinataires">
+			<div class="dropDown">
+				<select formControlName="destinataires" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+					<option disabled selected hidden>destinataires</option>
+					<option *ngFor="let dest of destinataires" [value]="dest">{{ dest }}</option>
+				</select>
+			</div>
+		</div>
+
+		<label for="objet" [ngClass]="couleurTexte">Objet</label>
+		<input type="text" id="objet" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" class="inputText" formControlName="objet" />
+
+		<label for="message" [ngClass]="couleurTexte">Message</label>
+		<textarea class="inputText" id="message" formControlName="message" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"></textarea>
+
+		<button type="submit" [disabled]="form.invalid" (click)="envoyerAnnonce()" class="textButton" [ngClass]="couleurTexte">Envoyer</button>
+
+		<p [ngClass]="couleurTexte" *ngIf="message">{{ message }}</p>
+		<app-erreur *ngIf="error" [message]="error" (close)="error = ''"></app-erreur>
+	</form>
+</div>
