@@ -14,7 +14,7 @@
 		<button type="submit" (click)="ajouter()" [ngClass]="couleurTexte" class="textButton">Ajouter thème</button>
 	</div>
 
-	<form id="ajouterTheme" *ngIf="ajouterTheme" class="panel" [formGroup]="form">
+	<form id="ajouterTheme" *ngIf="ajouterTheme" class="panel" [formGroup]="form" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 		<label for="source" [ngClass]="couleurTexte">Source</label>
 		<input type="text" id="source" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" class="inputText" formControlName="source" />
 

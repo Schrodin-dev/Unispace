@@ -1,5 +1,5 @@
 <div id="bigContainer">
-	<div id="container" class="panel">
+	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 		<div class="anneeUniv" *ngFor="let anneeUniv of detail">
 			<div class="displayContainer">
 				<p [ngClass]="couleurTexte">A{{ anneeUniv.anneeUniv }}</p>
