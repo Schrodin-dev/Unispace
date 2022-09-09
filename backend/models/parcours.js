@@ -3,7 +3,7 @@ const {
 	Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-	class semestre extends Model {
+	class parcours extends Model {
 		/**
 		 * Helper method for defining associations.
 		 * This method is not a part of Sequelize lifecycle.
@@ -11,24 +11,25 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			semestre.belongsTo(models.anneeUniv, {foreignKey: 'nomAnneeUniv'});
-			semestre.hasMany(models.UE, {foreignKey: {
-				name: 'nomSemestre',
-				allowNull: false,
-				onDelete: 'cascade',
-				onUpdate: 'cascade'
+			parcours.hasMany(models.UE, {foreignKey: {
+					name: 'nomParcours',
+					allowNull: false
+				}});
+			parcours.hasMany(models.classe, {foreignKey: {
+				name: 'nomParcours',
+				allowNull: false
 			}});
 		}
 	}
-	semestre.init({
-		nomSemestre: {
-			type: DataTypes.INTEGER(1),
+	parcours.init({
+		nomParcours: {
+			type: DataTypes.STRING(10),
 			primaryKey: true
 		}
 	}, {
 		sequelize,
-		modelName: 'semestre',
+		modelName: 'parcours',
 		freezeTableName: true
 	});
-	return semestre;
+	return parcours;
 };

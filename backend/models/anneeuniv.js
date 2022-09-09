@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         name: 'nomAnneeUniv',
         allowNull: false
       }});
-      anneeUniv.hasMany(models.semestre, {foreignKey: 'nomAnneeUniv'});
     }
   }
   anneeUniv.init({

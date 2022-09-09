@@ -16,13 +16,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false
       }});
       classe.belongsTo(models.anneeUniv, {
-          foreignKey: {
+        foreignKey: {
           name: 'nomAnneeUniv',
           allowNull: false
         },
         onDelete: 'cascade',
         onUpdate: 'cascade'
       });
+      classe.belongsTo(models.parcours, {foreignKey: {
+        name: 'nomParcours',
+        allowNull: false
+      }});
     }
   }
   classe.init({

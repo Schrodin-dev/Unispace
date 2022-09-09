@@ -50,6 +50,18 @@
                     "onUpdate": "CASCADE",
                     "field": "nomAnneeUniv",
                     "seqType": "Sequelize.INTEGER(1)"
+                },
+                "nomParcours": {
+                    "allowNull": false,
+                    "name": "nomParcours",
+                    "references": {
+                        "model": "parcours",
+                        "key": "nomParcours"
+                    },
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "field": "nomParcours",
+                    "seqType": "Sequelize.STRING(10)"
                 }
             },
             "indexes": []
@@ -283,29 +295,27 @@
                     "seqType": "Sequelize.DATE"
                 },
                 "ressourceIdRessource": {
-                    "allowNull": true,
+                    "primaryKey": true,
                     "references": {
                         "model": "ressource",
                         "key": "idRessource"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "ressourceIdRessource",
-                    "primaryKey": true,
-                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 },
                 "UEIdUE": {
-                    "allowNull": true,
+                    "primaryKey": true,
                     "references": {
                         "model": "UE",
                         "key": "idUE"
                     },
-                    "onDelete": "SET NULL",
+                    "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
                     "field": "UEIdUE",
-                    "primaryKey": true,
-                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+                    "allowNull": true,
                     "seqType": "Sequelize.INTEGER"
                 }
             },
@@ -427,6 +437,27 @@
             },
             "indexes": []
         },
+        "parcours": {
+            "tableName": "parcours",
+            "schema": {
+                "nomParcours": {
+                    "primaryKey": true,
+                    "field": "nomParcours",
+                    "seqType": "Sequelize.STRING(10)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "ressource": {
             "tableName": "ressource",
             "schema": {
@@ -450,38 +481,6 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
-                }
-            },
-            "indexes": []
-        },
-        "semestre": {
-            "tableName": "semestre",
-            "schema": {
-                "nomSemestre": {
-                    "primaryKey": true,
-                    "field": "nomSemestre",
-                    "seqType": "Sequelize.INTEGER(1)"
-                },
-                "createdAt": {
-                    "allowNull": false,
-                    "field": "createdAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "field": "updatedAt",
-                    "seqType": "Sequelize.DATE"
-                },
-                "nomAnneeUniv": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "anneeUniv",
-                        "key": "nomAnneeUniv"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "nomAnneeUniv",
-                    "seqType": "Sequelize.INTEGER(1)"
                 }
             },
             "indexes": []
@@ -682,17 +681,17 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "nomSemestre": {
+                "nomParcours": {
                     "allowNull": false,
-                    "name": "nomSemestre",
+                    "name": "nomParcours",
+                    "references": {
+                        "model": "parcours",
+                        "key": "nomParcours"
+                    },
                     "onDelete": "CASCADE",
                     "onUpdate": "CASCADE",
-                    "references": {
-                        "model": "semestre",
-                        "key": "nomSemestre"
-                    },
-                    "field": "nomSemestre",
-                    "seqType": "Sequelize.INTEGER(1)"
+                    "field": "nomParcours",
+                    "seqType": "Sequelize.STRING(10)"
                 }
             },
             "indexes": []
@@ -941,6 +940,6 @@
     },
     "path": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current.json",
     "backupPath": "/Users/Raf_1/Documents/GitHub/noobnote/backend/migrations/_current_bak.json",
-    "exists": true,
-    "revision": 2
+    "exists": false,
+    "revision": 1
 }

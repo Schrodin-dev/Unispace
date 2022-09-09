@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       UE.belongsToMany(models.ressource, {through: models.etreLieUE});
       UE.hasMany(models.etreLieUE);
-      UE.belongsTo(models.semestre, {foreignKey: {
-        name: 'nomSemestre',
+      UE.belongsTo(models.parcours, {foreignKey: {
+        name: 'nomParcours',
         allowNull: false
       }});
     }

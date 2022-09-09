@@ -5,19 +5,19 @@ const Sequelize = require("sequelize");
  *
  * createTable() => "anneeUniv", deps: []
  * createTable() => "cours", deps: []
+ * createTable() => "parcours", deps: []
  * createTable() => "ressource", deps: []
  * createTable() => "theme", deps: []
  * createTable() => "travailDeGroupe", deps: []
- * createTable() => "classe", deps: [anneeUniv]
+ * createTable() => "classe", deps: [anneeUniv, parcours]
  * createTable() => "contenuCours", deps: [cours]
  * createTable() => "devoir", deps: [ressource]
  * createTable() => "docsContenuCours", deps: [contenuCours]
  * createTable() => "travailAFaire", deps: [cours]
- * createTable() => "semestre", deps: [anneeUniv]
+ * createTable() => "UE", deps: [parcours]
  * createTable() => "groupe", deps: [classe]
  * createTable() => "groupeDeTravail", deps: [travailDeGroupe]
  * createTable() => "user", deps: [groupe, theme]
- * createTable() => "UE", deps: [semestre]
  * createTable() => "docsTravailARendre", deps: [travailAFaire]
  * createTable() => "note", deps: [devoir, user]
  * createTable() => "etreLieUE", deps: [ressource, UE]
@@ -32,7 +32,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-08-14T09:12:28.495Z",
+  created: "2022-09-09T22:12:13.198Z",
   comment: "",
 };
 
@@ -75,6 +75,30 @@ const migrationCommands = (transaction) => [
           type: Sequelize.STRING(6),
           field: "couleurCours",
           allowNull: false,
+        },
+        createdAt: {
+          type: Sequelize.DATE,
+          field: "createdAt",
+          allowNull: false,
+        },
+        updatedAt: {
+          type: Sequelize.DATE,
+          field: "updatedAt",
+          allowNull: false,
+        },
+      },
+      { transaction },
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "parcours",
+      {
+        nomParcours: {
+          type: Sequelize.STRING(10),
+          field: "nomParcours",
+          primaryKey: true,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -227,6 +251,15 @@ const migrationCommands = (transaction) => [
           onDelete: "CASCADE",
           references: { model: "anneeUniv", key: "nomAnneeUniv" },
           name: "nomAnneeUniv",
+          allowNull: false,
+        },
+        nomParcours: {
+          type: Sequelize.STRING(10),
+          field: "nomParcours",
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          references: { model: "parcours", key: "nomParcours" },
+          name: "nomParcours",
           allowNull: false,
         },
       },
@@ -419,12 +452,19 @@ const migrationCommands = (transaction) => [
   {
     fn: "createTable",
     params: [
-      "semestre",
+      "UE",
       {
-        nomSemestre: {
-          type: Sequelize.INTEGER(1),
-          field: "nomSemestre",
+        idUE: {
+          type: Sequelize.INTEGER,
+          field: "idUE",
+          autoIncrement: true,
           primaryKey: true,
+        },
+        nomUE: { type: Sequelize.STRING, field: "nomUE", allowNull: false },
+        numeroUE: {
+          type: Sequelize.INTEGER(1),
+          field: "numeroUE",
+          allowNull: false,
         },
         createdAt: {
           type: Sequelize.DATE,
@@ -436,13 +476,14 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        nomAnneeUniv: {
-          type: Sequelize.INTEGER(1),
-          field: "nomAnneeUniv",
+        nomParcours: {
+          type: Sequelize.STRING(10),
+          field: "nomParcours",
           onUpdate: "CASCADE",
-          onDelete: "SET NULL",
-          references: { model: "anneeUniv", key: "nomAnneeUniv" },
-          allowNull: true,
+          onDelete: "CASCADE",
+          references: { model: "parcours", key: "nomParcours" },
+          name: "nomParcours",
+          allowNull: false,
         },
       },
       { transaction },
@@ -588,46 +629,6 @@ const migrationCommands = (transaction) => [
           references: { model: "theme", key: "idTheme" },
           defaultValue: 1,
           name: "idTheme",
-          allowNull: false,
-        },
-      },
-      { transaction },
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "UE",
-      {
-        idUE: {
-          type: Sequelize.INTEGER,
-          field: "idUE",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        nomUE: { type: Sequelize.STRING, field: "nomUE", allowNull: false },
-        numeroUE: {
-          type: Sequelize.INTEGER(1),
-          field: "numeroUE",
-          allowNull: false,
-        },
-        createdAt: {
-          type: Sequelize.DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: Sequelize.DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        nomSemestre: {
-          type: Sequelize.INTEGER(1),
-          field: "nomSemestre",
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "semestre", key: "nomSemestre" },
-          name: "nomSemestre",
           allowNull: false,
         },
       },
@@ -987,11 +988,11 @@ const rollbackCommands = (transaction) => [
   },
   {
     fn: "dropTable",
-    params: ["ressource", { transaction }],
+    params: ["parcours", { transaction }],
   },
   {
     fn: "dropTable",
-    params: ["semestre", { transaction }],
+    params: ["ressource", { transaction }],
   },
   {
     fn: "dropTable",
