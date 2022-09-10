@@ -24,10 +24,10 @@ export class TravailAFaireComponent implements OnInit {
 
 	dateToHoursString(date: Date): String{
 		let result = '';
-		result += date.getUTCHours();
+		result += date.getHours();
 		result += 'h';
-		if(date.getUTCMinutes() > 0){
-			result += date.getUTCMinutes();
+		if(date.getMinutes() > 0){
+			result += date.getMinutes();
 		}
 
 		return result;
