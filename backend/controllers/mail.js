@@ -11,13 +11,13 @@ const { Op } = require("sequelize");
 exports.annonce = async (req, res, next) => {
 
     if(req.body.destinataires === undefined){
-        return res.status(400).json({message: 'Veuillez préciser un destinataire.'});
+        return res.status(500).json("Veuillez préciser un destinataire.");
     }
 
     if (req.body.destinataires === 'promo') {
         //annonce à toute la promo
         if(req.auth.droitsUser !== 'admin'){
-            return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
+            return res.status(500).json("Vous n'avez pas les droits suffisants.");
         }
 
         db.user.findAll({
@@ -28,12 +28,12 @@ exports.annonce = async (req, res, next) => {
                 envoyerMails(users, req, res);
             })
             .catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             });
     }else if(await db.anneeUniv.findOne({where: {nomAnneeUniv: req.body.destinataires}}) !== null){
         // annonce à une promo (année univ)
         if(req.auth.droitsUser !== 'admin'){
-            return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
+            return res.status(500).json("Vous n'avez pas les droits suffisants.");
         }
 
         db.user.findAll({
@@ -53,31 +53,26 @@ exports.annonce = async (req, res, next) => {
                 envoyerMails(users, req, res);
             })
             .catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             })
     }else if(await db.groupe.findOne({where: {nomGroupe: req.body.destinataires}}) !== null) {
         // annonce à un groupe
         if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué'){
-            return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
+            return res.status(500).json("Vous n'avez pas les droits suffisants.");
         }
 
-        let err = false
         if (req.auth.droitsUser === 'délégué') {
-            await db.groupe.findOne({where: {nomGroupe: req.body.destinataires}}).then(async dest => {
-                await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}}).then(sender => {
-                    if (dest.nomClasse !== sender.nomClasse) {
-                        err = true;
-                    }
-                }).catch(error => {
-                    res.status(500).json(error);
-                });
+            await db.groupe.findOne({where: {nomGroupe: req.body.destinataires}})
+                .then(dest => {
+                    return db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+                        .then(sender => {
+                            if (dest.nomClasse !== sender.nomClasse) {
+                                throw new Error("Impossible d'envoyer un mail aux destinataires spécifiés.");
+                            }
+                })
             }).catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             });
-        }
-
-        if(err){
-            return res.status(401).json({message: 'Vous n\'êtes pas délégué de cette classe.'});
         }
 
         db.user.findAll({
@@ -91,25 +86,22 @@ exports.annonce = async (req, res, next) => {
                 envoyerMails(users, req, res);
             })
             .catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             })
     }else if(await db.classe.findOne({where: {nomClasse: req.body.destinataires}}) !== null){
         // annonce à une classe
         if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué'){
-            return res.status(401).json({message: 'Vous n\'avez pas les droits suffisants.'});
+            return res.status(500).json("Vous n'avez pas les droits suffisants.");
         }
 
-        let err = false;
         if(req.auth.droitsUser === 'délégué') {
             await db.groupe.findOne({where: {[Op.and]: [{nomClasse: req.body.destinataires}, {nomGroupe: req.auth.userGroupe}]}}).then(rep => {
-                if(rep === null) err = true;
+                if(rep === null){
+                    throw new Error("Impossible d'envoyer un mail aux destinataires spécifiés.")
+                }
             }).catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             });
-        }
-
-        if(err){
-            return res.status(401).json({message: "Vous n'êtes pas délégué de cette classe."});
         }
 
         db.user.findAll({
@@ -126,10 +118,10 @@ exports.annonce = async (req, res, next) => {
                 envoyerMails(users, req, res);
             })
             .catch(error => {
-                res.status(500).json(error);
+                res.status(500).json(error.message);
             })
     }else{
-        return res.status(400).json({message: 'impossible de trouver le destinataire.'})
+        return res.status(500).json("impossible de trouver le destinataire.");
     }
 
 
@@ -154,13 +146,13 @@ function envoyerMails(destinataires, req, res){
     }
 
     if(emails.length === 0){
-        return res.status(400).json({message: 'Impossible d\'envoyer l\'annonce, aucun destinataire trouvé.'});
+        return res.status(500).json("Impossible d'envoyer l'annonce, aucun destinataire trouvé.");
     }
 
     try{
         require('../mailsender').envoyerMailGroupe(emails, req.body.subject, '<p>' + req.body.contenu + '</p>');
     }catch(error){
-        return res.status(500).json({error});
+        return res.status(500).json("Impossible d'envoyer l'email.");
     }
 
 
@@ -207,8 +199,10 @@ exports.listeDestinataires = (req, res, next) => {
                             }
                         }
                     }
-
                     return res.status(200).json(destinataires);
+                })
+                .catch(error => {
+                    return res.status(500).json(error.message);
                 });
             break;
         case 'délégué':
@@ -218,7 +212,7 @@ exports.listeDestinataires = (req, res, next) => {
                 }
             })
                 .then(userGroupe => {
-                    if(!userGroupe) return res.status(500).json({message: "Impossible de trouver votre classe."});
+                    if(!userGroupe) throw new Error("Impossible de trouver votre classe.");
 
                     destinataires.push(userGroupe.nomClasse);
 
@@ -237,9 +231,11 @@ exports.listeDestinataires = (req, res, next) => {
 
                     return res.status(200).json(destinataires);
                 })
+                .catch(error => {
+                    return res.status(500).json(error.message);
+                });
             break;
         default:
-            return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des destinataires."});
-            break;
+            return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher la liste des destinataires.");
     }
 }
