@@ -119,7 +119,7 @@ exports.recupererEdt = (req, res, next) => {
             return res.status(200).json(edt);
         })
         .catch(error => {
-            res.status(500).json(error.message);
+            return res.status(500).json({message: error.message});
         });
 
 
@@ -157,7 +157,7 @@ exports.recupererListeCours = (req, res, next) => {
             return res.status(200).json(listeCours);
         })
         .catch(error => {
-            res.status(500).json(error.message);
+            return res.status(500).json({message: error.message});
         });
 }
 
@@ -200,7 +200,7 @@ async function chargerCouleur(nomCours) {
 * */
 exports.creerGroupe = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous devez être admin pour créer un groupe.");
+        return res.status(500).json({message: "Vous devez être admin pour créer un groupe."});
     }
 
     db.groupe.create({
@@ -211,7 +211,9 @@ exports.creerGroupe = (req, res, next) => {
         .then(() => {
             return res.status(201).json({message: "Le groupe a bien été créé."})
         })
-        .catch(error => {res.status(500).json(error.message);});
+        .catch(() => {
+            res.status(500).json({message: "Une erreur s'est produite lors de la création du groupe."});
+        });
 }
 
 /*
@@ -223,7 +225,7 @@ exports.creerGroupe = (req, res, next) => {
 * */
 exports.modifierLienICal = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous devez être admin pour modifier un groupe.");
+        return res.status(500).json({message: "Vous devez être admin pour modifier un groupe."});
     }
 
     db.groupe.findOne({where: {nomGroupe: req.body.nom}})
@@ -238,7 +240,9 @@ exports.modifierLienICal = (req, res, next) => {
         .then(() => {
             return res.status(201).json({message: "Le lien ICal du groupe a bien été mis à jour."});
         })
-        .catch(error => {return res.status(500).json(error.message);});
+        .catch(error => {
+            return res.status(500).json({message: error.message});
+        });
 }
 
 /*
@@ -250,7 +254,7 @@ exports.modifierLienICal = (req, res, next) => {
 * */
 exports.supprimerGroupe = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous devez être admin pour supprimer un groupe.");
+        return res.status(500).json({message: "Vous devez être admin pour supprimer un groupe."});
     }
 
     db.groupe.findOne({where: {nomGroupe: req.body.groupe}})
@@ -264,7 +268,9 @@ exports.supprimerGroupe = (req, res, next) => {
         .then(() => {
             return res.status(201).json({message: "Le groupe a bien été supprimé."});
         })
-        .catch(error => {return res.status(500).json(error.message)});
+        .catch(error => {
+            return res.status(500).json({message: error.message});
+        });
 }
 
 //non utilisé
@@ -303,7 +309,7 @@ exports.verifierExistanceCours = async (dateDebut, nomCours, userGroupe) => {
 * */
 exports.detailGroupes = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher le détail des groupes.");
+        return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des groupes."});
     }
 
     db.anneeUniv.findAll({

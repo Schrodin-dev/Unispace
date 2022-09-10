@@ -9,7 +9,7 @@ const db = require('../models/index');
 * */
 exports.creerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous devez être admin pour créer une classe.")
+        return res.status(500).json({message: "Vous devez être admin pour créer une classe."});
     }
 
     db.classe.create({
@@ -25,7 +25,7 @@ exports.creerClasse = (req, res, next) => {
             res.status(201).json({message: "La classe a bien été créée."});
         })
         .catch(error => {
-            res.status(500).json(error.message);
+            return res.status(500).json({message: error.message});
         });
 }
 
@@ -38,7 +38,7 @@ exports.creerClasse = (req, res, next) => {
 * */
 exports.supprimerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(500).json("Vous devez être admin pour supprimer une classe.")
+        return res.status(500).json({message: "Vous devez être admin pour supprimer une classe."});
     }
 
     db.classe.findOne({where: {nomClasse: req.body.classe}})
@@ -48,7 +48,7 @@ exports.supprimerClasse = (req, res, next) => {
         .then(() => {
             return res.status(201).json({message: "La classe a bien été supprimée."});
         })
-        .catch(error => {
-            return res.status(500).json("Impossible de supprimer la classe.");
+        .catch(() => {
+            return res.status(500).json({message: "Impossible de supprimer la classe."});
         })
 }

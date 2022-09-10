@@ -17,23 +17,23 @@ exports.register = async (req, res, next) => {
     //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
     //vérification des données avant insertion
     if (await db.user.findOne({where: {emailUser: req.body.email}}) !== null) {
-        return res.status(500).json("Vous êtes déjà inscrit, veuillez vous connecter.");
+        return res.status(500).json({message: "Vous êtes déjà inscrit, veuillez vous connecter."});
     }
     if (!req.body.email.toString().includes('@etu.umontpellier.fr')) {
-        return res.status(500).json("Vous devez utiliser un email étudiant universitaire de Montpellier afin de vous inscrire.");
+        return res.status(500).json({message: "Vous devez utiliser un email étudiant universitaire de Montpellier afin de vous inscrire."});
     }
     // vérification du format des données fournies par l'utilisateur
     if(req.body.email.length > 128){
-        return res.status(500).json("Votre email est trop long (128 caractères maximum).");
+        return res.status(500).json({message: "Votre email est trop long (128 caractères maximum)."});
     }
     if(req.body.nom.length > 40){
-        return res.status(500).json("Votre nom est trop long (40 caractères maximum).");
+        return res.status(500).json({message: "Votre nom est trop long (40 caractères maximum)."});
     }
     if(req.body.prenom.length > 40){
-        return res.status(500).json("Votre prénom est trop long (40 caractères maximum).");
+        return res.status(500).json({message: "Votre prénom est trop long (40 caractères maximum)."});
     }
     if(await db.groupe.findOne({where: {nomGroupe: req.body.groupe}}) === null){
-        return res.status(500).json("Le groupe renseigné n'existe pas.");
+        return res.status(500).json({message: "Le groupe renseigné n'existe pas."});
     }
 
     const uuid = randomUUID();
@@ -55,7 +55,7 @@ exports.register = async (req, res, next) => {
         })
         .then(() => res.status(201).json({message: 'Un email a été envoyé pour valider la création de votre compte.'}))
         .catch(() => {
-            res.status(500).json("Impossible de créer le compte.");
+            res.status(500).json({message: "Impossible de créer le compte."});
         });
 };
 
@@ -128,7 +128,7 @@ exports.changementsDonneesCompte = async (req, res, next) => {
             res.status(200).json({message: 'Les modifications ont été prises en compte.'})
         })
         .catch(error => {
-            res.status(500).json(error.message);
+            return res.status(500).json({message: error.message});
         });
 
 };
@@ -189,7 +189,7 @@ exports.login = (req, res, next) => {
                 });
         })
         .catch(error => {
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         });
 };
 
@@ -209,7 +209,9 @@ exports.supprimerCompte = (req , res, next) => {
         .then(() => {
             res.status(200).json({message: 'Votre compte a bien été supprimé'});
         })
-        .catch(error => res.status(500).json("Impossible de supprimer le compte."));
+        .catch(() => {
+            res.status(500).json({message: "Impossible de supprimer le compte."})
+        });
 };
 
 /*
@@ -239,7 +241,9 @@ exports.validerCompte = (req, res, next) => {
       .then(() => {
           res.status(201).json({message: 'Votre compté a bien été validé'});
       })
-      .catch(error => res.status(500).json(error.message));
+      .catch(error => {
+          return res.status(500).json({message: error.message});
+      });
 };
 
 /*
@@ -277,7 +281,7 @@ exports.renvoyerCodeVerification = (req, res, next) => {
           }
       })
       .catch(() => {
-          res.status(400).json({message: "Une erreur s'est produite lors de l'envoie du nouveau code de vérification."});
+          res.status(500).json({message: "Une erreur s'est produite lors de l'envoie du nouveau code de vérification."});
       });
 };
 
@@ -314,7 +318,7 @@ exports.changerMotDePasse = (req, res, next) => {
             res.status(200).json({message: 'Votre nouveau mot de passe a été pris en compte.'});
         })
         .catch(error => {
-            res.status(500).json({message: error.message});
+            return res.status(500).json({message: error.message});
         });
 };
 
@@ -479,7 +483,7 @@ exports.voirAccepteAnnonces = (req, res, next) => {
         .then(user => {
             return res.status(200).json({accepteRecevoirAnnonces: user.accepteRecevoirAnnonces});
         })
-        .catch(error => {
+        .catch(() => {
             return res.status(500).json({message: "Une erreur est survenue."});
         });
 };

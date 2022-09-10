@@ -11,13 +11,13 @@ const groupeCtrl = require('../controllers/groupe');
 * */
 exports.ajouterContenuCours = async (req, res, next) => {
 	if (req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué') {
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un contenu de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un contenu de cours."});
 	}
 
 	db.cours.findOne({where: {nomCours: req.body.cours}})
 		.then(cours => {
 			if(!cours){
-				return res.status(500).json("Impossible de trouver le cours correspondant.");
+				throw new Error("Impossible de trouver le cours correspondant.");
 			}
 
 			return db.contenuCours.create({
@@ -81,7 +81,9 @@ exports.ajouterContenuCours = async (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le contenu de cours a bien été ajouté."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -93,7 +95,7 @@ exports.ajouterContenuCours = async (req, res, next) => {
 * */
 exports.supprimerContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un contenu de cours à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un contenu de cours à faire."});
 	}
 
 
@@ -120,7 +122,9 @@ exports.supprimerContenuCours = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le contenu de cours a bien été supprimé."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -132,7 +136,7 @@ exports.supprimerContenuCours = (req, res, next) => {
 * */
 exports.modifierContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un contenu de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier un contenu de cours."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -191,7 +195,7 @@ exports.modifierContenuCours = (req, res, next) => {
 										nomGroupe: groupe
 									}
 								}})
-								.catch(error => {
+								.catch(() => {
 									throw new Error("Impossible de modifier l'un des groupes");
 								})
 							);
@@ -213,7 +217,9 @@ exports.modifierContenuCours = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le contenu de cours a bien été modifié."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -225,7 +231,7 @@ exports.modifierContenuCours = (req, res, next) => {
 * */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un document à un contenu de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un contenu de cours."});
 	}
 
 	db.contenuCours.findOne({where: {idContenuCours: req.body.contenuCours}})
@@ -266,7 +272,9 @@ exports.ajouterDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le document a bien été ajouté au contenu de cours."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -278,7 +286,7 @@ exports.ajouterDocument = (req, res, next) => {
 * */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -317,7 +325,9 @@ exports.modifierDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(200).json({message: "Le document a bien été modifié."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -329,7 +339,7 @@ exports.modifierDocument = (req, res, next) => {
 * */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -362,7 +372,9 @@ exports.supprimerDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le document a bien été supprimé."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -374,7 +386,7 @@ exports.supprimerDocument = (req, res, next) => {
 * */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les contenus de cours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher les contenus de cours."});
 	}
 
 	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
@@ -418,7 +430,7 @@ exports.afficher = (req, res, next) => {
 
 			return res.status(200).json(contenu);
 		})
-		.catch(error => {
+		.catch(() => {
 			return res.status(500).json("Impossible de charger la liste des contenus de cours.");
 		});
 }

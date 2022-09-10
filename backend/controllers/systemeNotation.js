@@ -10,7 +10,7 @@ const {Op, literal} = require("sequelize");
 * */
 exports.ajouterUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour créer une UE.");
+		return res.status(500).json({message: "Vous devez être admin pour créer une UE."});
 	}
 
 	db.UE.create({
@@ -21,7 +21,9 @@ exports.ajouterUE = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "L'UE a bien été créée."});
 		})
-		.catch(() => {return res.status(500).json("Impossible de créer l'UE.");});
+		.catch(() => {
+			return res.status(500).json({message: "Impossible de créer l'UE."});
+		});
 };
 
 /*
@@ -33,7 +35,7 @@ exports.ajouterUE = (req, res, next) => {
 * */
 exports.supprimerUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour supprimer une UE.");
+		return res.status(500).json({message:"Vous devez être admin pour supprimer une UE."});
 	}
 
 	db.UE.findOne({where: {idUE: req.body.UE}})
@@ -47,7 +49,9 @@ exports.supprimerUE = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "L'UE a bien été supprimée."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -59,14 +63,16 @@ exports.supprimerUE = (req, res, next) => {
 * */
 exports.recupererUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("vous n'avez pas les droits suffisants pour afficher les UE.");
+		return res.status(500).json({message: "vous n'avez pas les droits suffisants pour afficher les UE."});
 	}
 
 	db.UE.findAll()
 		.then(UE => {
 			return res.status(201).json(UE);
 		})
-		.catch(() => {res.status(500).json("Impossible de récupérer les UE.");});
+		.catch(() => {
+			res.status(500).json({message: "Impossible de récupérer les UE."});
+		});
 };
 
 /*
@@ -78,7 +84,7 @@ exports.recupererUE = (req, res, next) => {
 * */
 exports.ajouterRessource = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter une ressource");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter une ressource"});
 	}
 
 	db.ressource.create({
@@ -87,7 +93,9 @@ exports.ajouterRessource = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "La ressource a bien été créée."});
 		})
-		.catch(error => {return res.status(500).json("Impossible de créer la ressource.");});
+		.catch(() => {
+			return res.status(500).json({message: "Impossible de créer la ressource."});
+		});
 };
 
 /*
@@ -99,7 +107,7 @@ exports.ajouterRessource = (req, res, next) => {
 * */
 exports.supprimerRessource = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer une ressource.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer une ressource."});
 	}
 
 	db.ressource.findOne({where: {idRessource: req.body.ressource}})
@@ -113,7 +121,9 @@ exports.supprimerRessource = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "La ressource a bien été supprimée."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -125,14 +135,16 @@ exports.supprimerRessource = (req, res, next) => {
 * */
 exports.recupererRessource = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour afficher les ressources.");
+		return res.status(500).json({message: "Vous devez être admin pour afficher les ressources."});
 	}
 
 	db.ressource.findAll()
 		.then(ressources => {
 			return res.status(201).json(ressources);
 		})
-		.catch(error => {res.status(500).json("Impossible de récupérer les ressources.");});
+		.catch(() => {
+			res.status(500).json({message: "Impossible de récupérer les ressources."});
+		});
 };
 
 /*
@@ -144,7 +156,7 @@ exports.recupererRessource = (req, res, next) => {
 * */
 exports.lierRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour lier une UE et une ressource.");
+		return res.status(500).json({message: "Vous devez être admin pour lier une UE et une ressource."});
 	}
 
 	db.etreLieUE.create({
@@ -155,7 +167,9 @@ exports.lierRessourceUE = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "L'UE a bien été liée à la ressource."});
 		})
-		.catch(() => {res.status(500).json("Impossible de lier l'UE à la ressource.");});
+		.catch(() => {
+			res.status(500).json({message: "Impossible de lier l'UE à la ressource."});
+		});
 };
 
 /*
@@ -167,7 +181,7 @@ exports.lierRessourceUE = (req, res, next) => {
 * */
 exports.modifierCoeffRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour modifier le coefficient entre une UE et une ressource.");
+		return res.status(500).json({message: "Vous devez être admin pour modifier le coefficient entre une UE et une ressource."});
 	}
 
 	db.etreLieUE.findOne({where: {
@@ -185,7 +199,9 @@ exports.modifierCoeffRessourceUE = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le coefficient a bien été modifié."});
 		})
-		.catch(error => {res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -197,7 +213,7 @@ exports.modifierCoeffRessourceUE = (req, res, next) => {
 * */
 exports.supprimerLienRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour supprimer le lien entre une UE et une ressource.");
+		return res.status(500).json({message: "Vous devez être admin pour supprimer le lien entre une UE et une ressource."});
 	}
 
 	db.etreLieUE.findOne({where: {
@@ -214,7 +230,9 @@ exports.supprimerLienRessourceUE = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le lien entre cette UE et cette ressource a bien été supprimé."});
 		})
-		.catch(error => {res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 }
 
 /*
@@ -226,7 +244,7 @@ exports.supprimerLienRessourceUE = (req, res, next) => {
 * */
 exports.ajouterDevoir = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un devoir.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un devoir."});
 	}
 
 	db.devoir.create({
@@ -273,7 +291,9 @@ exports.ajouterDevoir = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le devoir a bien été créé."});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -287,7 +307,7 @@ exports.modifierDevoir = (req, res, next) => {
 	console.log(req.body);
 
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un devoir.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier un devoir."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -365,7 +385,7 @@ exports.modifierDevoir = (req, res, next) => {
 			return res.status(200).json({message: "Le devoir a bien été modifié."});
 		})
 		.catch(error => {
-			return res.status(500).json(error.message);
+			return res.status(500).json({message: error.message});
 		});
 };
 
@@ -378,7 +398,7 @@ exports.modifierDevoir = (req, res, next) => {
 * */
 exports.supprimerDevoir = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un devoir.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un devoir."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -403,7 +423,7 @@ exports.supprimerDevoir = (req, res, next) => {
 			return res.status(201).json({message: "Le devoir a bien été supprimé."});
 		})
 		.catch(error => {
-			return res.status(500).json(error.message);
+			return res.status(500).json({message: error.message});
 		});
 };
 
@@ -416,7 +436,7 @@ exports.supprimerDevoir = (req, res, next) => {
 * */
 exports.ajouterNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter une note.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter une note."});
 	}
 
 	db.devoir.findOne({where: {idDevoir: req.body.devoir}})
@@ -456,7 +476,9 @@ exports.ajouterNote = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "La note a bien été ajoutée."});
 		})
-		.catch(error => {res.status(500).json(error.message)});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -468,7 +490,7 @@ exports.ajouterNote = (req, res, next) => {
 * */
 exports.modifierNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier une note.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier une note."});
 	}
 
 	db.note.findOne({
@@ -498,7 +520,9 @@ exports.modifierNote = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Votre note a bien été modifiée."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -510,7 +534,7 @@ exports.modifierNote = (req, res, next) => {
 * */
 exports.supprimerNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer une note.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer une note."});
 	}
 
 	db.note.findOne({where: {
@@ -530,7 +554,9 @@ exports.supprimerNote = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "La note a bien été supprimée."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -542,7 +568,7 @@ exports.supprimerNote = (req, res, next) => {
 * */
 exports.detailDesNotes = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher le détail des notes.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des notes."});
 	}
 
 	db.classe.findOne({
@@ -599,7 +625,9 @@ exports.detailDesNotes = (req, res, next) => {
 
 			return res.status(201).json(calculateurMoyennes(detail));
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -611,7 +639,7 @@ exports.detailDesNotes = (req, res, next) => {
 * */
 exports.dernieresNotes = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher des notes.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher des notes."});
 	}
 
 	db.note.findAll({
@@ -630,7 +658,9 @@ exports.dernieresNotes = (req, res, next) => {
 		.then(notes => {
 			return res.status(200).json(notes);
 		})
-		.catch(() => {return res.status(500).json("Impossible de charger les nouvelles notes.")});
+		.catch(() => {
+			return res.status(500).json({message: "Impossible de charger les nouvelles notes."});
+		});
 };
 
 /*
@@ -758,15 +788,15 @@ function adjustTo20(note, bareme){
 * */
 exports.listeParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher la liste des semestres.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des semestres."});
 	}
 
 	db.parcours.findAll({attributes: ['nomParcours']})
 		.then(parcours => {
 			return res.status(200).json(parcours);
 		})
-		.catch(error => {
-			return res.status(500).json("Impossible de charger la liste des semestres.");
+		.catch(() => {
+			return res.status(500).json({message: "Impossible de charger la liste des semestres."});
 		});
 }
 
@@ -779,7 +809,7 @@ exports.listeParcours = (req, res, next) => {
 * */
 exports.afficherRessourcesUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher la liste ressources et des U.E..");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste ressources et des U.E.."});
 	}
 
 	let objetRetourne = {
@@ -845,7 +875,7 @@ exports.afficherRessourcesUE = (req, res, next) => {
 				})
 		})
 		.catch(() => {
-			return res.status(500).json("Une erreur est survenue.");
+			return res.status(500).json({message: "Une erreur est survenue."});
 		});
 };
 
@@ -858,7 +888,7 @@ exports.afficherRessourcesUE = (req, res, next) => {
 * */
 exports.recupererParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher la liste des parcours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des parcours."});
 	}
 
 	db.parcours.findAll({
@@ -868,7 +898,7 @@ exports.recupererParcours = (req, res, next) => {
 			return res.status(200).json(parcours);
 		})
 		.catch(() => {
-			return res.status(500).json("Impossible de charger la liste des parcours.");
+			return res.status(500).json({message: "Impossible de charger la liste des parcours."});
 		});
 };
 
@@ -881,7 +911,7 @@ exports.recupererParcours = (req, res, next) => {
 * */
 exports.ajouterParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un parcours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un parcours."});
 	}
 
 	db.parcours.create({
@@ -891,7 +921,7 @@ exports.ajouterParcours = (req, res, next) => {
 			return res.status(200).json({message: "Le parcours a bien été créé."});
 		})
 		.catch(() => {
-			return res.status(500).json("Impossible de créer le parcours.");
+			return res.status(500).json({message: "Impossible de créer le parcours."});
 		});
 };
 
@@ -904,7 +934,7 @@ exports.ajouterParcours = (req, res, next) => {
 * */
 exports.supprimerParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un parcours.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un parcours."});
 	}
 
 	db.parcours.findOne({where: {
@@ -921,6 +951,6 @@ exports.supprimerParcours = (req, res, next) => {
 			return res.status(200).json({message: "Le parcours a bien été supprimé."});
 		})
 		.catch(() => {
-			return res.status(500).json("Impossible de supprimer le parcours.");
+			return res.status(500).json({message: "Impossible de supprimer le parcours."});
 		});
 };

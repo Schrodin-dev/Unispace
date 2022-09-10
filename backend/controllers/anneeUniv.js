@@ -9,7 +9,7 @@ const db = require('../models/index');
 * */
 exports.creerAnneeUniv = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour créer une année universitaire.");
+		return res.status(500).json({message: "Vous devez être admin pour créer une année universitaire."});
 	}
 
 	db.anneeUniv.create({
@@ -18,7 +18,9 @@ exports.creerAnneeUniv = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "L'année universitaire a bien été créée."});
 		})
-		.catch(error => {return res.status(500).json("Impossible de créer l'année universitaire");});
+		.catch(() => {
+			return res.status(500).json({message: "Impossible de créer l'année universitaire"});
+		});
 };
 
 /*
@@ -30,7 +32,7 @@ exports.creerAnneeUniv = (req, res, next) => {
 * */
 exports.supprimerAnneeUniv = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
-		return res.status(500).json("Vous devez être admin pour supprimer une année universitaire.");
+		return res.status(500).json({message: "Vous devez être admin pour supprimer une année universitaire."});
 	}
 
 	db.anneeUniv.findOne({where: {nomAnneeUniv: req.body.anneeUniv}})
@@ -44,5 +46,7 @@ exports.supprimerAnneeUniv = (req, res, next) => {
 		.then(() => {
 			return res.status(200).json({message: "L'année universitaire a bien été supprimée."});
 		})
-		.catch(error => {return res.status(500).json(error.message)});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };

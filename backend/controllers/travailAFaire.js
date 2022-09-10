@@ -10,7 +10,7 @@ const {Op, literal} = require("sequelize");
 * */
 exports.ajouterTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un travail à faire."});
 	}
 
 	// création du travail
@@ -58,7 +58,7 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 						lienDoc: document.lienDoc,
 						idTravailAFaire: travailAFaire.idTravailAFaire
 					})
-						.catch(error => {
+						.catch(() => {
 							throw new Error("Impossible de créer l'un des documents.");
 						})
 				);
@@ -75,7 +75,9 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le travail à faire de cours a bien été ajouté."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -87,13 +89,13 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 * */
 exports.supprimerTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un travail à faire."});
 	}
 
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(groupe => {
-			//vérificatio du groupe
+			//vérification du groupe
 			return db.travailAFaire.findOne({
 				where: {idTravailAFaire: req.body.travailAFaire},
 				include: {
@@ -113,7 +115,9 @@ exports.supprimerTravailAFaire = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le travail à faire a bien été supprimé."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -125,7 +129,7 @@ exports.supprimerTravailAFaire = (req, res, next) => {
 * */
 exports.modifierTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier un travail à faire."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -204,8 +208,7 @@ exports.modifierTravailAFaire = (req, res, next) => {
 			return res.status(201).json({message: "Le travail à faire a bien été modifié."});
 		})
 		.catch(error => {
-			console.error(error);
-			return res.status(500).json(error.message);
+			return res.status(500).json({message: error.message});
 		});
 };
 
@@ -218,7 +221,7 @@ exports.modifierTravailAFaire = (req, res, next) => {
 * */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un document à un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un travail à faire."});
 	}
 
 	db.travailAFaire.findOne({where: {idTravailAFaire: req.body.travailAFaire}})
@@ -257,7 +260,9 @@ exports.ajouterDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le document a bien été ajouté au travail à faire."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -269,7 +274,7 @@ exports.ajouterDocument = (req, res, next) => {
 * */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -312,7 +317,9 @@ exports.modifierDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(200).json({message: "Le document a bien été modifié."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -324,7 +331,7 @@ exports.modifierDocument = (req, res, next) => {
 * */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un document à un travail à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document à un travail à faire."});
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
@@ -357,7 +364,9 @@ exports.supprimerDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(200).json({message: "Le document a bien été supprimé."});
 		})
-		.catch(error => {return res.status(500).json(error.message);});
+		.catch(error => {
+			return res.status(500).json({message: error.message});
+		});
 };
 
 /*
@@ -369,7 +378,7 @@ exports.supprimerDocument = (req, res, next) => {
 * */
 exports.recupererEmbed = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les travails à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
 	}
 
 	//récupération de la date du devoir le plus proche dans le futur à partir de maintenant
@@ -411,7 +420,7 @@ exports.recupererEmbed = (req, res, next) => {
 			return res.status(200).json(travails);
 		})
 		.catch(() => {
-			return res.status(500).json("Impossible de récupérer les prochains travail à faire.");
+			return res.status(500).json({message: "Impossible de récupérer les prochains travail à faire."});
 		});
 };
 
@@ -424,7 +433,7 @@ exports.recupererEmbed = (req, res, next) => {
 * */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les travails à faire.");
+		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
 	}
 
 	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
@@ -467,6 +476,6 @@ exports.afficher = (req, res, next) => {
 			return res.status(200).json(travails);
 		})
 		.catch(error => {
-			return res.status(500).json("Impossible de charger la liste de travails à faire.");
+			return res.status(500).json({message: "Impossible de charger la liste de travails à faire."});
 		});
 }
