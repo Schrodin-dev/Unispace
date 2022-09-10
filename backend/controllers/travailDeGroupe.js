@@ -3,6 +3,13 @@ const {Op} = require("sequelize");
 const crypto = require('crypto');
 const randomUUID = crypto.randomUUID;
 
+/*
+* BUT: créer un nouveau travail de groupe (pour un projet, une SAÉ etc où les élèves doivent se mettre en groupe)
+*
+* paramètres: nom (=nomTravailDeGroupe), min (=membresMin), max (=membresMax), groupes (liste des groupes concernés)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.creerTravail = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour créer un travail de groupe."});
@@ -51,6 +58,13 @@ exports.creerTravail = (req, res, next) => {
 		});
 };
 
+/*
+* BUT: supprimer un travail de groupe
+*
+* paramètres: travail (=idTravailDeGroupe)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerTravail = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un travail de groupe."});
@@ -84,6 +98,13 @@ exports.supprimerTravail = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un travail de groupe
+*
+* paramètres: travail (=idTravailDeGroupe), nom (=nomTravailDeGroupe), min (=membresMin), max (=membresMax), groupes (liste des groupes concernés)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierTravail = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un travail de groupe."});
@@ -156,6 +177,13 @@ exports.modifierTravail = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: créer un groupe (avec plusieurs élèves, non renseignés ici) pour le travail de groupe
+*
+* paramètres: travail (travailDeGroupe.idTravailDeGroupe)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.creerGroupe = (req, res, next) => {
 	if(req.auth.droitsUser === 'non validé'){
 		return res.status(401).json("Vous n'avez pas les droits nécessaires pour créer un groupe de travail.");
@@ -208,6 +236,13 @@ exports.creerGroupe = (req, res, next) => {
 			.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: inviter un autre élève à rejoindre le groupe dans lequel l'utilisateur est
+*
+* paramètres: groupe (=idGroupeDeTravail), user (=user.emailUser)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.inviterGroupe = (req, res, next) => {
 	if(req.auth.droitsUser === 'non validé'){
 		return res.status(401).json("Vous n'avez pas les droits nécessaires pour inviter quelqu'un dans un groupe de travail.");
@@ -255,6 +290,13 @@ exports.inviterGroupe = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: accepter l'invitation d'un autre étudiant et rejoindre son groupe de travail
+*
+* paramètres: uuid (=UUIDInvitation)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.accepterInvitationGroupe = (req, res, next) => {
 	if(req.auth.droitsUser === 'non validé'){
 		return res.status(401).json("Vous n'avez pas les droits nécessaires pour rejoindre un groupe de travail.");
@@ -298,6 +340,13 @@ exports.accepterInvitationGroupe = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: refuser une invitation à rejoindre un groupe de travail
+*
+* paramètres: uuid (=UUIDInvitation)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.refuserInvitationGroupe = (req, res, next) => {
 	if(req.auth.droitsUser === 'non validé'){
 		return res.status(401).json("Vous n'avez pas les droits nécessaires pour refuser une invitation à un groupe de travail.");
@@ -327,6 +376,13 @@ exports.refuserInvitationGroupe = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: quitter le groupe de travail dans lequel l'étudiant est (devient Sans Groupe Fixe SGF :))
+*
+* paramètres: groupe (=idGroupeDeTravail)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.quitterGroupe = (req, res, next) => {
 	if(req.auth.droitsUser === 'non validé'){
 		return res.status(401).json("Vous n'avez pas les droits nécessaires pour quitter un groupe de travail.");
@@ -375,6 +431,13 @@ exports.quitterGroupe = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: afficher la liste des groupes pour un travail de groupe donné (type SAÉ) et le détail du travail de groupe
+*
+* paramètres: travail (=travailDeGroupe.idTravailDeGroupe)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.recupererGroupes = (req, res, next) => {
 	//affiche les groupes (avec leur ID) + les groupes auxquels l'utilisateur est invité, avec son UUID
 	if(req.auth.droitsUser === 'non validé'){
@@ -420,6 +483,13 @@ exports.recupererGroupes = (req, res, next) => {
 		})
 }
 
+/*
+* BUT: mettre en forme le détail d'un travail de groupe
+*
+* paramètres: travail, req
+*
+* droits requis: AUCUN
+* */
 function groupesParser(travail, req){
 	let parsed = {};
 

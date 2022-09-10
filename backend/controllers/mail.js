@@ -1,6 +1,13 @@
 const db = require('../models/index');
 const { Op } = require("sequelize");
 
+/*
+* BUT: faire une annonce par mail
+*
+* paramètres: destinataires (nom des destinataires: promo, année universitaire, classe, groupe), subject, contenu
+*
+* droits requis: délégué, admin --> dépend du destinataire ciblé
+* */
 exports.annonce = async (req, res, next) => {
 
     if(req.body.destinataires === undefined){
@@ -128,6 +135,13 @@ exports.annonce = async (req, res, next) => {
 
 };
 
+/*
+* BUT: envoie un mail à une ou plusieurs personnes
+*
+* paramètres: destinataires, subject, contenu
+*
+* droits requis: AUCUN
+* */
 function envoyerMails(destinataires, req, res){
     let emails = [];
     let i = 0;
@@ -153,6 +167,13 @@ function envoyerMails(destinataires, req, res){
     res.status(201).json({message: 'Votre annonce a bien été envoyée'});
 }
 
+/*
+* BUT: afficher la liste des destinataires en fonction des droits de l'utilisateur
+*
+* paramètres: AUCUN
+*
+* droits requis: délégué, admin
+* */
 exports.listeDestinataires = (req, res, next) => {
     let destinataires = [];
 

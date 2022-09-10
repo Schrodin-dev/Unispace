@@ -2,6 +2,13 @@ const db = require('../models/index');
 const {Op, literal} = require("sequelize");
 const groupeCtrl = require('../controllers/groupe');
 
+/*
+* BUT: ajouter un contenu de cours à l'agenda d'un ou de plusieurs groupes de la classe
+*
+* paramètres: groupes (=groupe.nomGroupe), date (=dateContenuCours), desc (=descContenuCours), cours (=cours.nomCours), docs
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.ajouterContenuCours = async (req, res, next) => {
 	if (req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué') {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un contenu de cours."});
@@ -73,6 +80,13 @@ exports.ajouterContenuCours = async (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer un contenu de cours de l'agenda, SSI appartient à la classe dont la groupe a l'agenda
+*
+* paramètres: contenuCours (=contenuCours.idContenuCours)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un contenu de cours à faire."});
@@ -105,6 +119,13 @@ exports.supprimerContenuCours = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un contenu de cours SSI l'utilisateur appartient à la classe dont le groupe possède l'agenda
+*
+* paramètres: date (=dateContenuCours), description (=descContenuCours), cours (=cours.nomCours), groupes (=groupe.nomGroupe)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un contenu de cours."});
@@ -179,6 +200,13 @@ exports.modifierContenuCours = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: ajouter un document à un contenu de cours
+*
+* paramètres: nom (=nomDoc), lienDoc, idContenuCours (=contenuCours.idContenuCours)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un contenu de cours."});
@@ -223,6 +251,13 @@ exports.ajouterDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un document d'un contenu de cours
+*
+* paramètres: doc (=idDoc), nom (=nomDoc), lienDoc
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours."});
@@ -261,6 +296,13 @@ exports.modifierDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer un document lié à un contenu de cours
+*
+* paramètres: doc (=idDoc)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours."});
@@ -292,6 +334,13 @@ exports.supprimerDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher la liste des contenus de cours pour son groupe
+*
+* paramètres: cours (=cours.nomCours)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les contenus de cours."});

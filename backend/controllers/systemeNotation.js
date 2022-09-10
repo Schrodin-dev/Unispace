@@ -1,6 +1,13 @@
 const db = require('../models/index');
 const {Op, literal} = require("sequelize");
 
+/*
+* BUT: ajouter une UE (équivalent d'une Compétence)
+*
+* paramètres: nom (=nomUE), numeroUE, parcours (=parcours.nomParcours)
+*
+* droits requis: admin
+* */
 exports.ajouterUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour créer une UE."});
@@ -17,6 +24,13 @@ exports.ajouterUE = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer une UE (équivalent d'une Compétence)
+*
+* paramètres: UE (=idUE)
+*
+* droits requis: admin
+* */
 exports.supprimerUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour supprimer une UE."});
@@ -37,6 +51,13 @@ exports.supprimerUE = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher la liste des UE
+*
+* paramètres: AUCUN
+*
+* droits requis: admin
+* */
 exports.recupererUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "vous n'avez pas les droits suffisants pour afficher les UE."});
@@ -49,10 +70,15 @@ exports.recupererUE = (req, res, next) => {
 		.catch(error => {res.status(500).json(error);});
 };
 
-
-
+/*
+* BUT: ajouter une ressource
+*
+* paramètres: nom (=nomRessource)
+*
+* droits requis: admin
+* */
 exports.ajouterRessource = (req, res, next) => {
-	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
+	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter une ressource"});
 	}
 
@@ -65,8 +91,15 @@ exports.ajouterRessource = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer une ressource
+*
+* paramètres: ressource (=idRessource)
+*
+* droits requis: admin
+* */
 exports.supprimerRessource = (req, res, next) => {
-	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
+	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer une ressource."});
 	}
 
@@ -85,6 +118,13 @@ exports.supprimerRessource = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher la liste des ressource
+*
+* paramètres: AUCUN
+*
+* droits requis: admin
+* */
 exports.recupererRessource = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour afficher les ressources."})
@@ -97,8 +137,13 @@ exports.recupererRessource = (req, res, next) => {
 		.catch(error => {res.status(500).json(error);});
 };
 
-
-
+/*
+* BUT: lier une ressource et une UE (Compétence) entre elles avec un coefficient donné
+*
+* paramètres: UE (=UE.idUE), ressource (=ressource.idRessource), coeff (=coeffRessource)
+*
+* droits requis: admin
+* */
 exports.lierRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour lier une UE et une ressource."});
@@ -115,6 +160,13 @@ exports.lierRessourceUE = (req, res, next) => {
 		.catch(error => {res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier le coefficient qui lie une ressource à une UE (compétence)
+*
+* paramètres: ressource (=ressource.idRessource), UE (=UE.idUE), coeff (=coeffRessource)
+*
+* droits requis: admin
+* */
 exports.modifierCoeffRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour modifier le coefficient entre une UE et une ressource."});
@@ -139,6 +191,13 @@ exports.modifierCoeffRessourceUE = (req, res, next) => {
 		.catch(error => {res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer le lien entre une ressource et une UE (Compétence)
+*
+* paramètres: ressource (=ressource.idRessource), UE (=UE.idUE)
+*
+* droits requis: admin
+* */
 exports.supprimerLienRessourceUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour supprimer le lien entre une UE et une ressource."});
@@ -162,8 +221,13 @@ exports.supprimerLienRessourceUE = (req, res, next) => {
 		.catch(error => {res.status(500).json(error);});
 }
 
-
-
+/*
+* BUT: ajouter un nouveau devoir pour une ressource (équivalent d'une matière, SAÉ, portfolio) donnée
+*
+* paramètres: nom (=nomDevoir), coeff (=coeffDevoir), noteMaxDevoir, ressource (=ressource.idRessource)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.ajouterDevoir = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un devoir."});
@@ -219,6 +283,13 @@ exports.ajouterDevoir = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un devoir pour un groupe de sa classe
+*
+* paramètres: devoir (=idDevoir), nom (=nomDevoir), coeff (=coeffDevoir), noteMaxDevoir, ressource (=ressource.idRessource)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierDevoir = (req, res, next) => {
 	console.log(req.body);
 
@@ -303,6 +374,13 @@ exports.modifierDevoir = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer un devoir pour un groupe de la classe de l'utilisateur
+*
+* paramètres: devoir (=idDevoir)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerDevoir = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un devoir."});
@@ -334,6 +412,13 @@ exports.supprimerDevoir = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: ajouter une note à un devoir
+*
+* paramètres: devoir (=devoir.idDevoir), note (=noteDevoir)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.ajouterNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter une note."});
@@ -374,6 +459,13 @@ exports.ajouterNote = (req, res, next) => {
 		.catch(error => {console.error(error);res.status(400).json({message: "Impossible de trouver le devoir."})});
 };
 
+/*
+* BUT: modifier la note obtenue à un devoir
+*
+* paramètres:  devoir (=devoir.idDevoir), note (=noteDevoir)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.modifierNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier une note."});
@@ -408,6 +500,13 @@ exports.modifierNote = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer une note à un devoir
+*
+* paramètres: devoir (=devoir.idDevoir)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.supprimerNote = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer une note."});
@@ -431,6 +530,13 @@ exports.supprimerNote = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher le bulletin de notes détaillé avec d'une part les ressources et ses devoirs, et d'autre part un résumé des moyennes obtenues pour chaque UE (Compétence)
+*
+* paramètres: AUCUN
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.detailDesNotes = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des notes."});
@@ -493,6 +599,13 @@ exports.detailDesNotes = (req, res, next) => {
 		.catch(error => {console.error(error);return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher un bref aperçu des dernières notes (jusqu'à 5) de l'utilisateur
+*
+* paramètres: AUCUN
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.dernieresNotes = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'élève'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher des notes."});
@@ -517,6 +630,13 @@ exports.dernieresNotes = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error)});
 };
 
+/*
+* BUT: calculer les moyennes des ressources et des UE en fonction des coefficients définis
+*
+* paramètres: detail
+*
+* droits requis: AUCUN
+* */
 function calculateurMoyennes(detail){
 	let parsedNotes = [];
 
@@ -582,6 +702,13 @@ function calculateurMoyennes(detail){
 	return lessDetailledNotes(parsedNotes);
 }
 
+/*
+* BUT: séparer dans le tableau de notes avec les moyennes, les ressources et les UE (puisqu'un UE peut avoir plusieurs ressources)
+*
+* paramètres: detail
+*
+* droits requis: AUCUN
+* */
 function lessDetailledNotes(detail){
 	let result = {
 		UE: [],
@@ -608,10 +735,24 @@ function lessDetailledNotes(detail){
 	return result;
 }
 
+/*
+* BUT: ramener une note sur 20
+*
+* paramètres: note, bareme
+*
+* droits requis: AUCUN
+* */
 function adjustTo20(note, bareme){
 	return (note*20)/bareme;
 }
 
+/*
+* BUT: lister les différents parcours au sein du BUT
+*
+* paramètres: AUCUN
+*
+* droits requis: admin
+* */
 exports.listeParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des semestres."});
@@ -626,6 +767,13 @@ exports.listeParcours = (req, res, next) => {
 		})
 }
 
+/*
+* BUT: afficher la liste des UE et des ressources pour un parcours donné, ainsi que les coefficients, s'ils existent, qui lient une ressource à une UE
+*
+* paramètres: parcours (=parcours.nomParcours)
+*
+* droits requis: admin
+* */
 exports.afficherRessourcesUE = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste ressources et des U.E.."});
@@ -695,6 +843,13 @@ exports.afficherRessourcesUE = (req, res, next) => {
 		});
 };
 
+/*
+* BUT: récupérer la liste des parcours
+*
+* paramètres: AUCUN
+*
+* droits requis: admin
+* */
 exports.recupererParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des parcours."});
@@ -711,6 +866,13 @@ exports.recupererParcours = (req, res, next) => {
 		});
 };
 
+/*
+* BUT: ajouter un nouveau parcours
+*
+* paramètres: nomParcours
+*
+* droits requis: admin
+* */
 exports.ajouterParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour ajouter un parcours."});
@@ -727,6 +889,13 @@ exports.ajouterParcours = (req, res, next) => {
 		});
 };
 
+/*
+* BUT: supprimer un parcours
+*
+* paramètres: parcours (=parcours.nomParcours)
+*
+* droits requis: admin
+* */
 exports.supprimerParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour supprimer un parcours."});

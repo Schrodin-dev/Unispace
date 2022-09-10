@@ -4,6 +4,13 @@ const jsonwebtoken = require('jsonwebtoken');
 const crypto = require('crypto');
 const randomUUID = crypto.randomUUID;
 
+/*
+* BUT: enregister un nouvel étudiant
+*
+* paramètres: email (=emailUser), nom (=nomUser), prenom (=prenomUser), password (=mdpUser), groupe (=groupe.nomGroupe)
+*
+* droits requis: AUCUN
+* */
 exports.register = async (req, res, next) => {
 
 
@@ -58,6 +65,13 @@ exports.register = async (req, res, next) => {
         });
 };
 
+/*
+* BUT: mettre à jour les données de l'utilisateur avec les nouvelles données saisies
+*
+* paramètres: nom (=nomUser), prenom (=prenomUser), groupe (=groupe.nomGroupe), annonces (=accepteRecevoirAnnonces), password (=mdpUser)
+*
+* droits requis: AUCUN
+* */
 exports.changementsDonneesCompte = async (req, res, next) => {
     //règle numéro 1 : ne jamais faire confiance à l'utilisateur 😇
     //vérification des données avant insertion
@@ -114,7 +128,6 @@ exports.changementsDonneesCompte = async (req, res, next) => {
                 });
         })
         .then(user => {
-            console.log(user);
             user.save()
                 .then(() => {
                     res.status(201).json({message: 'Les modifications ont été prises en compte.'})
@@ -127,6 +140,13 @@ exports.changementsDonneesCompte = async (req, res, next) => {
 
 };
 
+/*
+* BUT: connecter l'utilisateur et lui fournir son token de connexion
+*
+* paramètres: email (=emailUser), password (=mdpUser)
+*
+* droits requis: AUCUN
+* */
 exports.login = (req, res, next) => {
     db.user.findOne({
         where: {emailUser: req.body.email},
@@ -177,6 +197,13 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
+/*
+* BUT: supprimer un utilisateur et toutes ses données
+*
+* paramètres: AUCUN
+*
+* droits requis: AUCUN
+* */
 exports.supprimerCompte = (req , res, next) => {
     db.user.findOne({where: {emailUser: req.auth.userEmail}})
         .then(user => {
@@ -189,6 +216,13 @@ exports.supprimerCompte = (req , res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
+/*
+* BUT: vérifier le compte d'un utilisateur (et notamment que l'email fournie est bien un email universitaire)
+*
+* paramètres: codeVerification
+*
+* droits requis: AUCUN
+* */
 exports.validerCompte = (req, res, next) => {
   db.user.findOne({where: {codeVerification: req.body.codeVerification}})
       .then(user => {
@@ -211,6 +245,13 @@ exports.validerCompte = (req, res, next) => {
       .catch(error => res.status(500).json({error}));
 };
 
+/*
+* BUT: envoyer ou renvoyer un code de vérification pour vérifier le compte ou réinitialiser le mot de passe, en fonction de si le compte est déjà vérifié ou non
+*
+* paramètres: email (=emailUser)
+*
+* droits requis: AUCUN
+* */
 exports.renvoyerCodeVerification = (req, res, next) => {
   db.user.findOne({where: {emailUser: req.body.email}})
       .then(async user => {
@@ -239,6 +280,13 @@ exports.renvoyerCodeVerification = (req, res, next) => {
       .catch(error => res.status(500).json({error}));
 };
 
+/*
+* BUT: changer son mot de passe à l'aide d'un code de vérification
+*
+* paramètres: codeVerification
+*
+* droits requis: AUCUN
+* */
 exports.changerMotDePasse = (req, res, next) => {
     db.user.findOne({where: {codeVerification: req.body.codeVerification}})
         .then(async user => {
@@ -267,6 +315,13 @@ exports.changerMotDePasse = (req, res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
+/*
+* BUT: afficher la liste des utilisateurs de l'application, seulement ceux de la classe pour un délégué et tous pour un admin
+*
+* paramètres: AUCUN
+*
+* droits requis: délégué, admin
+* */
 exports.afficherUtilisateurs = (req, res, next) => {
     switch(req.auth.droitsUser){
         case 'admin':
@@ -302,6 +357,13 @@ exports.afficherUtilisateurs = (req, res, next) => {
     }
 };
 
+/*
+* BUT: modifier les droits d'un utilisateur
+*
+* paramètres: user (=emailUser), droits (=droitsUser)
+*
+* droits requis: délégué, admin
+* */
 exports.modifierDroits = (req, res, next) => {
     switch(req.auth.droitsUser){
         case 'admin':
@@ -361,6 +423,13 @@ exports.modifierDroits = (req, res, next) => {
     }
 };
 
+/*
+* BUT: afficher la liste des classes-->groupes lors du register ou de la modification des informations d'un utilisateur
+*
+* paramètres: AUCUN
+*
+* droits requis: AUCUN
+* */
 exports.visualiserClasses = (req, res, next) => {
   db.classe.findAll({
       include: {
@@ -380,6 +449,13 @@ exports.visualiserClasses = (req, res, next) => {
       .catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: retourne si l'utilisateur accepte de recevoir des annonces par mail ou non
+*
+* paramètres: AUCUN
+*
+* droits requis: AUCUN
+* */
 exports.voirAccepteAnnonces = (req, res, next) => {
     db.user.findOne({
         where: {emailUser: req.auth.userEmail},
@@ -391,6 +467,13 @@ exports.voirAccepteAnnonces = (req, res, next) => {
         .catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher la liste des thèmes
+*
+* paramètres: AUCUN
+*
+* droits requis: AUCUN
+* */
 exports.recupererThemes = (req, res, next) => {
     db.theme.findAll({
         attributes: ['idTheme']
@@ -401,6 +484,13 @@ exports.recupererThemes = (req, res, next) => {
         .catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: modifier le thème que l'utilisateur utilise
+*
+* paramètres: theme (=idTheme)
+*
+* droits requis: AUCUN
+* */
 exports.modifierTheme = (req, res, next) => {
     db.user.findOne({where: {emailUser: req.auth.userEmail}})
         .then(user => {
@@ -429,6 +519,13 @@ exports.modifierTheme = (req, res, next) => {
         })
 }
 
+/*
+* BUT: afficher la liste des thèmes détaillée
+*
+* paramètres: AUCUN
+*
+* droits requis: admin
+* */
 exports.recupererThemesAdmin = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour afficher le détail des thèmes."});
 
@@ -439,6 +536,13 @@ exports.recupererThemesAdmin = (req, res, next) => {
         .catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: ajouter un nouveau thème à la liste des thèmes
+*
+* paramètres: source (=sourceTheme), couleurPrincipale (=couleurPrincipaleTheme), couleurFond (=couleurFond)
+*
+* droits requis: admin
+* */
 exports.ajouterTheme = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour ajouter un thème."});
 
@@ -455,6 +559,13 @@ exports.ajouterTheme = (req, res, next) => {
         .catch(error => {return res.status(500).json(error);});
 }
 
+/*
+* BUT: supprimer un thème de la liste des thèmes
+*
+* paramètres: theme (=idTheme)
+*
+* droits requis: admin
+* */
 exports.supprimerTheme = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin') return res.status(500).json({message: "Vous n'avez pas les droits nécessaires pour supprimer un thème."});
 

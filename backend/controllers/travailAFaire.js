@@ -1,6 +1,13 @@
 const db = require('../models/index');
 const {Op, literal} = require("sequelize");
 
+/*
+* BUT: ajouter à l'agenda d'un ou plusieurs groupes d'une classe un nouveau travail à faire (comme un devoir)
+*
+* paramètres: date (=dateTravailAFaire), description (=descTravailAFaire), estNote, cours (=cours.nomCours), groupes (=groupe.nomGroupe), documents (liste des documents)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.ajouterTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un travail à faire."});
@@ -66,6 +73,13 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer un travail à faire (devoir) pour un groupe de la classe de l'utilisateur
+*
+* paramètres: travailAFaire (=idTravailAFaire)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un travail à faire."});
@@ -98,6 +112,13 @@ exports.supprimerTravailAFaire = (req, res, next) => {
 	.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un travail à faire (devoir) pour un ou plusieurs groupe.s de la classe de l'utilisateur
+*
+* paramètres: travailAFaire (=idTravailAFaire), date (=dateTravailAFaire), description (=descTravailAFaire), estNote, cours (=cours.nomCours), groupes (=groupe.nomGroupe)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un travail à faire."});
@@ -176,6 +197,13 @@ exports.modifierTravailAFaire = (req, res, next) => {
 		.catch(error => {console.error(error);return res.status(500).json(error);});
 };
 
+/*
+* BUT: ajouter un document à un travail à faire (devoir) --> le document est un lien vers un autre site
+*
+* paramètres: travailAFaire (=travailAFaire.idTravailAFaire), nom (=nomDoc), lienDoc
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un travail à faire."});
@@ -220,6 +248,13 @@ exports.ajouterDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: modifier un document d'un travail à faire (devoir)
+*
+* paramètres: doc (=docTravailARendre.idDoc), nom (=nomDoc), lienDoc
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire."});
@@ -258,6 +293,13 @@ exports.modifierDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer un document d'un travail à faire (devoir)
+*
+* paramètres: doc (docTravailARendre.idDoc)
+*
+* droits requis: publicateur, délégué, admin
+* */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document à un travail à faire."});
@@ -289,6 +331,13 @@ exports.supprimerDocument = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: afficher un cours aperçu des prochains travails à faire (jusqu'à 3)
+*
+* paramètres: AUCUN
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.recupererEmbed = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
@@ -336,6 +385,13 @@ exports.recupererEmbed = (req, res, next) => {
 		});
 };
 
+/*
+* BUT: afficher une page des travails à faire suivant une matière donnée, une date minimale de rendu et un numéro de page donnée. Retourne jusqu'à 10 travail à faire.
+*
+* paramètres: cours (=cours.nomCours), dateMin (=dateTravailAFaire), pagination (numéro de la page à afficher)
+*
+* droits requis: élève, publicateur, délégué, admin
+* */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});

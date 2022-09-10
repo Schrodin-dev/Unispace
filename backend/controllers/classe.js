@@ -1,5 +1,12 @@
 const db = require('../models/index');
 
+/*
+* BUT: créer une nouvelle classe
+*
+* paramètres: nomClasse,anneeUniv (=anneeUniv.nomAnneeUniv), nomParcours (=parcours.nomParcours)
+*
+* droits requis: admin
+* */
 exports.creerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
         return res.status(401).json({message: "Vous devez être admin pour créer une classe."})
@@ -18,6 +25,13 @@ exports.creerClasse = (req, res, next) => {
         });
 }
 
+/*
+* BUT: supprimer une classe
+*
+* paramètres: classe (=nomClasse)
+*
+* droits requis: admin
+* */
 exports.supprimerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
         return res.status(401).json({message: "Vous devez être admin pour supprimer une classe."})

@@ -1,5 +1,12 @@
 const db = require('../models/index');
 
+/*
+* BUT: ajouter une année universitaire
+*
+* paramètres: nomAnneeUniv
+*
+* droits requis: admin
+* */
 exports.creerAnneeUniv = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour créer une année universitaire."});
@@ -14,6 +21,13 @@ exports.creerAnneeUniv = (req, res, next) => {
 		.catch(error => {return res.status(500).json(error);});
 };
 
+/*
+* BUT: supprimer une année universitaire
+*
+* paramètres: anneeUniv (=nomAnneeUniv)
+*
+* droits requis: admin
+* */
 exports.supprimerAnneeUniv = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(401).json({message: "Vous devez être admin pour supprimer une année universitaire."});
