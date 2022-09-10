@@ -37,7 +37,6 @@ export class AnnonceComponent implements OnInit {
 			  this.destinataires = destinataires;
 		  })
 		  .catch(error => {
-			  console.error(error);
 			  this.message = '';
 			  this.error = error.error.message;
 		  })

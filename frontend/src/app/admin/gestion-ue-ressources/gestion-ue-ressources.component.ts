@@ -66,7 +66,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 				this.liens = value.liens;
 			})
 			.catch(error => {
-				this.error = error;
+				this.error = error.error.message;
 			})
   }
 
@@ -120,8 +120,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 				this.chargerTableau(this.form.value.parcours);
 			})
 			.catch(error => {
-				console.error(error);
-				this.error = error;
+				this.error = error.error.message;
 			});
 	}
 
@@ -133,7 +132,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 				this.chargerTableau(this.form.value.parcours);
 			})
 			.catch(error => {
-				this.error = error;
+				this.error = error.error.message;
 			});
 	}
 

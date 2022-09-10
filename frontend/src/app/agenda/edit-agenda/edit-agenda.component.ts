@@ -159,11 +159,7 @@ export class EditAgendaComponent implements OnInit {
 								this.close.emit(true);
 							})
 							.catch(error => {
-								if(error !== undefined && error.message != undefined){
-									this.error = error;
-								}else{
-									this.error = error;
-								}
+								this.error = error.error.message;
 							});
 
 						break;
@@ -174,11 +170,7 @@ export class EditAgendaComponent implements OnInit {
 								for (let doc of this.addedDocs) {
 									await this.requestsService.ajouterDocumentTravailAFaire(Number(this.travail.id), doc.doc.nom, doc.doc.lien)
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 
@@ -186,11 +178,7 @@ export class EditAgendaComponent implements OnInit {
 								for (let doc of this.editedDocs) {
 									await this.requestsService.modifierDocumentTravailAFaire(Number(doc.doc.id), doc.doc.nom, doc.doc.lien)
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 
@@ -199,11 +187,7 @@ export class EditAgendaComponent implements OnInit {
 									console.log(doc.id)
 									await this.requestsService.supprimerDocumentTravailAFaire(Number(doc.id))
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 							})
@@ -211,11 +195,7 @@ export class EditAgendaComponent implements OnInit {
 								this.close.emit(true);
 							})
 							.catch(error => {
-								if(error !== undefined && error.message != undefined){
-									this.error = error;
-								}else{
-									this.error = error;
-								}
+								this.error = error.error.message;
 							});
 
 						break;
@@ -238,11 +218,7 @@ export class EditAgendaComponent implements OnInit {
 								this.close.emit(true);
 							})
 							.catch(error => {
-								if(error !== undefined && error.message != undefined){
-									this.error = error;
-								}else{
-									this.error = error;
-								}
+								this.error = error.error.message;
 							});
 
 						break;
@@ -253,11 +229,7 @@ export class EditAgendaComponent implements OnInit {
 								for (let doc of this.addedDocs) {
 									await this.requestsService.ajouterDocumentContenuCours(Number(this.travail.id), doc.doc.nom, doc.doc.lien)
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 
@@ -265,11 +237,7 @@ export class EditAgendaComponent implements OnInit {
 								for (let doc of this.editedDocs) {
 									await this.requestsService.modifierDocumentContenuCours(Number(doc.doc.id), doc.doc.nom, doc.doc.lien)
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 
@@ -278,11 +246,7 @@ export class EditAgendaComponent implements OnInit {
 									console.log(doc.id)
 									await this.requestsService.supprimerDocumentContenuCours(Number(doc.id))
 										.catch(error => {
-											if (error !== undefined && error.message != undefined) {
-												this.error = error;
-											} else {
-												this.error = error;
-											}
+											this.error = error.error.message;
 										});
 								}
 							})
@@ -290,11 +254,7 @@ export class EditAgendaComponent implements OnInit {
 								this.close.emit(true);
 							})
 							.catch(error => {
-								if(error !== undefined && error.message != undefined){
-									this.error = error;
-								}else{
-									this.error = error;
-								}
+								this.error = error.error.message;
 							});
 
 						break;
@@ -342,11 +302,7 @@ export class EditAgendaComponent implements OnInit {
 							this.close.emit(true);
 						})
 						.catch(error => {
-							if(error !== undefined && error.message != undefined){
-								this.error = error;
-							}else{
-								this.error = error;
-							}
+							this.error = error.error.message;
 						});
 					break;
 				case 'contenu de cours':
@@ -355,11 +311,7 @@ export class EditAgendaComponent implements OnInit {
 							this.close.emit(true);
 						})
 						.catch(error => {
-							if(error !== undefined && error.message != undefined){
-								this.error = error;
-							}else{
-								this.error = error;
-							}
+							this.error = error.error.message;
 						});
 					break;
 				default:

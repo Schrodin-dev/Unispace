@@ -73,7 +73,7 @@ export class DetailComponent implements OnInit {
 		  })
 		  .catch(error => {
 			  this.detail = [];
-			  this.error = error;
+			  this.error = error.error.message;
 		  });
   }
 }

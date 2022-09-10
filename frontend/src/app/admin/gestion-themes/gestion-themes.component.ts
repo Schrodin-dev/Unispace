@@ -38,7 +38,7 @@ export class GestionThemesComponent implements OnInit {
 			  this.ajouterTheme = false;
 		  })
 		  .catch(error => {
-			  this.error = error.error.massage;
+			  this.error = error.error.message;
 		  });
   }
 
@@ -58,7 +58,7 @@ export class GestionThemesComponent implements OnInit {
 				this.rechargerThemes();
 			})
 			.catch(error => {
-				this.error = error.error.massage;
+				this.error = error.error.message;
 			});
 	}
 
@@ -72,7 +72,7 @@ export class GestionThemesComponent implements OnInit {
 				this.rechargerThemes();
 			})
 			.catch(error => {
-				this.error = error.error.massage;
+				this.error = error.error.message;
 			});
 	}
 }

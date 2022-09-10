@@ -73,13 +73,7 @@ export class DetailContentTodoComponent implements OnInit {
 				  }
 			  })
 			  .catch(error => {
-				  console.log(error);
-				  if(error.error !== undefined && error.error.message !== undefined){
-					  this.error = error.error.message;
-				  }else{
-					  this.error = error;
-				  }
-
+				  this.error = error.error.message;
 			  });
 	  }else{ // contenu cours
 		  this.requestsService.chargerPageContenuCours(this.date, this.pagination, this.matiere || '')
@@ -91,13 +85,7 @@ export class DetailContentTodoComponent implements OnInit {
 				  }
 			  })
 			  .catch(error => {
-				  console.log(error);
-				  if(error.error !== undefined && error.error.message !== undefined){
-					  this.error = error.error.message;
-				  }else{
-					  this.error = error;
-				  }
-
+				  this.error = error.error.message;
 			  });
 	  }
   }
