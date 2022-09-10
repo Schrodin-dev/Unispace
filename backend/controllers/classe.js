@@ -9,7 +9,7 @@ const db = require('../models/index');
 * */
 exports.creerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous devez être admin pour créer une classe."})
+        return res.status(500).json("Vous devez être admin pour créer une classe.")
     }
 
     db.classe.create({
@@ -38,7 +38,7 @@ exports.creerClasse = (req, res, next) => {
 * */
 exports.supprimerClasse = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous devez être admin pour supprimer une classe."})
+        return res.status(500).json("Vous devez être admin pour supprimer une classe.")
     }
 
     db.classe.findOne({where: {nomClasse: req.body.classe}})

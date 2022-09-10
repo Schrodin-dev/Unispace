@@ -11,27 +11,30 @@ const groupeCtrl = require('../controllers/groupe');
 * */
 exports.ajouterContenuCours = async (req, res, next) => {
 	if (req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué') {
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un contenu de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un contenu de cours.");
 	}
 
 	db.cours.findOne({where: {nomCours: req.body.cours}})
 		.then(cours => {
 			if(!cours){
-				return res.status(400).json({message: "Impossible de trouver le cours correspondant."});
+				return res.status(500).json("Impossible de trouver le cours correspondant.");
 			}
 
-			db.contenuCours.create({
+			return db.contenuCours.create({
 				dateContenuCours: req.body.date,
 				descContenuCours: req.body.description,
 				nomCours: req.body.cours,
 			})
-				.then(async contenuCours => {
-					try {
+				.then(contenuCours => {
+					let listePromesses = [];
+
 						//ajout des groupes
-						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
-							.then(async userGroupe => {
+						listePromesses.push(db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+							.then(userGroupe => {
+								let listePromessesGroupes = [];
+
 								for (const groupe of req.body.groupes) {
-									await db.groupe.findOne({
+									listePromessesGroupes.push(db.groupe.findOne({
 										where: {
 											[Op.and]: {
 												nomClasse: userGroupe.nomClasse,
@@ -39,45 +42,40 @@ exports.ajouterContenuCours = async (req, res, next) => {
 											}
 										}
 									})
-										.then(async groupe => {
+										.then(groupe => {
 											if (!groupe) {
-												throw {message: "Impossible de trouver l'un des groupes."};
+												throw new Error("Impossible de trouver l'un des groupes.");
 											}
 
-											await contenuCours.addGroupe(groupe.nomGroupe)
-												.catch(error => {
-													throw error;
-												})
+											return contenuCours.addGroupe(groupe.nomGroupe);
 										})
-										.catch(error => {
-											throw error;
-										});
+									);
 								}
+
+								return Promise.all(listePromessesGroupes);
 							})
-							.catch(error => {
-								throw error;
-							});
+						);
 
 						// ajout des documents liés au travail
-						for (const document of req.body.documents) {
-							db.docsContenuCours.create({
+						for(const document of req.body.documents){
+							listePromesses.push(db.docsContenuCours.create({
 								nomDoc: document.nom,
 								lienDoc: document.lienDoc,
 								idContenuCours: contenuCours.idContenuCours
 							})
 								.catch(error => {
-									throw error
-								});
+									throw new Error("Impossible de créer l'un des documents.");
+								})
+							);
 						}
 
-						return res.status(201).json({message: "Le contenu de cours a bien été ajouté."});
-					} catch (error) {
-						return res.status(500).json(error);
-					}
+						return Promise.all(listePromesses);
+					})
 				})
-				.catch(error => {return res.status(500).json(error);});
+		.then(() => {
+			return res.status(201).json({message: "Le contenu de cours a bien été ajouté."});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -89,13 +87,14 @@ exports.ajouterContenuCours = async (req, res, next) => {
 * */
 exports.supprimerContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un contenu de cours à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un contenu de cours à faire.");
 	}
 
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(groupe => {
-			db.contenuCours.findOne({
+			//récupération du contenu de cours
+			return db.contenuCours.findOne({
 				where: {idContenuCours: req.body.contenuCours},
 				include: {
 					model: db.groupe,
@@ -103,20 +102,19 @@ exports.supprimerContenuCours = (req, res, next) => {
 					where: {nomClasse: groupe.nomClasse}
 				}
 			})
-				.then(contenuCours => {
-					if(!contenuCours){
-						return res.status(500).json({message: "Impossible de trouver le contenu de cours."});
-					}
-
-					contenuCours.destroy()
-						.then(() => {
-							return res.status(201).json({message: "Le contenu de cours a bien été supprimé."});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(500).json(error);});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(contenuCours => {
+			//suppression du contenu de cours
+			if(!contenuCours){
+				throw new Error("Impossible de trouver le contenu de cours.");
+			}
+
+			return contenuCours.destroy();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le contenu de cours a bien été supprimé."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -128,12 +126,13 @@ exports.supprimerContenuCours = (req, res, next) => {
 * */
 exports.modifierContenuCours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un contenu de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un contenu de cours.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(groupe => {
-			db.contenuCours.findOne({
+			//récupération du contenu de cours
+			return db.contenuCours.findOne({
 				where: {idContenuCours: req.body.contenuCours},
 				include: {
 					model: db.groupe,
@@ -141,63 +140,74 @@ exports.modifierContenuCours = (req, res, next) => {
 					where: {nomClasse: groupe.nomClasse}
 				}
 			})
-				.then(async contenuCours => {
-					if (!contenuCours) {
-						return res.status(400).json({message: "Impossible de trouver le contenu de cours."});
-					}
-
-					if (req.body.date.length > 0) {
-						contenuCours.dateContenuCours = req.body.date;
-					}
-					if (req.body.description.length > 0) {
-						contenuCours.descContenuCours = req.body.description;
-					}
-					if (req.body.cours.length > 0) {
-						await db.cours.findOne({where: {nomCours: req.body.cours}})
-							.then(cours => {
-								if(cours){
-									contenuCours.nomCours = cours.nomCours;
-								}
-							})
-					}
-
-					let erreurAjoutGroupe = false;
-					if (req.body.groupes.length > 0) {
-						await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
-							.then(async userGroupe => {
-								for(const groupe of req.body.groupes){
-									await db.groupe.findOne({where: {
-											[Op.and]: {
-												nomClasse: userGroupe.nomClasse,
-												nomGroupe: groupe
-											}
-										}})
-										.catch(error => {
-											erreurAjoutGroupe = true;
-											return res.status(500).json(error);
-										});
-								}
-							})
-							.then(() => {
-								contenuCours.setGroupes(req.body.groupes);
-							})
-							.catch(error => {
-								erreurAjoutGroupe = true;
-								return res.status(500).json(error);
-							});
-					}
-
-					if(!erreurAjoutGroupe) contenuCours.save()
-						.then(() => {
-							return res.status(201).json({message: "Le contenu de cours a bien été modifié."});
-						})
-						.catch(error => {
-							return res.status(500).json(error);
-						});
-				})
-				.catch(error => {return res.status(500).json(error);});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(contenuCours => {
+			//modification des différents champs
+			if (!contenuCours) {
+				throw new Error("Impossible de trouver le contenu de cours.");
+			}
+
+			if (req.body.date.length > 0) {
+				contenuCours.dateContenuCours = req.body.date;
+			}
+			if (req.body.description.length > 0) {
+				contenuCours.descContenuCours = req.body.description;
+			}
+
+			let promessesCours = [];
+			if (req.body.cours.length > 0) {
+				promessesCours.push(db.cours.findOne({where: {nomCours: req.body.cours}})
+					.then(cours => {
+						if(cours){
+							contenuCours.nomCours = cours.nomCours;
+						}
+					})
+				);
+			}
+
+			return Promise.all(promessesCours)
+				.then(() => {
+					return contenuCours;
+				})
+		})
+		.then(contenuCours => {
+			//modification des groupes liés
+			let promessesGroupes = [];
+
+			if (req.body.groupes.length > 0) {
+				db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+					.then(userGroupe => {
+						//vérification de la validité des groupes
+						for(const groupe of req.body.groupes){
+							promessesGroupes.push(db.groupe.findOne({where: {
+									[Op.and]: {
+										nomClasse: userGroupe.nomClasse,
+										nomGroupe: groupe
+									}
+								}})
+								.catch(error => {
+									throw new Error("Impossible de modifier l'un des groupes");
+								})
+							);
+						}
+					})
+					.then(() => {
+						contenuCours.setGroupes(req.body.groupes);
+					});
+			}
+
+			return Promise.all(promessesGroupes)
+				.then(() => {
+					return contenuCours;
+				})
+		})
+		.then(contenuCours => {
+			return contenuCours.save()
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le contenu de cours a bien été modifié."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -209,15 +219,20 @@ exports.modifierContenuCours = (req, res, next) => {
 * */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un contenu de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un document à un contenu de cours.");
 	}
 
 	db.contenuCours.findOne({where: {idContenuCours: req.body.contenuCours}})
 		.then(contenuCours => {
-			contenuCours.getGroupes()
+			// récupération des groupes du contenu de cours
+			return contenuCours.getGroupes()
+				.catch(() => {
+					throw new Error("Impossible de récupérer la liste des groupes pour ce contenu de cours.");
+				})
 				.then(groupes => {
-					db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+					return db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 						.then(userGroupe => {
+							//vérifie si l'utilisateur a le droit d'ajouter un document à ce contenu de cours
 							let groupeValide = false;
 							for(const groupe of groupes){
 								if (groupe.nomClasse === userGroupe.nomClasse){
@@ -227,28 +242,28 @@ exports.ajouterDocument = (req, res, next) => {
 							}
 
 							if(!groupeValide){
-								return res.status(401).json({message: "Vous ne pouvez pas ajouter de document à ce contenu de cours."});
+								throw new Error("Vous ne pouvez pas ajouter de document à ce contenu de cours.");
 							}
 
-							db.docsContenuCours.create({
+							return db.docsContenuCours.create({
 								nomDoc: req.body.nom,
 								lienDoc: req.body.lienDoc,
 								idContenuCours: contenuCours.idContenuCours
 							})
-								.then(doc => {
-									doc.save()
-										.then(() => {
-											return res.status(201).json({message: "Le document a bien été ajouté au contenu de cours."});
-										})
-										.catch(error => {return res.status(500).json(error);});
-								})
-								.catch(error => {return res.status(500).json(error);});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(500).json(error);});
+								.catch(() => {
+									throw new Error("Impossible de créer le nouveau document.");
+								});
+						});
+				});
+
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(doc => {
+			return doc.save();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le document a bien été ajouté au contenu de cours."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -260,12 +275,13 @@ exports.ajouterDocument = (req, res, next) => {
 * */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un document d'un contenu de cours.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(userGroupe => {
-			db.docsContenuCours.findOne({
+			//récupérer le document
+			return db.docsContenuCours.findOne({
 				include: {
 					model: db.contenuCours,
 					required: true,
@@ -277,23 +293,28 @@ exports.modifierDocument = (req, res, next) => {
 				},
 				where: {idDoc: req.body.doc}
 			})
-				.then(doc => {
-					if(req.body.nom.length > 0){
-						doc.nomDoc = req.body.nom;
-					}
-					if(req.body.lienDoc.length > 0){
-						doc.lienDoc = req.body.lienDoc;
-					}
-
-					doc.save()
-						.then(() => {
-							return res.status(201).json({message: "Le document a bien été modifié."});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à modifier."});});
+				.catch(() => { throw new Error("Impossible de trouver le document à modifier.");});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(doc => {
+			//application des modifications
+			if(!doc){
+				throw new Error("Impossible de trouver le document à modifier.");
+			}
+
+
+			if(req.body.nom.length > 0){
+				doc.nomDoc = req.body.nom;
+			}
+			if(req.body.lienDoc.length > 0){
+				doc.lienDoc = req.body.lienDoc;
+			}
+
+			return doc.save();
+		})
+		.then(() => {
+			return res.status(200).json({message: "Le document a bien été modifié."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -305,12 +326,13 @@ exports.modifierDocument = (req, res, next) => {
 * */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un document d'un contenu de cours.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(userGroupe => {
-			db.docsContenuCours.findOne({
+			//récupération du document
+			return db.docsContenuCours.findOne({
 				include: {
 					model: db.contenuCours,
 					required: true,
@@ -322,14 +344,20 @@ exports.supprimerDocument = (req, res, next) => {
 				},
 				where: {idDoc: req.body.doc}
 			})
-				.then(doc => {
-					doc.destroy()
-						.then(() => {
-							return res.status(201).json({message: "Le document a bien été supprimé."});
-						})
-						.catch(error => {return res.status(500).json(error);});
+				.catch(() => {
+					throw new Error("Impossible de trouver le document.");
 				})
-				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à supprimer."});});
+		})
+		.then(doc => {
+			//suppresion du document
+			if(!doc){
+				throw new Error("Impossible de trouver le document.");
+			}
+
+			return doc.destroy();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le document a bien été supprimé."});
 		})
 		.catch(error => {return res.status(500).json(error);});
 };
@@ -343,7 +371,7 @@ exports.supprimerDocument = (req, res, next) => {
 * */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les contenus de cours."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les contenus de cours.");
 	}
 
 	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
@@ -381,9 +409,13 @@ exports.afficher = (req, res, next) => {
 		order: ['dateContenuCours']
 	})
 		.then(contenu => {
+			if(!contenu){
+				throw new Error("Impossible de charger la liste des contenus de cours.");
+			}
+
 			return res.status(200).json(contenu);
 		})
 		.catch(error => {
-			return res.status(500).json({messsage: error});
+			return res.status(500).json("Impossible de charger la liste des contenus de cours.");
 		});
 }
