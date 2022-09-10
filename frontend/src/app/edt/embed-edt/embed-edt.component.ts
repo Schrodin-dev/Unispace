@@ -25,7 +25,10 @@ export class EmbedEdtComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private requests: RequestsService, private authService: AuthService) { }
 
   ngOnInit(): void {
-	  this.embedEdtDate = new BehaviorSubject<Date>(new Date());
+	  let date = new Date();
+	  date.setHours(0, 0, 0, 0);
+
+	  this.embedEdtDate = new BehaviorSubject<Date>(date);
 	  this.embedEdtDate.subscribe(date => {
 		  this.date = date;
 		  this.chargerEdt(this.date.toISOString());

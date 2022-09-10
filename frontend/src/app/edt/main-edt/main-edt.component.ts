@@ -33,9 +33,10 @@ export class MainEdtComponent implements OnInit {
 
   selectStartDate(){
 	  this.date = new Date();
-	  this.initialWeek = new Date();
+	  this.date.setHours(0, 0, 0, 0);
+	  this.initialWeek = new Date(this.date);
 	  this.initialWeek.setFullYear(2021, 7, 25);
-	  this.initialWeek.setFullYear(new Date().getFullYear());
+	  this.initialWeek.setFullYear(this.date.getFullYear());
 	  this.initialWeek = this.dateToMonday(this.initialWeek);
 	  if(this.date.getDate() < this.initialWeek.getDate()){
 		  this.date = this.initialWeek;
