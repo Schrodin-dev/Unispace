@@ -96,6 +96,10 @@ export class MenuComponent implements OnInit {
 				  name: "Gestion thèmes",
 			  },
 			  {
+				  path: "admin/gestionParcours",
+				  name: "Gestion parcours",
+			  },
+			  {
 				  path: "admin/annonce",
 				  name: "Faire une annonce"
 			  }

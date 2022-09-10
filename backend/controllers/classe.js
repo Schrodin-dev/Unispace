@@ -7,7 +7,8 @@ exports.creerClasse = (req, res, next) => {
 
     db.classe.create({
         nomAnneeUniv: req.body.anneeUniv,
-        nomClasse: req.body.nomClasse
+        nomClasse: req.body.nomClasse,
+        nomParcours: req.body.nomParcours
     })
         .then(() => {
             res.status(201).json({message: "La classe a bien été créée."});

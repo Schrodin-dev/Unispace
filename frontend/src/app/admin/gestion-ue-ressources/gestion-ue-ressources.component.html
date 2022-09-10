@@ -1,11 +1,11 @@
 <div id="bigContainer">
 	<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 		<form id="semestreSelector" [formGroup]="form">
-			<label for="semestre" [ngClass]="couleurTexte">Semestre</label>
+			<label for="parcours" [ngClass]="couleurTexte">Parcours</label>
 			<div class="dropDown">
-				<select id="semestre" formControlName="semestre" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
-					<option selected *ngIf="form.value.semestre === null"></option>
-					<option *ngFor="let semestre of semestres" [value]="semestre">semestre {{ semestre }}</option>
+				<select id="parcours" formControlName="parcours" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+					<option selected *ngIf="form.value.parcours === null"></option>
+					<option *ngFor="let p of parcours" [value]="p">parcours {{ p }}</option>
 				</select>
 			</div>
 		</form>
@@ -45,5 +45,5 @@
 		</div>
 	</div>
 
-	<app-ajouter-ressource-ue *ngIf="ajouterUERessource" [semestre]="form.value.semestre" [type]="ajouterUERessource" (ajout)="chargerTableau(form.value.semestre)"></app-ajouter-ressource-ue>
+	<app-ajouter-ressource-ue *ngIf="ajouterUERessource" [parcours]="form.value.parcours" [type]="ajouterUERessource" (ajout)="chargerTableau(form.value.parcours)"></app-ajouter-ressource-ue>
 </div>

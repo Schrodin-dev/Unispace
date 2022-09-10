@@ -16,7 +16,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 	couleurTexte!: String;
 	error!: String;
 
-	semestres!: Number[];
+	parcours!: String[];
 	UE!: UEAdmin[];
 	ressources!: RessourceAdmin[];
 	liens!: LienRessourceUE[];
@@ -41,24 +41,24 @@ export class GestionUeRessourcesComponent implements OnInit {
   }
 
   private genererFormulaire(){
-		this.requestsService.getListeSemestres()
+		this.requestsService.getListeParcours()
 			.then(value => {
-				this.semestres = value;
+				this.parcours = value;
 			})
 
 		this.form = this.formBuilder.group({
-			semestre: [null, Validators.required]
+			parcours: [null, Validators.required]
 		});
 
 		this.form.valueChanges.subscribe(value => {
-			if(value.semestre !== undefined && value.semestre !== null){
-				this.chargerTableau(value.semestre);
+			if(value.parcours !== undefined && value.parcours !== null){
+				this.chargerTableau(value.parcours);
 			}
 		})
   }
 
-  chargerTableau(semestre: number){
-		this.requestsService.afficherRessourcesUE(semestre)
+  chargerTableau(parcours: String){
+		this.requestsService.afficherRessourcesUE(parcours)
 			.then(value => {
 				this.ajouterUERessource = '';
 				this.UE = value.UE;
@@ -117,7 +117,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 
 		this.requestsService.supprimerRessource(Number(ressource.id))
 			.then(() => {
-				this.chargerTableau(this.form.value.semestre);
+				this.chargerTableau(this.form.value.parcours);
 			})
 			.catch(error => {
 				console.error(error);
@@ -130,7 +130,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 
 		this.requestsService.supprimerUE(Number(ue.id))
 			.then(() => {
-				this.chargerTableau(this.form.value.semestre);
+				this.chargerTableau(this.form.value.parcours);
 			})
 			.catch(error => {
 				this.error = error;
@@ -161,7 +161,7 @@ export class GestionUeRessourcesComponent implements OnInit {
 				this.modifierLien = [];
 				this.ajouterLien = [];
 
-				this.chargerTableau(this.form.value.semestre);
+				this.chargerTableau(this.form.value.parcours);
 			})
 			.catch(error => {
 				this.error = error.error.message;

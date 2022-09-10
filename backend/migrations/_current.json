@@ -294,28 +294,30 @@
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
                 },
-                "ressourceIdRessource": {
-                    "primaryKey": true,
-                    "references": {
-                        "model": "ressource",
-                        "key": "idRessource"
-                    },
-                    "onDelete": "CASCADE",
-                    "onUpdate": "CASCADE",
-                    "field": "ressourceIdRessource",
-                    "allowNull": true,
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "UEIdUE": {
-                    "primaryKey": true,
+                    "allowNull": false,
                     "references": {
                         "model": "UE",
                         "key": "idUE"
                     },
-                    "onDelete": "CASCADE",
+                    "onDelete": "NO ACTION",
                     "onUpdate": "CASCADE",
                     "field": "UEIdUE",
-                    "allowNull": true,
+                    "primaryKey": true,
+                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "ressourceIdRessource": {
+                    "allowNull": false,
+                    "references": {
+                        "model": "ressource",
+                        "key": "idRessource"
+                    },
+                    "onDelete": "NO ACTION",
+                    "onUpdate": "CASCADE",
+                    "field": "ressourceIdRessource",
+                    "primaryKey": true,
+                    "unique": "etreLieUE_UEIdUE_ressourceIdRessource_unique",
                     "seqType": "Sequelize.INTEGER"
                 }
             },

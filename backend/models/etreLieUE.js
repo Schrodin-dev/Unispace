@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
 		 */
 		static associate(models) {
 			// define association here
-			//etreLieUE.belongsTo(models.ressource);
-			//etreLieUE.belongsTo(models.UE);
+			etreLieUE.belongsTo(models.UE, {foreignKey: {allowNull: false}});
+			etreLieUE.belongsTo(models.ressource, {foreignKey: {allowNull: false}});
 		}
 	}
 	etreLieUE.init({

@@ -1,0 +1,32 @@
+@import "../../../scss/composants/forms";
+@import "../../../scss/composants/panelsComps";
+
+#bigContainer{
+	display:flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+#listeParcours{
+	width: calc(100% - 40px);
+
+	> div{
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+}
+
+.panel{
+	margin: 30px 10px;
+	padding: 10px;
+}
+
+form{
+	display:flex;
+	flex-direction: column;
+
+	button{
+		align-self: center;
+	}
+}

@@ -553,23 +553,23 @@ export class RequestsService{
 			});
 	}
 
-	getListeSemestres():Promise<Number[]>{
-		return this.httpClient.get(backend.url + '/api/notation/ressourceUE/listeSemestres').toPromise()
-			.then(semestres => {
-				let listeSemestres: Number[] = [];
+	getListeParcours():Promise<String[]>{
+		return this.httpClient.get(backend.url + '/api/notation/ressourceUE/listeParcours').toPromise()
+			.then(parcours => {
+				let listeParcours: String[] = [];
 
 				// @ts-ignore
-				for(let s of semestres){
-					listeSemestres.push(s.nomSemestre);
+				for(let p of parcours){
+					listeParcours.push(p.nomParcours);
 				}
 
-				return listeSemestres;
+				return listeParcours;
 			})
 	}
 
-	afficherRessourcesUE(semestre: number):Promise<{ressources: RessourceAdmin[], UE: UEAdmin[], liens: LienRessourceUE[]}>{
+	afficherRessourcesUE(parcours: String):Promise<{ressources: RessourceAdmin[], UE: UEAdmin[], liens: LienRessourceUE[]}>{
 		return this.httpClient.post(backend.url + '/api/notation/ressourceUE/afficher', {
-			semestre: semestre
+			parcours: parcours
 		})
 			.toPromise()
 			.then(objet => {
@@ -598,11 +598,11 @@ export class RequestsService{
 			});
 	}
 
-	ajouterUE(nom: String, numeroUE: number, semestre: number):Promise<String>{
+	ajouterUE(nom: String, numeroUE: number, parcours: String):Promise<String>{
 		return this.httpClient.post(backend.url + '/api/notation/UE/ajouter', {
 			nom: nom,
 			numeroUE: numeroUE,
-			semestre: semestre
+			parcours: parcours
 		})
 			.toPromise()
 			.then(message => {
@@ -729,10 +729,11 @@ export class RequestsService{
 			});
 	}
 
-	ajouterClasse(nom: String, anneeUniv: String): Promise<String>{
+	ajouterClasse(nom: String, anneeUniv: String, parcours: String): Promise<String>{
 		return this.httpClient.post(backend.url + '/api/classe/ajouter', {
 			nomClasse: nom,
-			anneeUniv: anneeUniv
+			anneeUniv: anneeUniv,
+			nomParcours: parcours
 		})
 			.toPromise()
 			.then(message => {
@@ -859,6 +860,43 @@ export class RequestsService{
 			destinataires: destinataires,
 			subject: sujet,
 			contenu: contenu
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	listeParcours(): Promise<String[]>{
+		return this.httpClient.get(backend.url + '/api/notation/parcours/afficher')
+			.toPromise()
+			.then(liste => {
+				let parcours: String[] = [];
+
+				// @ts-ignore
+				for(let p of liste){
+					parcours.push(p.nomParcours);
+				}
+
+				return parcours;
+			});
+	}
+
+	ajouterParcours(nom: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/parcours/ajouter', {
+			nomParcours: nom
+		})
+			.toPromise()
+			.then(message => {
+				// @ts-ignore
+				return message.message;
+			});
+	}
+
+	supprimerParcours(nom: String): Promise<String>{
+		return this.httpClient.post(backend.url + '/api/notation/parcours/supprimer', {
+			parcours: nom
 		})
 			.toPromise()
 			.then(message => {

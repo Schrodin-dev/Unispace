@@ -1,0 +1,19 @@
+<div id="bigContainer">
+	<div id="listeParcours" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
+		<div *ngFor="let p of listeParcours">
+			<p [ngClass]="couleurTexte">{{ p }}</p>
+			<app-suppr-emitter [nomObjetASupprimer]="'parcours ' + p" (supprimer)="supprimerParcours($event, p)"></app-suppr-emitter>
+		</div>
+
+		<button type="button" class="textButton" (click)="ajouterParcours()" [ngClass]="couleurTexte">Ajouter un parcours</button>
+	</div>
+
+	<form [formGroup]="form" class="panel" *ngIf="ajouter">
+		<h1 [ngClass]="couleurTexte">Ajouter parcours</h1>
+
+		<label for="nomParcours" [ngClass]="couleurTexte">Nom parcours</label>
+		<input type="text" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" id="nomParcours" formControlName="nomParcours" class="inputText"/>
+
+		<button type="submit" [ngClass]="couleurTexte" [disabled]="form.invalid" (click)="validerAjoutParcours()" class="textButton">Ajouter</button>
+	</form>
+</div>

@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      UE.belongsToMany(models.ressource, {through: models.etreLieUE});
       UE.hasMany(models.etreLieUE);
+      UE.belongsToMany(models.ressource, {through: models.etreLieUE});
       UE.belongsTo(models.parcours, {foreignKey: {
         name: 'nomParcours',
         allowNull: false

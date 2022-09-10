@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ressource.belongsToMany(models.UE, {through: models.etreLieUE});
       ressource.hasMany(models.etreLieUE);
+      ressource.belongsToMany(models.UE, {through: models.etreLieUE});
       ressource.hasMany(models.devoir, {foreignKey: {
         name: 'idRessource',
         allowNull: false

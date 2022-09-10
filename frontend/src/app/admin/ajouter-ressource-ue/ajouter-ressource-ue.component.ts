@@ -9,7 +9,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
   styleUrls: ['./ajouter-ressource-ue.component.scss']
 })
 export class AjouterRessourceUEComponent implements OnInit {
-	@Input() semestre!: number;
+	@Input() parcours!: String;
 	@Input() type!: String;
 	@Output() ajout: EventEmitter<any> = new EventEmitter<any>();
 
@@ -48,7 +48,7 @@ export class AjouterRessourceUEComponent implements OnInit {
 
   onSubmit(){
 	  if(this.type === 'UE'){
-		  this.requestsService.ajouterUE(this.form.value.nom, this.form.value.numeroUE, this.semestre)
+		  this.requestsService.ajouterUE(this.form.value.nom, this.form.value.numeroUE, this.parcours)
 			  .then(() => {
 				  this.ajout.emit();
 			  })

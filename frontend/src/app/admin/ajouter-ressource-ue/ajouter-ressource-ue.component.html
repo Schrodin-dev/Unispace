@@ -1,7 +1,7 @@
 <div id="container" class="panel">
-	<h1 *ngIf="semestre !== undefined; else ajouterRessource;" [ngClass]="couleurTexte">Ajouter UE</h1>
+	<h1 *ngIf="parcours !== undefined; else ajouterRessource;" [ngClass]="couleurTexte">Ajouter UE</h1>
 	<ng-template #ajouterRessource>
-		<h1 [ngClass]="couleurTexte">Ajouter ressource</h1>
+		<h1 [ngClass]="couleurTexte">Ajouter {{ type }}</h1>
 	</ng-template>
 
 	<form [formGroup]="form">

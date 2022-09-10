@@ -9,7 +9,7 @@ exports.ajouterUE = (req, res, next) => {
 	db.UE.create({
 		nomUE: req.body.nom,
 		numeroUE : req.body.numeroUE,
-		nomSemestre: req.body.semestre
+		nomParcours: req.body.parcours
 	})
 		.then(() => {
 			return res.status(201).json({message: "L'UE a bien été créée."});
@@ -436,51 +436,53 @@ exports.detailDesNotes = (req, res, next) => {
 		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des notes."});
 	}
 
-	db.UE.findAll({
-		include: [
-			{
-				model: db.ressource,
-				include: {
-					model: db.devoir,
-					required: false,
-					include: [
-						{
-							required: false,
-							model: db.note,
-							where: {userEmailUser: req.auth.userEmail},
-							attributes: ['noteDevoir']
-						},
-						{
-							required: true,
-							model: db.groupe,
-							attributes: ['nomGroupe'],
-						}
-					],
-					where: { idDevoir: {[Op.in]: literal("(SELECT DISTINCT idDevoir FROM aPourDevoir WHERE nomGroupe = '" + req.auth.userGroupe + "')")}},
-					attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir', 'idDevoir']
-				},
-			},
-			{
-				model: db.semestre,
-				required: true,
-				include: {
-					model: db.anneeUniv,
-					required: true,
-					include: {
-						model: db.classe,
-						required: true,
-						include: {
-							model: db.groupe,
-							required: true,
-							where: { nomGroupe: req.auth.userGroupe }
-						}
-					}
-				}
+	db.classe.findOne({
+		include: {
+			model: db.groupe,
+			required: true,
+			where: {
+				nomGroupe: req.auth.userGroupe
 			}
-		],
-		attributes : ['nomUE', 'numeroUE'],
-		order: ['numeroUE']
+		},
+		attributes: ['nomParcours']
 	})
+		.then(classe => {
+			if(!classe){
+				return res.status(500).json({message: "Impossible de trouver le parcours de votre classe."});
+			}
+
+			return db.UE.findAll({
+				include: [
+					{
+						model: db.ressource,
+						include: {
+							model: db.devoir,
+							required: false,
+							include: [
+								{
+									required: false,
+									model: db.note,
+									where: {userEmailUser: req.auth.userEmail},
+									attributes: ['noteDevoir']
+								},
+								{
+									required: true,
+									model: db.groupe,
+									attributes: ['nomGroupe'],
+								}
+							],
+							where: {idDevoir: {[Op.in]: literal("(SELECT DISTINCT idDevoir FROM aPourDevoir WHERE nomGroupe = '" + req.auth.userGroupe + "')")}},
+							attributes: ['nomDevoir', 'coeffDevoir', 'noteMaxDevoir', 'idDevoir']
+						},
+					}
+				],
+				/*where: {
+					nomParcours: classe.nomParcours
+				},*/
+				attributes: ['nomUE', 'numeroUE', 'nomParcours'],
+				order: ['numeroUE']
+			});
+		})
 		.then(detail => {
 			if(detail === null){
 				return res.status(400).json({message: "Aucune note trouvée."});
@@ -610,14 +612,14 @@ function adjustTo20(note, bareme){
 	return (note*20)/bareme;
 }
 
-exports.listeSemestres = (req, res, next) => {
+exports.listeParcours = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin'){
 		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des semestres."});
 	}
 
-	db.semestre.findAll({attributes: ['nomSemestre']})
-		.then(semestres => {
-			return res.status(200).json(semestres);
+	db.parcours.findAll({attributes: ['nomParcours']})
+		.then(parcours => {
+			return res.status(200).json(parcours);
 		})
 		.catch(error => {
 			return res.status(500).json({message: "Impossible de charger la liste des semestres."});
@@ -635,15 +637,15 @@ exports.afficherRessourcesUE = (req, res, next) => {
 		coeffs: []
 	};
 
-	db.semestre.findOne({where: {nomSemestre: req.body.semestre}})
-		.then(semestre => {
-			if(!semestre){
-				return res.status(400).json({message: "Impossible de trouver le semestre."});
+	db.parcours.findOne({where: {nomParcours: req.body.parcours}})
+		.then(parcours => {
+			if(!parcours){
+				return res.status(400).json({message: "Impossible de trouver le parcours."});
 			}
 
-			return semestre;
+			return parcours;
 		})
-		.then(semestre => {
+		.then(parcours => {
 			return db.ressource.findAll()
 				.then(ressources => {
 					if(ressources !== undefined){
@@ -654,7 +656,7 @@ exports.afficherRessourcesUE = (req, res, next) => {
 				})
 				.then(() => {
 					return db.UE.findAll({
-							where: {nomSemestre: semestre.nomSemestre}
+							where: {nomParcours: parcours.nomParcours}
 						})
 						.then(listeUE => {
 							if(listeUE !== undefined){
@@ -668,7 +670,7 @@ exports.afficherRessourcesUE = (req, res, next) => {
 								include: {
 									model: db.UE,
 									required: true,
-									where: {nomSemestre: semestre.nomSemestre}
+									where: {nomParcours: parcours.nomParcours}
 								}
 							})
 								.then(liens => {
@@ -689,9 +691,61 @@ exports.afficherRessourcesUE = (req, res, next) => {
 				})
 		})
 		.catch(error => {
-			console.error(error);
 			return res.status(500).json("Une erreur est survenue.");
+		});
+};
+
+exports.recupererParcours = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin'){
+		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour afficher la liste des parcours."});
+	}
+
+	db.parcours.findAll({
+		attributes: ['nomParcours']
+	})
+		.then(parcours => {
+			return res.status(200).json(parcours);
 		})
+		.catch(error => {
+			return res.status(500).json("Impossible de charger la liste des parcours.");
+		});
+};
 
+exports.ajouterParcours = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin'){
+		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour ajouter un parcours."});
+	}
 
-}
+	db.parcours.create({
+		nomParcours: req.body.nomParcours
+	})
+		.then(() => {
+			return res.status(200).json({message: "Le parcours a bien été créé."});
+		})
+		.catch(error => {
+			return res.status(500).json("Impossible de créer le parcours.");
+		});
+};
+
+exports.supprimerParcours = (req, res, next) => {
+	if(req.auth.droitsUser !== 'admin'){
+		return res.status(400).json({message: "Vous n'avez pas les droits suffisants pour supprimer un parcours."});
+	}
+
+	db.parcours.findOne({where: {
+			nomParcours: req.body.parcours
+		}})
+		.then(parcours => {
+			if(!parcours){
+				return res.status(500).json({message: "Impossible de trouver le parcours."});
+			}
+
+			return parcours.destroy();
+		})
+		.then(() => {
+			return res.status(200).json({message: "Le parcours a bien été supprimé."});
+		})
+		.catch(error => {
+			return res.status(500).json("Impossible de supprimer le parcours.");
+		});
+};

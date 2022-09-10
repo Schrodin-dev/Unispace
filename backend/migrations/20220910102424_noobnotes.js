@@ -20,7 +20,7 @@ const Sequelize = require("sequelize");
  * createTable() => "user", deps: [groupe, theme]
  * createTable() => "docsTravailARendre", deps: [travailAFaire]
  * createTable() => "note", deps: [devoir, user]
- * createTable() => "etreLieUE", deps: [ressource, UE]
+ * createTable() => "etreLieUE", deps: [UE, ressource]
  * createTable() => "travailler", deps: [groupeDeTravail, user]
  * createTable() => "aFait", deps: [contenuCours, groupe]
  * createTable() => "aPourDevoir", deps: [devoir, groupe]
@@ -32,7 +32,7 @@ const Sequelize = require("sequelize");
 const info = {
   revision: 1,
   name: "noobnotes",
-  created: "2022-09-09T22:12:13.198Z",
+  created: "2022-09-10T10:24:24.386Z",
   comment: "",
 };
 
@@ -737,23 +737,25 @@ const migrationCommands = (transaction) => [
           field: "updatedAt",
           allowNull: false,
         },
-        ressourceIdRessource: {
-          type: Sequelize.INTEGER,
-          allowNull: true,
-          field: "ressourceIdRessource",
-          onUpdate: "CASCADE",
-          onDelete: "CASCADE",
-          references: { model: "ressource", key: "idRessource" },
-          primaryKey: true,
-        },
         UEIdUE: {
           type: Sequelize.INTEGER,
-          allowNull: true,
+          unique: "etreLieUE_UEIdUE_ressourceIdRessource_unique",
+          primaryKey: true,
           field: "UEIdUE",
           onUpdate: "CASCADE",
-          onDelete: "CASCADE",
+          onDelete: "NO ACTION",
           references: { model: "UE", key: "idUE" },
+          allowNull: false,
+        },
+        ressourceIdRessource: {
+          type: Sequelize.INTEGER,
+          unique: "etreLieUE_UEIdUE_ressourceIdRessource_unique",
           primaryKey: true,
+          field: "ressourceIdRessource",
+          onUpdate: "CASCADE",
+          onDelete: "NO ACTION",
+          references: { model: "ressource", key: "idRessource" },
+          allowNull: false,
         },
       },
       { transaction },

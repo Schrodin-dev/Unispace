@@ -43,6 +43,15 @@
 			<ng-template #isAnneeUniv>
 				<input type="number" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: couleurFond}" class="inputText" id="nom" formControlName="nom">
 			</ng-template>
+			<ng-container *ngIf="ajouter === 'classe'">
+				<label for="parcours" [ngClass]="couleurTexte">Parcours</label>
+				<div class="dropDown">
+					<select id="parcours" formControlName="nomParcours" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}" [ngClass]="couleurTexte">
+						<option selected *ngIf="form.value.nomParcours === null"></option>
+						<option *ngFor="let p of parcours" [value]="p">parcours {{ p }}</option>
+					</select>
+				</div>
+			</ng-container>
 		</ng-container>
 
 		<ng-container *ngIf="ajouter === 'groupe' || ajouter === 'modifierLienICal'">

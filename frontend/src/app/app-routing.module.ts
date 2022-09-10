@@ -16,6 +16,7 @@ import {GestionUeRessourcesComponent} from "./admin/gestion-ue-ressources/gestio
 import {AnnonceComponent} from "./admin/annonce/annonce.component";
 import {GestionGroupesComponent} from "./admin/gestion-groupes/gestion-groupes.component";
 import {GestionThemesComponent} from "./admin/gestion-themes/gestion-themes.component";
+import {GestionParcoursComponent} from "./admin/gestion-parcours/gestion-parcours.component";
 
 const routes: Routes = [
   { path: '', canActivate: [AuthGuard], component: MainPageComponent},
@@ -37,7 +38,8 @@ const routes: Routes = [
 	{ path:'admin/gestionUERessources', canActivate: [AuthGuard], component: GestionUeRessourcesComponent},
 	{ path:'admin/annonce', canActivate: [AuthGuard], component: AnnonceComponent},
 	{ path:'admin/gestionGroupes', canActivate: [AuthGuard], component: GestionGroupesComponent},
-	{ path:'admin/gestionThemes', canActivate: [AuthGuard], component: GestionThemesComponent}
+	{ path:'admin/gestionThemes', canActivate: [AuthGuard], component: GestionThemesComponent},
+	{ path:'admin/gestionParcours', canActivate: [AuthGuard], component: GestionParcoursComponent}
 ];
 
 @NgModule({

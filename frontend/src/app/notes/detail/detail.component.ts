@@ -54,7 +54,7 @@ export class DetailComponent implements OnInit {
 		  }
 	  }
 
-	  return nbUEValide >= 3;
+	  return (this.resumeUE.length > 3 && nbUEValide >= 3) || (nbUEValide === 3);
   }
 
   onModificationNote(ressource: Ressource, note: Note){

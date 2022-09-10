@@ -14,7 +14,7 @@ router.get('/ressource/recuperer', systemeNotationCtrl.recupererRessource);
 router.post('/ressourceUE/lier', systemeNotationCtrl.lierRessourceUE);
 router.post('/ressourceUE/modifierCoeff', systemeNotationCtrl.modifierCoeffRessourceUE);
 router.post('/ressourceUE/supprimer', systemeNotationCtrl.supprimerLienRessourceUE);
-router.get('/ressourceUE/listeSemestres', systemeNotationCtrl.listeSemestres);
+router.get('/ressourceUE/listeParcours', systemeNotationCtrl.listeParcours);
 router.post('/ressourceUE/afficher', systemeNotationCtrl.afficherRessourcesUE);
 
 router.post('/devoir/ajouter', systemeNotationCtrl.ajouterDevoir);
@@ -27,5 +27,9 @@ router.post('/note/supprimer', systemeNotationCtrl.supprimerNote);
 
 router.get('/detail', systemeNotationCtrl.detailDesNotes);
 router.get('/dernieresNotes', systemeNotationCtrl.dernieresNotes);
+
+router.get('/parcours/afficher', systemeNotationCtrl.listeParcours);
+router.post('/parcours/ajouter', systemeNotationCtrl.ajouterParcours);
+router.post('/parcours/supprimer', systemeNotationCtrl.supprimerParcours);
 
 module.exports = router;

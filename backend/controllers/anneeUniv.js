@@ -9,22 +9,8 @@ exports.creerAnneeUniv = (req, res, next) => {
 		nomAnneeUniv: req.body.nom
 	})
 		.then(() => {
-			try{
-				db.semestre.create({
-					nomSemestre : parseInt(req.body.nom)*2 - 1,
-					nomAnneeUniv: req.body.nom
-				})
 					.catch(error => {throw error});
-				db.semestre.create({
-					nomSemestre : parseInt(req.body.nom)*2,
-					nomAnneeUniv: req.body.nom
-				})
-					.catch(error => {throw error});
-
-				return res.status(201).json({message: "L'année universitaire a bien été créée."});
-			}catch(error) {
-				return res.status(500).json(error);
-			}
+			return res.status(201).json({message: "L'année universitaire a bien été créée."});
 		})
 		.catch(error => {return res.status(500).json(error);});
 };

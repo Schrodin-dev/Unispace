@@ -13,6 +13,7 @@ export class GestionGroupesComponent implements OnInit {
 	couleurTexte!: String;
 
 	detail!: {anneeUniv: String, classes: {classe: String, groupes: String[]}[]}[];
+	parcours!: String[];
 	ajouter!: string;
 	form!: FormGroup;
 	nMoinsUn!: String;
@@ -33,10 +34,17 @@ export class GestionGroupesComponent implements OnInit {
 
   private chargerDetails(){
 	  this.requestsService.getDetailGroupes()
-		  .then(detail => {this.detail = detail; console.log(detail)})
+		  .then(detail => {this.detail = detail;})
 		  .catch(error => {
 			  this.error = error.error.message;
+		  });
+	  this.requestsService.getListeParcours()
+		  .then(parcours => {
+			  this.parcours = parcours;
 		  })
+		  .catch(error => {
+			  this.error = error.error.message;
+		  });
   }
 
 	add(type: string, nMoinsUn?: String) {
@@ -52,7 +60,8 @@ export class GestionGroupesComponent implements OnInit {
 			case 'classe':
 				this.ajouter = type;
 				this.form = this.formBuilder.group({
-					nom: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(2)]]
+					nom: [null, [Validators.required, Validators.minLength(1), Validators.maxLength(2)]],
+					nomParcours: [null, [Validators.required, Validators.maxLength(10)]]
 				});
 
 				if(nMoinsUn) this.nMoinsUn = nMoinsUn;
@@ -129,7 +138,8 @@ export class GestionGroupesComponent implements OnInit {
 					});
 				break;
 			case 'classe':
-				this.requestsService.ajouterClasse(this.form.value.nom, this.nMoinsUn)
+				console.log(this.form.value.nomParcours);
+				this.requestsService.ajouterClasse(this.form.value.nom, this.nMoinsUn, this.form.value.nomParcours)
 					.then(() => {
 						this.chargerDetails();
 						this.ajouter = '';
