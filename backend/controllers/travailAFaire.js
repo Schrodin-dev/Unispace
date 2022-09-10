@@ -10,7 +10,7 @@ const {Op, literal} = require("sequelize");
 * */
 exports.ajouterTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un travail à faire.");
 	}
 
 	// création du travail
@@ -20,13 +20,16 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 		estNote: req.body.estNote,
 		nomCours: req.body.cours
 	})
-		.then(async travailAFaire => {
-			try {
-				//ajout des groupes
-				await db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
-					.then(async userGroupe => {
-						for (const groupe of req.body.groupes) {
-							await db.groupe.findOne({
+		.then(travailAFaire => {
+			let listePromesses = [];
+
+			//ajout des groupes
+			listePromesses.push(db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
+				.then(userGroupe => {
+					let listePromessesGroupes = [];
+
+					for (const groupe of req.body.groupes) {
+						listePromessesGroupes.push(db.groupe.findOne({
 								where: {
 									[Op.and]: {
 										nomClasse: userGroupe.nomClasse,
@@ -34,43 +37,45 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 									}
 								}
 							})
-								.then(async groupe => {
+								.then(groupe => {
 									if (!groupe) {
-										throw {message: "Impossible de trouver l'un des groupes."};
+										throw new Error("Impossible de trouver l'un des groupes.");
 									}
 
-									await travailAFaire.addGroupe(groupe.nomGroupe)
-										.catch(error => {
-											throw error;
-										})
+									return travailAFaire.addGroupe(groupe.nomGroupe);
 								})
-								.catch(error => {
-									throw error;
-								});
-						}
-					})
-					.catch(error => {
-						throw error;
-					});
+						);
+					}
 
-				// ajout des documents liés au travail
-				for (const document of req.body.documents) {
-					db.docsTravailARendre.create({
+					return Promise.all(listePromessesGroupes);
+				})
+			);
+
+			// ajout des documents liés au travail
+			for(const document of req.body.documents){
+				listePromesses.push(db.docsTravailARendre.create({
 						nomDoc: document.nom,
 						lienDoc: document.lienDoc,
 						idTravailAFaire: travailAFaire.idTravailAFaire
 					})
 						.catch(error => {
-							throw error
-						});
-				}
-
-				return res.status(201).json({message: "Le travail à faire a bien été ajouté."});
-			} catch (error) {
-				return res.status(500).json({messsage: error});
+							throw new Error("Impossible de créer l'un des documents.");
+						})
+				);
 			}
+
+			return Promise.all(listePromesses)
+				.then(() => {
+					return travailAFaire;
+				})
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(travailAFaire => {
+			return travailAFaire.save();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le travail à faire de cours a bien été ajouté."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -82,13 +87,14 @@ exports.ajouterTravailAFaire = (req, res, next) => {
 * */
 exports.supprimerTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un travail à faire.");
 	}
 
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(groupe => {
-			db.travailAFaire.findOne({
+			//vérificatio du groupe
+			return db.travailAFaire.findOne({
 				where: {idTravailAFaire: req.body.travailAFaire},
 				include: {
 					model: db.groupe,
@@ -96,20 +102,18 @@ exports.supprimerTravailAFaire = (req, res, next) => {
 					where: {nomClasse: groupe.nomClasse}
 				}
 			})
-				.then(travailAFaire => {
-					if(!travailAFaire){
-						return res.status(400).json({message: "Impossible de trouver le travail à faire."});
-					}
+		})
+		.then(travailAFaire => {
+			if(!travailAFaire){
+				throw new Error("Impossible de trouver le travail à faire.");
+			}
 
-					travailAFaire.destroy()
-						.then(() => {
-							return res.status(201).json({message: "Le travail à faire a bien été supprimé."});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(500).json(error);});
-	})
-	.catch(error => {return res.status(500).json(error);});
+			return travailAFaire.destroy();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le travail à faire a bien été supprimé."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -121,12 +125,13 @@ exports.supprimerTravailAFaire = (req, res, next) => {
 * */
 exports.modifierTravailAFaire = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un travail à faire.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(userGroupe => {
-			db.travailAFaire.findOne({
+			//récupération du travail à faire
+			return db.travailAFaire.findOne({
 				where: {idTravailAFaire: req.body.travailAFaire},
 				include: {
 					model: db.groupe,
@@ -134,10 +139,12 @@ exports.modifierTravailAFaire = (req, res, next) => {
 					where: {nomClasse: userGroupe.nomClasse}
 				}
 			})
-				.then(async travailAFaire => {
+				.then(travailAFaire => {
 					if (!travailAFaire) {
-						return res.status(400).json({message: "Impossible de trouver le travail à faire."});
+						throw new Error("Impossible de trouver le travail à faire.");
 					}
+
+					let promesses = [];
 
 					if (req.body.date !== undefined && req.body.date.length > 0) {
 						travailAFaire.dateTravailAFaire = req.body.date;
@@ -149,52 +156,57 @@ exports.modifierTravailAFaire = (req, res, next) => {
 						travailAFaire.estNote = req.body.estNote;
 					}
 					if (req.body.cours !== undefined && req.body.cours.length > 0) {
-						await db.cours.findOne({where: {nomCours: req.body.cours}})
+						promesses.push(db.cours.findOne({where: {nomCours: req.body.cours}})
 							.then(cours => {
 								if(cours){
 									travailAFaire.nomCours = cours.nomCours;
 								}
 							})
+						);
 					}
 
-					let erreurAjoutGroupe = false;
 					if (req.body.groupes !== undefined && req.body.groupes.length > 0) {
-							for(const groupe of req.body.groupes){
-								await db.groupe.findOne({where: {
+						//modification des groupes
+						let promessesGroupes = [];
+						for(const groupe of req.body.groupes){
+							promessesGroupes.push(db.groupe.findOne({where: {
 									[Op.and]: {
 										nomClasse: userGroupe.nomClasse,
 										nomGroupe: groupe
 									}
 								}})
-									.then(async groupe => {
-										if(!groupe){
-											erreurAjoutGroupe = true;
-											return res.status(401).json({message: "Impossible de trouver l'un des groupes."});
-										}
+								.then(groupe => {
+									if(!groupe){
+										throw new Error("Impossible de trouver l'un des groupes.");
+									}
+								})
+							);
+						}
 
-									})
-									.then(() => {
-										travailAFaire.setGroupes(req.body.groupes)
-									})
-									.catch(error => {
-										console.error(error);
-										erreurAjoutGroupe = true;
-										return res.status(500).json(error);
-									});
-							}
+						promesses.push(
+							Promise.all(promessesGroupes)
+								.then(() => {
+									travailAFaire.setGroupes(req.body.groupes);
+								})
+						);
 					}
 
-					if(!erreurAjoutGroupe) travailAFaire.save()
+					return Promise.all(promesses)
 						.then(() => {
-							return res.status(201).json({message: "Le travail à faire a bien été modifié."});
+							return travailAFaire;
 						})
-						.catch(error => {
-							return res.status(500).json(error);
-						});
 				})
-				.catch(error => {console.error(error);return res.status(500).json(error);});
 		})
-		.catch(error => {console.error(error);return res.status(500).json(error);});
+		.then(travailAFaire => {
+			return travailAFaire.save();
+		})
+		.then(() => {
+			return res.status(201).json({message: "Le travail à faire a bien été modifié."});
+		})
+		.catch(error => {
+			console.error(error);
+			return res.status(500).json(error.message);
+		});
 };
 
 /*
@@ -206,15 +218,19 @@ exports.modifierTravailAFaire = (req, res, next) => {
 * */
 exports.ajouterDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour ajouter un document à un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour ajouter un document à un travail à faire.");
 	}
 
 	db.travailAFaire.findOne({where: {idTravailAFaire: req.body.travailAFaire}})
 		.then(travailAFaire => {
-			travailAFaire.getGroupes()
+			return travailAFaire.getGroupes()
+				.catch(() => {
+					throw new Error("Impossible de récupérer la liste des groupes pour ce travail à faire.");
+				})
 				.then(groupes => {
 					db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 						.then(userGroupe => {
+							//vérification des groupes
 							let groupeValide = false;
 							for(const groupe of groupes){
 								if (groupe.nomClasse === userGroupe.nomClasse){
@@ -224,28 +240,24 @@ exports.ajouterDocument = (req, res, next) => {
 							}
 
 							if(!groupeValide){
-								return res.status(401).json({message: "Vous ne pouvez pas ajouter de document à ce devoir."});
+								throw new Error("Vous ne pouvez pas ajouter de document à ce devoir.");
 							}
 
-							db.docsTravailARendre.create({
+							return db.docsTravailARendre.create({
 								nomDoc: req.body.nom,
 								lienDoc: req.body.lienDoc,
 								idTravailAFaire: travailAFaire.idTravailAFaire
 							})
-								.then(doc => {
-									doc.save()
-										.then(() => {
-											return res.status(201).json({message: "Le document a bien été ajouté au travail à faire."});
-										})
-										.catch(error => {return res.status(500).json(error);});
-								})
-								.catch(error => {return res.status(500).json(error);});
+								.catch(() => {
+									throw new Error("Impossible de créer le nouveau document.");
+								});
 						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(500).json(error);});
+				});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(() => {
+			return res.status(201).json({message: "Le document a bien été ajouté au travail à faire."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -257,12 +269,13 @@ exports.ajouterDocument = (req, res, next) => {
 * */
 exports.modifierDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour modifier un document à un travail à faire.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(userGroupe => {
-			db.docsTravailARendre.findOne({
+			//récupération du document
+			return db.docsTravailARendre.findOne({
 				include: {
 					model: db.travailAFaire,
 					required: true,
@@ -274,23 +287,32 @@ exports.modifierDocument = (req, res, next) => {
 				},
 				where: {idDoc: req.body.doc}
 			})
-				.then(doc => {
-					if(req.body.nom.length > 0){
-						doc.nomDoc = req.body.nom;
-					}
-					if(req.body.lienDoc.length > 0){
-						doc.lienDoc = req.body.lienDoc;
-					}
-
-					doc.save()
-						.then(() => {
-							return res.status(201).json({message: "Le document a bien été modifié."});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à modifier."});});
+				.catch(() => {
+					throw new Error("Impossible de trouver le document à modifier.");
+				});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(doc => {
+			//application des modifications
+			if(!doc){
+				throw new Error("Impossible de trouver le document à modifier.");
+			}
+
+			if(req.body.nom.length > 0){
+				doc.nomDoc = req.body.nom;
+			}
+			if(req.body.lienDoc.length > 0){
+				doc.lienDoc = req.body.lienDoc;
+			}
+
+			return doc.save()
+				.catch(() => {
+					throw new Error("Impossible de modifier le document.");
+				});
+		})
+		.then(() => {
+			return res.status(200).json({message: "Le document a bien été modifié."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -302,12 +324,13 @@ exports.modifierDocument = (req, res, next) => {
 * */
 exports.supprimerDocument = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'publicateur' && req.auth.droitsUser !== 'délégué'){
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour supprimer un document à un travail à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour supprimer un document à un travail à faire.");
 	}
 
 	db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
 		.then(userGroupe => {
-			db.docsTravailARendre.findOne({
+			//récupération du document
+			return db.docsTravailARendre.findOne({
 				include: {
 					model: db.travailAFaire,
 					required: true,
@@ -319,16 +342,22 @@ exports.supprimerDocument = (req, res, next) => {
 				},
 				where: {idDoc: req.body.doc}
 			})
-				.then(doc => {
-					doc.destroy()
-						.then(() => {
-							return res.status(201).json({message: "Le document a bien été supprimé."});
-						})
-						.catch(error => {return res.status(500).json(error);});
-				})
-				.catch(error => {return res.status(401).json({message: "Impossible de trouver le document à supprimer."});});
+				.catch(() => {
+					throw new Error("Impossible de trouver le document à supprimer.");
+				});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.then(doc => {
+			//suppression du document
+			if(!doc){
+				throw new Error("Impossible de trouver le document à supprimer.");
+			}
+
+			return doc.destroy();
+		})
+		.then(() => {
+			return res.status(200).json({message: "Le document a bien été supprimé."});
+		})
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
@@ -340,20 +369,22 @@ exports.supprimerDocument = (req, res, next) => {
 * */
 exports.recupererEmbed = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les travails à faire.");
 	}
 
+	//récupération de la date du devoir le plus proche dans le futur à partir de maintenant
 	db.travailAFaire.min('dateTravailAFaire', {
 		where: {
 			dateTravailAFaire: {[Op.gte]: Date.now()}
 		}
 	})
 		.then(min => {
+			//récupération des prochains devoirs
 			if(!min){
 				return res.status(200).json({});
 			}
 
-			db.travailAFaire.findAll({
+			return db.travailAFaire.findAll({
 				include: [
 					{
 						model: db.groupe,
@@ -373,15 +404,14 @@ exports.recupererEmbed = (req, res, next) => {
 				limit: 3,
 				order: ['dateTravailAFaire']
 			})
-				.then(travails => {
-					return res.status(200).json(travails);
-				})
-				.catch(error => {
-					return res.status(500).json(error);
-				});
 		})
-		.catch(error => {
-			return res.status(500).json(error);
+		.then(travails => {
+			if(!travails) return; // cas où il n'y a pas de devoirs.
+
+			return res.status(200).json(travails);
+		})
+		.catch(() => {
+			return res.status(500).json("Impossible de récupérer les prochains travail à faire.");
 		});
 };
 
@@ -394,16 +424,17 @@ exports.recupererEmbed = (req, res, next) => {
 * */
 exports.afficher = (req, res, next) => {
 	if (req.auth.droitsUser === 'non validé') {
-		return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher les travails à faire."});
+		return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher les travails à faire.");
 	}
 
 	// code from: https://stackoverflow.com/questions/42236837/how-to-perform-a-search-with-conditional-where-parameters-using-sequelize
+	// si le nom du cours est précisé, on filtre les travails à faire que l'on retourne
 	let whereStatement = {};
 	if(req.body.cours !== undefined && req.body.cours.length > 0){
 		whereStatement.nomCours = req.body.cours;
 	}
 
-
+	//récupération de la liste des travails à faire
 	db.travailAFaire.findAll({
 		include: [
 			{
@@ -436,6 +467,6 @@ exports.afficher = (req, res, next) => {
 			return res.status(200).json(travails);
 		})
 		.catch(error => {
-			return res.status(500).json({messsage: error});
+			return res.status(500).json("Impossible de charger la liste de travails à faire.");
 		});
 }

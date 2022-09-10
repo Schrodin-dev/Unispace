@@ -36,7 +36,6 @@ export class EditAgendaComponent implements OnInit {
   constructor(private authService: AuthService, private requestsService: RequestsService, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
-	  console.log(this.travail);
 	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
 	  this.authService.couleurTexte.subscribe(couleur => {
 		  this.couleurTexte = couleur;

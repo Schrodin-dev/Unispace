@@ -69,9 +69,15 @@ exports.ajouterContenuCours = async (req, res, next) => {
 							);
 						}
 
-						return Promise.all(listePromesses);
+						return Promise.all(listePromesses)
+							.then(() => {
+								return contenuCours;
+							})
 					})
 				})
+		.then(contenuCours => {
+			return contenuCours.save();
+		})
 		.then(() => {
 			return res.status(201).json({message: "Le contenu de cours a bien été ajouté."});
 		})
@@ -256,9 +262,6 @@ exports.ajouterDocument = (req, res, next) => {
 						});
 				});
 
-		})
-		.then(doc => {
-			return doc.save();
 		})
 		.then(() => {
 			return res.status(201).json({message: "Le document a bien été ajouté au contenu de cours."});
