@@ -17,11 +17,15 @@ exports.creerClasse = (req, res, next) => {
         nomClasse: req.body.nomClasse,
         nomParcours: req.body.nomParcours
     })
-        .then(() => {
+        .then(classe=> {
+            if(!classe){
+                throw new Error("Impossible de créer la classe.");
+            }
+
             res.status(201).json({message: "La classe a bien été créée."});
         })
         .catch(error => {
-            res.status(500).json(error);
+            res.status(500).json(error.message);
         });
 }
 
@@ -39,13 +43,12 @@ exports.supprimerClasse = (req, res, next) => {
 
     db.classe.findOne({where: {nomClasse: req.body.classe}})
         .then(classe => {
-            classe.destroy()
-                .then(() => {
-                    return res.status(201).json({message: "La classe a bien été supprimée."});
-                })
-                .catch(error => {return res.status(500).json(error);});
+            return classe.destroy();
+        })
+        .then(() => {
+            return res.status(201).json({message: "La classe a bien été supprimée."});
         })
         .catch(error => {
-            return res.status(500).json(error);
+            return res.status(500).json("Impossible de supprimer la classe.");
         })
 }
