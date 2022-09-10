@@ -6,8 +6,9 @@ footer{
 	background-color: #313131;
 }
 
-p{
+p, a{
 	margin: 5px;
+	color: white;
 }
 
 @media screen and (min-width:650px) {
@@ -19,9 +20,5 @@ p{
 
 	p{
 		margin: 5px 15px;
-
-		&, a{
-			color: white;
-		}
 	}
 }

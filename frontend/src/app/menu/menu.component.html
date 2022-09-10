@@ -40,7 +40,7 @@
 		</div>
 	</nav>
 
-	<nav id="subMenu">
+	<nav id="subMenu" *ngIf="currentSubmenuRoutes">
 	  <div routerLinkActive="subActive" [routerLinkActiveOptions]="{exact:true}" *ngFor = "let routes of currentSubmenuRoutes">
 		  <div class="before" [ngStyle]="{backgroundColor: '#'+this.couleurPrincipale}"></div>
 		<a [routerLink]= routes.path [ngStyle]="{color: '#'+this.couleurPrincipale}">{{routes.name}}</a>

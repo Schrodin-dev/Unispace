@@ -124,6 +124,8 @@ export class MenuComponent implements OnInit {
       if(url instanceof NavigationEnd){
         this.path = '/' + router.url.split('/')[1];
 		if(this.currentRootPath === this.path) return;
+		if(this.path === '/mentionsLegales') this.currentSubmenuRoutes = undefined;
+
         for(let routes of this.submenuRoutes){
           if(this.path === routes.rootPath || (this.path + 'Delegue' === routes.rootPath && this.authService.isDelegue() && !this.authService.isAdmin())){
 			  this.currentRootPath = routes.rootPath;

@@ -48,6 +48,7 @@ import { GestionGroupesComponent } from './admin/gestion-groupes/gestion-groupes
 import { GestionThemesComponent } from './admin/gestion-themes/gestion-themes.component';
 import { AjouterRessourceUEComponent } from './admin/ajouter-ressource-ue/ajouter-ressource-ue.component';
 import { GestionParcoursComponent } from './admin/gestion-parcours/gestion-parcours.component';
+import { MentionsLegalesComponent } from './mentions-legales/mentions-legales.component';
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import { GestionParcoursComponent } from './admin/gestion-parcours/gestion-parco
     GestionThemesComponent,
     AjouterRessourceUEComponent,
     GestionParcoursComponent,
+    MentionsLegalesComponent,
   ],
     imports: [
         BrowserModule,
