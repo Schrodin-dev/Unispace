@@ -15,9 +15,12 @@ let couleurCours = {};
 exports.chargerGroupes = () => {
     let newPlannings = {};
     db.groupe.findAll({attributes: ['nomGroupe', 'lienICalGroupe']})
-        .then(async groupes => {
+        .then(groupes => {
+            let promesses = [];
+
             for (const groupe of groupes) {
-                await ical.async.fromURL(groupe.lienICalGroupe)
+                //récupération de l'emploi du temps grâce au lien iCal
+                promesses.push(ical.async.fromURL(groupe.lienICalGroupe)
                     .then(async calendrier => {
                         let planning = [];
                         let i = 0;
@@ -32,9 +35,11 @@ exports.chargerGroupes = () => {
                     })
                     .catch(() => {
                         console.error('impossible de mettre à jour le planning du groupe ' + groupe.nomGroupe);
-                    })
+                    }));
 
             }
+
+            return Promise.all(promesses);
         }).then(() => {
             plannings = newPlannings;
             console.log('groupes chargés');
@@ -95,7 +100,7 @@ exports.recupererEdt = (req, res, next) => {
     db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
         .then(groupe => {
             if(groupe === null){
-                res.status(400).json({message: 'Impossible de trouver votre groupe.'});
+                throw new Error("Impossible de trouver votre groupe.");
             }
 
             let edt = [];
@@ -114,7 +119,7 @@ exports.recupererEdt = (req, res, next) => {
             return res.status(200).json(edt);
         })
         .catch(error => {
-            res.status(500).json({message: error});
+            res.status(500).json(error.message);
         });
 
 
@@ -131,7 +136,7 @@ exports.recupererListeCours = (req, res, next) => {
     db.groupe.findOne({where: {nomGroupe: req.auth.userGroupe}})
         .then(groupe => {
             if(groupe === null){
-                res.status(400).json({message: 'Impossible de trouver votre groupe.'});
+                throw new Error("Impossible de trouver votre groupe.");
             }
 
             let i = 0;
@@ -146,14 +151,13 @@ exports.recupererListeCours = (req, res, next) => {
                         nom: cours.nom,
                         couleur: cours.couleur
                     })
-                };
+                }
             }
 
             return res.status(200).json(listeCours);
         })
         .catch(error => {
-            console.error(error);
-            res.status(500).json({message: error});
+            res.status(500).json(error.message);
         });
 }
 
@@ -196,7 +200,7 @@ async function chargerCouleur(nomCours) {
 * */
 exports.creerGroupe = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous devez être admin pour créer un groupe."});
+        return res.status(500).json("Vous devez être admin pour créer un groupe.");
     }
 
     db.groupe.create({
@@ -207,7 +211,7 @@ exports.creerGroupe = (req, res, next) => {
         .then(() => {
             return res.status(201).json({message: "Le groupe a bien été créé."})
         })
-        .catch(error => {res.status(500).json(error)});
+        .catch(error => {res.status(500).json(error.message);});
 }
 
 /*
@@ -219,23 +223,22 @@ exports.creerGroupe = (req, res, next) => {
 * */
 exports.modifierLienICal = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous devez être admin pour modifier un groupe."});
+        return res.status(500).json("Vous devez être admin pour modifier un groupe.");
     }
 
     db.groupe.findOne({where: {nomGroupe: req.body.nom}})
         .then(groupe => {
             if(groupe === null){
-                return res.status(401).json({message: "Impossible de trouver le groupe correspondant."});
+                throw new Error("Impossible de trouver le groupe correspondant.");
             }
 
             groupe.lienICalGroupe = req.body.lienICal;
-            groupe.save()
-                .then(() => {
-                    return res.status(201).json({message: "Le lien ICal du groupe a bien été mis à jour."});
-                })
-                .catch(error => {return res.status(500).json(error);});
+            return groupe.save();
         })
-        .catch(error => {return res.status(500).json(error);});
+        .then(() => {
+            return res.status(201).json({message: "Le lien ICal du groupe a bien été mis à jour."});
+        })
+        .catch(error => {return res.status(500).json(error.message);});
 }
 
 /*
@@ -247,22 +250,21 @@ exports.modifierLienICal = (req, res, next) => {
 * */
 exports.supprimerGroupe = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous devez être admin pour supprimer un groupe."});
+        return res.status(500).json("Vous devez être admin pour supprimer un groupe.");
     }
 
     db.groupe.findOne({where: {nomGroupe: req.body.groupe}})
         .then(groupe => {
             if(groupe === null){
-                return res.status(400).json({message: "Le groupe que vous souhaitez supprimer n'existe pas."});
+                throw new Error("Le groupe que vous souhaitez supprimer n'existe pas.");
             }
 
-            groupe.destroy()
-                .then(() => {
-                    return res.status(201).json({message: "Le groupe a bien été supprimé."});
-                })
-                .catch(error => {return res.status(500).json(error)});
+            return groupe.destroy();
         })
-        .catch(error => {return res.status(500).json(error)});
+        .then(() => {
+            return res.status(201).json({message: "Le groupe a bien été supprimé."});
+        })
+        .catch(error => {return res.status(500).json(error.message)});
 }
 
 //non utilisé
@@ -301,7 +303,7 @@ exports.verifierExistanceCours = async (dateDebut, nomCours, userGroupe) => {
 * */
 exports.detailGroupes = (req, res, next) => {
     if(req.auth.droitsUser !== 'admin'){
-        return res.status(401).json({message: "Vous n'avez pas les droits suffisants pour afficher le détail des groupes."});
+        return res.status(500).json("Vous n'avez pas les droits suffisants pour afficher le détail des groupes.");
     }
 
     db.anneeUniv.findAll({
@@ -321,6 +323,6 @@ exports.detailGroupes = (req, res, next) => {
             return res.status(200).json(liste);
         })
         .catch(() => {
-            return res.status(500).json({message: "Impossible de charger le détail des groupes."})
+            return res.status(500).json("Impossible de charger le détail des groupes.")
         })
 };

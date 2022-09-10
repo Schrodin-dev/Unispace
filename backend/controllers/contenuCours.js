@@ -359,7 +359,7 @@ exports.supprimerDocument = (req, res, next) => {
 		.then(() => {
 			return res.status(201).json({message: "Le document a bien été supprimé."});
 		})
-		.catch(error => {return res.status(500).json(error);});
+		.catch(error => {return res.status(500).json(error.message);});
 };
 
 /*
