@@ -5,7 +5,7 @@
 	</div>
 	<p id="date" *ngIf="type === 'travail à faire'; else contenuCours">à faire pour: {{ dateToHoursString(travail.date)}}<ng-container *ngIf="travail.estNote">, est noté.</ng-container></p>
 	<ng-template #contenuCours><p id="date">Fait à: {{ dateToHoursString(travail.date)}}</p></ng-template>
-	<p id="desc" [ngClass]="couleurTexte">{{ description() | nl2br }}</p>
+	<p id="desc" [ngClass]="couleurTexte" [innerHTML]="description().toString() | nl2br"></p>
 	<p *ngIf="travail.documents.length > 0" id="docs">Contient {{ travail.documents.length }} documents.</p>
 </div>
 
