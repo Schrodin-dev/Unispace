@@ -8,11 +8,11 @@ import {catchError} from "rxjs/operators";
 @Injectable()
 export class AuthService{
   private loginRes:any;
-	public couleurPrincipale: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurPrincipale") || 'AD1FB7');
-	public couleurFond: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("couleurFond") || 'ffffff');
-	public sourceImageTheme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("sourceImageTheme") || 'une source');
-	public theme: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("theme") || '1');
-	public couleurTexte: Subject<String> = new BehaviorSubject<String>(sessionStorage.getItem("textColor") || 'light');
+	public couleurPrincipale: Subject<String> = new BehaviorSubject<String>(localStorage.getItem("couleurPrincipale") || 'AD1FB7');
+	public couleurFond: Subject<String> = new BehaviorSubject<String>(localStorage.getItem("couleurFond") || 'ffffff');
+	public sourceImageTheme: Subject<String> = new BehaviorSubject<String>(localStorage.getItem("sourceImageTheme") || 'une source');
+	public theme: Subject<String> = new BehaviorSubject<String>(localStorage.getItem("theme") || '1');
+	public couleurTexte: Subject<String> = new BehaviorSubject<String>(localStorage.getItem("textColor") || 'light');
 
   constructor(private httpClient: HttpClient, private router: Router) {
 
@@ -46,12 +46,12 @@ export class AuthService{
 
 			this.loginRes = res;
 			// @ts-ignore
-			sessionStorage.setItem("email", email);
-			sessionStorage.setItem("token", this.loginRes.token);
-			sessionStorage.setItem("groupe", this.loginRes.groupe);
-			sessionStorage.setItem("droits", this.loginRes.droits);
-			sessionStorage.setItem("nom", this.loginRes.nom);
-			sessionStorage.setItem("prenom", this.loginRes.prenom);
+			localStorage.setItem("email", email);
+			localStorage.setItem("token", this.loginRes.token);
+			localStorage.setItem("groupe", this.loginRes.groupe);
+			localStorage.setItem("droits", this.loginRes.droits);
+			localStorage.setItem("nom", this.loginRes.nom);
+			localStorage.setItem("prenom", this.loginRes.prenom);
 
 			this.updateTheme(this.loginRes.couleurPrincipale, this.loginRes.couleurFond, this.loginRes.sourceImageTheme, this.loginRes.theme)
 
@@ -62,36 +62,36 @@ export class AuthService{
   }
 
   disconnect(){
-    sessionStorage.clear();
+	  localStorage.clear();
     this.router.navigate(['login']);
   }
 
   getEmail(){
-    return sessionStorage.getItem("email");
+    return localStorage.getItem("email");
   }
 
   getToken(){
-    return sessionStorage.getItem("token");
+    return localStorage.getItem("token");
   }
 
   isLogin(){
-    return (sessionStorage.getItem("token") !== null);
+    return (localStorage.getItem("token") !== null);
   }
 
   getNom(){
-    return sessionStorage.getItem("nom");
+    return localStorage.getItem("nom");
   }
 
   getPrenom(){
-    return sessionStorage.getItem("prenom");
+    return localStorage.getItem("prenom");
   }
 
   getGroupe(){
-    return sessionStorage.getItem("groupe");
+    return localStorage.getItem("groupe");
   }
 
   getDroits(){
-    return sessionStorage.getItem("droits");
+    return localStorage.getItem("droits");
   }
 
   getUserInfos(){
@@ -106,17 +106,17 @@ export class AuthService{
   	updateTheme(couleurPrincipale: string, couleurFond: string, source: string, theme: string){
 		//mise à jour du theme
 		this.couleurPrincipale.next(couleurPrincipale);
-		sessionStorage.setItem("couleurPrincipale", couleurPrincipale);
+		localStorage.setItem("couleurPrincipale", couleurPrincipale);
 		this.couleurFond.next(couleurFond);
-		sessionStorage.setItem("couleurFond", couleurFond);
+		localStorage.setItem("couleurFond", couleurFond);
 		this.sourceImageTheme.next(source);
-		sessionStorage.setItem("sourceImageTheme", source);
+		localStorage.setItem("sourceImageTheme", source);
 		this.theme.next(theme);
-		sessionStorage.setItem("theme", theme);
+		localStorage.setItem("theme", theme);
 
-		sessionStorage.setItem("textColor", this.lightOrDark(couleurFond));
+		localStorage.setItem("textColor", this.lightOrDark(couleurFond));
 		// @ts-ignore
-		this.couleurTexte.next(sessionStorage.getItem("textColor"));
+		this.couleurTexte.next(localStorage.getItem("textColor"));
 	}
 
 	lightOrDark(color: any) {

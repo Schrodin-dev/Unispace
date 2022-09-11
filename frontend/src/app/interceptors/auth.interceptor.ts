@@ -20,7 +20,7 @@ export class AuthInterceptor implements HttpInterceptor{
 	private static getRequestOptions(): { headers: HttpHeaders }{
 		let headers =  new HttpHeaders();
 		headers = headers.append('Content-Type', 'application/json; charset=utf-8');
-		headers = headers.append('Authorization', 'Bearer ' + sessionStorage.getItem("token"));
+		headers = headers.append('Authorization', 'Bearer ' + localStorage.getItem("token"));
 		return { headers: headers };
 	}
 }

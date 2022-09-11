@@ -13,7 +13,7 @@
 		<p *ngIf="type === 'travail à faire' && travail.estNote" [ngClass]="couleurTexte">Ce travail est noté.</p>
 	</div>
 
-	<p [ngClass]="couleurTexte">{{ travail.desc }}</p>
+	<p [ngClass]="couleurTexte">{{ travail.desc | nl2br }}</p>
 
 	<div id="documents" *ngIf="travail.documents.length > 0">
 		<h3 [ngClass]="couleurTexte">Documents</h3>

@@ -49,6 +49,7 @@ import { GestionThemesComponent } from './admin/gestion-themes/gestion-themes.co
 import { AjouterRessourceUEComponent } from './admin/ajouter-ressource-ue/ajouter-ressource-ue.component';
 import { GestionParcoursComponent } from './admin/gestion-parcours/gestion-parcours.component';
 import { MentionsLegalesComponent } from './mentions-legales/mentions-legales.component';
+import {nl2brPipe} from "./pipes/nl2br.pipe";
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { MentionsLegalesComponent } from './mentions-legales/mentions-legales.co
     AjouterRessourceUEComponent,
     GestionParcoursComponent,
     MentionsLegalesComponent,
+	  nl2brPipe
   ],
     imports: [
         BrowserModule,
