@@ -57,6 +57,8 @@ export class RequestsService{
 	  return this.httpClient.post(backend.url + "/api/travailAFaire/afficherEmbed",{})
 		  .toPromise()
 		  .then(listeTravails => {
+			  if(Object.keys(listeTravails).length === 0) return [];
+
 			  let travails: TravailAFaire[] = [];
 			  // @ts-ignore
 			  for(let travail of listeTravails){
