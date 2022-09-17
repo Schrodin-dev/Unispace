@@ -390,7 +390,7 @@ exports.recupererEmbed = (req, res, next) => {
 		.then(min => {
 			//récupération des prochains devoirs
 			if(!min){
-				return res.status(200).json({});
+				return {};
 			}
 
 			return db.travailAFaire.findAll({
@@ -415,8 +415,6 @@ exports.recupererEmbed = (req, res, next) => {
 			})
 		})
 		.then(travails => {
-			if(!travails) return; // cas où il n'y a pas de devoirs.
-
 			return res.status(200).json(travails);
 		})
 		.catch(() => {
