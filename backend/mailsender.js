@@ -84,7 +84,7 @@ exports.envoyerMailPersonne = (receipt, subject, content) => {
 
     transporter.sendMail(options, (error) => {
        if(error){
-           throw new error;
+           throw new Error(error.message);
        }
     });
 };

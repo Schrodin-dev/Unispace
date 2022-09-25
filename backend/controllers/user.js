@@ -224,6 +224,10 @@ exports.supprimerCompte = (req , res, next) => {
 exports.validerCompte = (req, res, next) => {
   db.user.findOne({where: {codeVerification: req.body.codeVerification}})
       .then(user => {
+          if(!user){
+              throw new Error("Le code de vérification est invalide.");
+          }
+
           if(user.expirationCodeVerification === null || user.expirationCodeVerification < new Date(Date.now()).getTime()){
               throw new Error("Le code de vérification est expiré.");
           }
@@ -234,8 +238,9 @@ exports.validerCompte = (req, res, next) => {
           }
 
           return user.save()
-              .catch(() => {
-                  throw new Error("Impossible de valide votre compte.");
+              .catch(error => {
+                  console.error(error);
+                  throw new Error("Impossible de valider votre compte.");
               })
       })
       .then(() => {
@@ -257,30 +262,31 @@ exports.renvoyerCodeVerification = (req, res, next) => {
   db.user.findOne({where: {emailUser: req.body.email}})
       .then(user => {
           //création du nouveau code de vérification
-          const uuid = randomUUID();
+          const uuid = randomUUID()
           user.set({codeVerification: uuid, expirationCodeVerification: new Date(Date.now()).getTime() + 24*60*60*1000})
 
           return user.save()
+              .then(() => {
+                  //envoie du mail
+                  if(user.droitsUser === 'non validé'){
+                      require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
+                  }else{
+                      require('../mailsender').envoyerMailPersonne(req.body.email, 'Mot de passe oublié', '<p>Afin de modifier votre mot de passe, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienMdpOublie + uuid + '">' + require('../config/appli.json').lienMdpOublie + uuid + '</a></p>');
+                  }
+              })
               .then(() => {
                   return user;
               });
       })
       .then(user => {
-          //envoie du mail
-          if(user.droitsUser === 'non validé'){
-              require('../mailsender').envoyerMailPersonne(req.body.email, 'Vérification de votre compte', '<p>Afin d\'accéder à Noobnotes, veuillez vérifier votre compte. Pour ce faire, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienVerification + uuid + '">' + require('../config/appli.json').lienVerification + uuid + '</a></p>');
-          }else{
-              require('../mailsender').envoyerMailPersonne(req.body.email, 'Mot de passe oublié', '<p>Afin de modifier votre mot de passe, cliquez sur ce lien (ou copiez-le dans votre navigateur) : <a href="' + require('../config/appli.json').lienMdpOublie + uuid + '">' + require('../config/appli.json').lienMdpOublie + uuid + '</a></p>');
-          }
-      })
-      .then(() => {
           if(user.droitsUser === 'non validé'){
               res.status(201).json({message: 'Un email a été envoyé pour valider votre compte.'});
           }else{
               res.status(201).json({message: 'Un email a été envoyé pour modifier votre mot de passe.'});
           }
       })
-      .catch(() => {
+      .catch(error => {
+          console.error(error);
           res.status(500).json({message: "Une erreur s'est produite lors de l'envoie du nouveau code de vérification."});
       });
 };
@@ -295,6 +301,10 @@ exports.renvoyerCodeVerification = (req, res, next) => {
 exports.changerMotDePasse = (req, res, next) => {
     db.user.findOne({where: {codeVerification: req.body.codeVerification}})
         .then(user => {
+            if(!user){
+                throw new Error("Le code de vérification est invalide.");
+            }
+
             //vérification du code de vérification (logique du coup x))
             if (user.droitsUser === 'non validé') {
                 throw new Error("veuillez valider votre compte d'abord.");
@@ -304,15 +314,15 @@ exports.changerMotDePasse = (req, res, next) => {
                 throw new Error("Le code de vérification est expiré.");
             }
 
-            return bcrypt.hash(req.body.password, 10);
-        })
-        .then(hash => {
-            //modification du mot de passe
-            user.set({mdpUser: hash, expirationCodeVerification: null});
-            return user.save()
-                .catch(() => {
-                    throw new Error("Une erreur s'est produite lors de la modification de votre mot de passe.");
-                })
+            return bcrypt.hash(req.body.password, 10)
+                .then(hash => {
+                    //modification du mot de passe
+                    user.set({mdpUser: hash, expirationCodeVerification: null});
+                    return user.save()
+                        .catch(() => {
+                            throw new Error("Une erreur s'est produite lors de la modification de votre mot de passe.");
+                        })
+                });
         })
         .then(() => {
             res.status(200).json({message: 'Votre nouveau mot de passe a été pris en compte.'});
