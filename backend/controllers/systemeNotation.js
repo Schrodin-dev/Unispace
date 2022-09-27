@@ -246,6 +246,7 @@ exports.ajouterDevoir = (req, res, next) => {
 	if(req.auth.droitsUser !== 'admin' && req.auth.droitsUser !== 'délégué' && req.auth.droitsUser !== 'publicateur'){
 		return res.status(500).json({message: "Vous n'avez pas les droits suffisants pour ajouter un devoir."});
 	}
+	//TODO: rajouter une vérification du parcours
 
 	db.devoir.create({
 		nomDevoir: req.body.nom,
@@ -611,9 +612,9 @@ exports.detailDesNotes = (req, res, next) => {
 						},
 					}
 				],
-				/*where: {
+				where: {
 					nomParcours: classe.nomParcours
-				},*/
+				},
 				attributes: ['nomUE', 'numeroUE', 'nomParcours'],
 				order: ['numeroUE']
 			});
