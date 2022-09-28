@@ -45,6 +45,7 @@ export class MainEdtComponent implements OnInit {
   }
 
   dateToMonday(date: Date){
+	  date.setHours(0, 0, 0, 0);
 	  if(date.getDay() === 0) {
 		  return this.getDate(date,-6);
 	  }else if(date.getDay() !== 1){
