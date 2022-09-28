@@ -10,8 +10,8 @@
 		<input type="datetime-local" class="inputDate" [ngStyle]="{borderColor: '#'+this.couleurPrincipale}" id="date" formControlName="date"/>
 
 		<label for="matiere" [ngClass]="couleurTexte">Matière</label>
-		<div class="dropDown" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-			<select formControlName="matiere" id="matiere" [ngClass]="couleurTexte">
+		<div class="dropDown">
+			<select formControlName="matiere" id="matiere" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 				<option selected *ngIf="form.value.matiere === null"></option>
 				<option *ngFor="let matiere of matieres" [value]="matiere.nom">{{ matiere.nom }}</option>
 			</select>

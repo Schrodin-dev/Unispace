@@ -105,6 +105,12 @@
 	}
 }
 
+#preview{
+	height:fit-content;
+	position: sticky;
+	top:0;
+}
+
 @media screen and (min-width: 650px) {
 	#main{
 		display:flex;
