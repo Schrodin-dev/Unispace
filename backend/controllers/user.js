@@ -350,7 +350,8 @@ exports.afficherUtilisateurs = (req, res, next) => {
     switch(req.auth.droitsUser){
         case 'admin':
             db.user.findAll({
-                attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser', 'nomGroupe']
+                attributes: ['emailUser', 'nomUser', 'prenomUser', 'droitsUser', 'nomGroupe'],
+                order: ['nomGroupe', 'emailUser']
             })
                 .then(users => {
                     return res.status(200).json(users);
@@ -369,7 +370,8 @@ exports.afficherUtilisateurs = (req, res, next) => {
                             required: true,
                             where: {nomClasse: userGroupe.nomClasse},
                             attributes: []
-                        }
+                        },
+                        order: ['nomGroupe', 'emailUser']
                     });
                 })
                 .then(users => {
