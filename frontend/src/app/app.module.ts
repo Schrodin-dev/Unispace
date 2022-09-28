@@ -38,7 +38,6 @@ import {SupprService} from "./services/suppr.service";
 import { DetailContentTodoComponent } from './agenda/detail-content-todo/detail-content-todo.component';
 import { DateSelectorComponent } from './date-selector/date-selector.component';
 import { PreviewAgendaComponent } from './agenda/preview-agenda/preview-agenda.component';
-import { AjouterAgendaComponent } from './agenda/ajouter-agenda/ajouter-agenda.component';
 import { EditAgendaComponent } from './agenda/edit-agenda/edit-agenda.component';
 import { DocumentComponent } from './agenda/document/document.component';
 import { GestionEtudiantsComponent } from './admin/gestion-etudiants/gestion-etudiants.component';
@@ -79,7 +78,6 @@ import {nl2brPipe} from "./pipes/nl2br.pipe";
     DetailContentTodoComponent,
     DateSelectorComponent,
     PreviewAgendaComponent,
-    AjouterAgendaComponent,
     EditAgendaComponent,
     DocumentComponent,
     GestionEtudiantsComponent,

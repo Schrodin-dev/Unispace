@@ -1,4 +1,4 @@
-<div class="panel" id="container">
+<div class="panel" id="container" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 	<h1 [ngClass]="couleurTexte">{{ mode.toString() | titlecase }}</h1>
 
 	<form [formGroup]="form">
@@ -10,7 +10,7 @@
 		<input type="datetime-local" class="inputDate" [ngStyle]="{borderColor: '#'+this.couleurPrincipale}" id="date" formControlName="date"/>
 
 		<label for="matiere" [ngClass]="couleurTexte">Matière</label>
-		<div class="dropDown">
+		<div class="dropDown" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 			<select formControlName="matiere" id="matiere" [ngClass]="couleurTexte">
 				<option selected *ngIf="form.value.matiere === null"></option>
 				<option *ngFor="let matiere of matieres" [value]="matiere.nom">{{ matiere.nom }}</option>
@@ -21,7 +21,7 @@
 		<ng-template #descContenuCours>
 			<label for="desc" [ngClass]="couleurTexte">Coutenu du cours</label>
 		</ng-template>
-		<textarea formControlName="desc" class="inputText" id="desc" [ngClass]="couleurTexte" placeholder="Entrez la description"></textarea>
+		<textarea formControlName="desc" class="inputText" id="desc" [ngClass]="couleurTexte" placeholder="Entrez la description" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}"></textarea>
 
 		<div id="checkbox" *ngIf="type === 'travail à faire'">
 			<input type="checkBox" formControlName="estNote" id="estNote">
