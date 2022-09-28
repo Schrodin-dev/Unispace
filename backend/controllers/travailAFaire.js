@@ -156,7 +156,7 @@ exports.modifierTravailAFaire = (req, res, next) => {
 					if (req.body.description !== undefined && req.body.description.length > 0) {
 						travailAFaire.descTravailAFaire = req.body.description;
 					}
-					if (req.body.estNote !== undefined && req.body.estNote.length > 0) {
+					if (req.body.estNote !== undefined) {
 						travailAFaire.estNote = req.body.estNote;
 					}
 					if (req.body.cours !== undefined && req.body.cours.length > 0) {
