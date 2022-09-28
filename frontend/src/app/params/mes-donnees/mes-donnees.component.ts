@@ -103,9 +103,6 @@ export class MesDonneesComponent implements OnInit {
 				this.errorParametres = '';
 				this.messageParametres = message;
 
-				/*if(this.form.value.nom) localStorage.setItem("nom", this.form.value.nom);
-				if(this.form.value.prenom) localStorage.setItem("prenom", this.form.value.prenom);
-				if(this.form.value.groupe) localStorage.setItem("groupe", this.form.value.groupe);*/
 				this.authService.disconnect();
 				window.location.reload();
 			})
