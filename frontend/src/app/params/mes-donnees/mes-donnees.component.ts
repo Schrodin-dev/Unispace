@@ -41,7 +41,7 @@ export class MesDonneesComponent implements OnInit {
 		  groupe: [this.userInfos.groupe],
 		  mdp: [null],
 		  annonces: [null]
-	  });
+	  }, {updateOn: "blur"});
 
 	  this.loadClasses();
 	  this.loadAnnonces();

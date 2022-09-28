@@ -49,6 +49,9 @@
 			<button type="submit" class="textButton" [ngClass]="couleurTexte" [disabled]="form.invalid" (click)="onSubmit()">Valider</button>
 		</div>
 
+		<!--<p *ngIf="form.controls['date'].hasError('required')" class="errorText">Entrez une date valide.</p>
+		<p *ngIf="form.controls['matiere'].hasError('required')" class="errorText">Précisez la matière.</p>
+		<p *ngIf="form.controls['desc'].hasError('required')" class="errorText">Remplissez une description.</p>-->
 		<app-erreur *ngIf="error" (close)="error = ''" [message]="error"></app-erreur>
 	</form>
 </div>

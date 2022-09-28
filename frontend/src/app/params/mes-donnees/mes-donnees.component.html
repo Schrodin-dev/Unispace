@@ -39,6 +39,9 @@
 			<button type="submit" [disabled]="form.invalid" class="textButton" [ngClass]="couleurTexte" (click)="modifierCompte()">Valider</button>
 
 			<p *ngIf="messageParametres" [ngClass]="couleurTexte">{{ messageParametres }}</p>
+
+			<p *ngIf="form.controls['nom'].hasError('maxlength')" class="errorText">Entrez un nom de moins de 40 caractères</p>
+			<p *ngIf="form.controls['prenom'].hasError('maxlength')" class="errorText">Entrez un prénom de moins de 40 caractères</p>
 			<app-erreur *ngIf="errorParametres" [message]="errorParametres" (close)="errorParametres = ''" ></app-erreur>
 		</form>
 	</div>
