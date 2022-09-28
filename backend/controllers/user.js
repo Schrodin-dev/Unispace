@@ -179,7 +179,7 @@ exports.login = (req, res, next) => {
                                 userGroupe: user.nomGroupe,
                                 droitsUser: user.droitsUser
                             },
-                            require('../config/appli.json').token,//TODO: remplacer le token en production par un truc bien long comme il faut :)
+                            require('../config/appli.json').token,
                             {expiresIn: '24h'}
                         ),
                         theme: user.theme.idTheme,
