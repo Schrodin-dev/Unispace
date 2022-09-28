@@ -6,7 +6,7 @@
 
 	<div id="bandeau" class="panel">
 		<p [ngClass]="couleurTexte">
-			<ng-container *ngIf="type === 'travail à faire'; else elseDate">À rendre pour le </ng-container>
+			<ng-container *ngIf="type === 'travail à faire'; else elseDate">À faire pour le </ng-container>
 			<ng-template #elseDate>Fait le </ng-template>
 			{{ travail.date | date: 'EEEE d MMMM YYYY'}} à {{ travail.date | date: 'H'}}h{{ travail.date | date: 'mm'}}.
 		</p>
