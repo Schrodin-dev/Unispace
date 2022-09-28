@@ -1,0 +1,15 @@
+#week{
+	border-radius: 5px;
+	margin:5px;
+	cursor: pointer;
+
+	p{
+		padding: 5px 20px;
+		margin: 0;
+		white-space: nowrap;
+	}
+}
+
+.active{
+	background-color: blue !important;
+}

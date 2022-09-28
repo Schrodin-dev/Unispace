@@ -107,4 +107,13 @@ export class MainEdtComponent implements OnInit {
 	  this.setDate(this.getWeek(weeksAfter+1)); //je sais pas pourquoi il voulait un +1, je préfère ne pas savoir..
   }
 
+  // pour une prochaine version --> scroll vers l'élément d'un id donné
+  scrollToWeeksAfter(weeksAfter: number){
+	  let el = document.getElementById('week-' + weeksAfter);
+	  // @ts-ignore
+	  el.scrollIntoView({
+		  inline: "start"
+	  });
+  }
+
 }

@@ -59,9 +59,9 @@
 			</div>
 		</div>
 		<div id="weeksScroll">
-			<div class="week"[ngStyle]="{backgroundColor: '#'+couleurPrincipale+'BF'}" *ngFor="let item of [].constructor(50); let i = index" (click)="changeWeek(i)">
-				<p [ngClass]="couleurTexte">s{{i+1}}: {{getWeek(i) | date : 'dd MMM'}}</p>
-			</div>
+			<ng-container *ngFor="let item of [].constructor(50); let i = index" >
+				<app-edt-week [weekNumber]="i+1" [date]="getWeek(i)" [actualDate]="updateDate" (click)="changeWeek(i - 1)" [id]="'week-' + (i-1)"></app-edt-week>
+			</ng-container>
 		</div>
 	</div>
 	<app-erreur *ngIf="error" (close)="error= ''" [message]="error"></app-erreur>

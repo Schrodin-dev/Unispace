@@ -49,6 +49,7 @@ import { AjouterRessourceUEComponent } from './admin/ajouter-ressource-ue/ajoute
 import { GestionParcoursComponent } from './admin/gestion-parcours/gestion-parcours.component';
 import { MentionsLegalesComponent } from './mentions-legales/mentions-legales.component';
 import {nl2brPipe} from "./pipes/nl2br.pipe";
+import { EdtWeekComponent } from './edt/edt-week/edt-week.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,8 @@ import {nl2brPipe} from "./pipes/nl2br.pipe";
     AjouterRessourceUEComponent,
     GestionParcoursComponent,
     MentionsLegalesComponent,
-	  nl2brPipe
+	  nl2brPipe,
+   EdtWeekComponent
   ],
     imports: [
         BrowserModule,
