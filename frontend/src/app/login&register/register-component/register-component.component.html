@@ -8,14 +8,14 @@
 			<div class="dropDown">
 				<select formControlName="classe" id="classe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 					<option disabled selected hidden>classe</option>
-					<option *ngFor="let classe of classes$ | async" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
+					<option *ngFor="let classe of classes" [value]="classe.nomClasse">{{ classe.nomClasse }}</option>
 				</select>
 			</div>
 			<div class="dropDown" >
 				<select formControlName="groupe" id="groupe" [ngClass]="couleurTexte" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
-					<ng-container *ngIf="groupes$ | async as groupes">
+					<ng-container *ngIf="groupes as groupes">
 						<option disabled selected hidden>groupe</option>
-						<option *ngFor="let groupe of groupes | async" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
+						<option *ngFor="let groupe of groupes" [value]="groupe.nomGroupe">{{ groupe.nomGroupe }}</option>
 					</ng-container>
 				</select>
 			</div>

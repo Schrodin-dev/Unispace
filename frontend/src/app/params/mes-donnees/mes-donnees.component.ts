@@ -50,7 +50,6 @@ export class MesDonneesComponent implements OnInit {
 	  this.form.valueChanges.subscribe(value => {
 		  if(value.classe && value.classe !== this.classe.nomClasse){
 			  this.updateClasse(value.classe);
-			  console.log(this.classe);
 		  }
 	  })
   }

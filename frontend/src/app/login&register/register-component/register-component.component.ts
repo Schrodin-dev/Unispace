@@ -16,16 +16,20 @@ export class RegisterComponentComponent implements OnInit {
 	error!: String;
 	message!: String;
 
-	classes$!: Observable<any>;
+	classes!: {nomClasse: string; groupes: {nomGroupe: string}[]}[];
 	form!: FormGroup;
-	groupes$!: Observable<any>;
+	groupes!: {nomGroupe: string}[];
+	classeChoisie!: String;
 
   constructor(private authService: AuthService, private requests: RequestsService, private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
 	  this.authService.couleurFond.subscribe(couleur => {this.couleurFond = couleur;});
 	  this.authService.couleurTexte.subscribe(couleur => {this.couleurTexte = couleur;});
-	  this.classes$ = this.requests.getClasses();
+	  this.requests.getClasses().subscribe(classes => {
+		  this.classes = classes;
+		  console.log(this.classes);
+	  })
 
 	  this.form = this.formBuilder.group({
 		  nom: [null, [Validators.required, Validators.maxLength(40)]],
@@ -36,7 +40,7 @@ export class RegisterComponentComponent implements OnInit {
 		  password: [null, [Validators.required]]
 	  });
 
-	  this.groupes$ = this.form.valueChanges.pipe(
+	  /*this.groupes$ = this.form.valueChanges.pipe(
 		  filter(value => value.classe !== 'classe'),
 		  map(async value => {
 			  let res: any[] = [];
@@ -49,7 +53,19 @@ export class RegisterComponentComponent implements OnInit {
 			  });
 			  return res;
 		  })
-	  );
+	  );*/
+
+	  this.form.valueChanges.subscribe(values => {
+		  if(values.classe && (this.classeChoisie === undefined || this.classeChoisie != values.classe) && this.classes !== undefined){
+			  for(let classe of this.classes){
+				  if(classe.nomClasse === values.classe){
+					  this.classeChoisie = classe.nomClasse;
+					  this.groupes = classe.groupes;
+					  break;
+				  }
+			  }
+		  }
+	  });
   }
 
   onRegister(){
@@ -65,7 +81,6 @@ export class RegisterComponentComponent implements OnInit {
 
   }
 
-
 }
 
 /* vérifie que la valeur de l'input n'est pas celle indiquée */
@@ -74,3 +89,4 @@ export const notValueValidator = (valeurNonVoulue: string): ValidatorFn => (cont
 	const erreur = (value as string) !== valeurNonVoulue;
 	return erreur ? null : { erreur: 'Veuillez choisir un/une ' + valeurNonVoulue };
 };
+
