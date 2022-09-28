@@ -1,4 +1,4 @@
-<div id="container" class="panel">
+<div id="container" class="panel" [ngStyle]="{backgroundColor: '#'+couleurFond+'1A'}">
 	<h1 [ngStyle]="{color: '#'+travail.couleurCours}">{{ travail.nomCours }}</h1>
 	<div id="edit">
 		<button class="textButton" *ngIf="isDelegue" (click)="edit()" [ngClass]="couleurTexte">modifier</button>

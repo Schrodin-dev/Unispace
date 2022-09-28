@@ -26,16 +26,15 @@ export class EmbedEdtComponent implements OnInit {
 
   ngOnInit(): void {
 	  let date = new Date();
-	  date.setHours(0, 0, 0, 0);
 
 	  this.embedEdtDate = new BehaviorSubject<Date>(date);
 	  this.embedEdtDate.subscribe(date => {
 		  this.date = date;
-		  this.chargerEdt(this.date.toISOString());
+		  this.chargerEdt(this.formatDate(this.date));
 		  this.updateParent(this.date);
 	  });
 
-		this.chargerEdt(this.date.toISOString());
+		this.chargerEdt(this.formatDate(this.date));
 
 
 		if(this.updateDateIn !== undefined){
@@ -69,5 +68,16 @@ export class EmbedEdtComponent implements OnInit {
 
 	updateParent(name: Date){
 		this.updateDateOut.emit(name);
+	}
+
+	/* code from: https://w3guides.com/tutorial/how-to-populate-date-input-in-angular-reactive-forms */
+	private formatDate(date: Date) {
+		const d = new Date(date);
+		let month = '' + (d.getMonth() + 1);
+		let day = '' + d.getDate();
+		const year = d.getFullYear();
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+		return [year, month, day].join('-');
 	}
 }
