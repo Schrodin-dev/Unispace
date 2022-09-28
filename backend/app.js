@@ -34,6 +34,8 @@ app.use(bodyParser.json());
 
 require('./controllers/groupe').chargerGroupes();
 setInterval(() => require('./controllers/groupe').chargerGroupes(), 5*60*1000);
+require('./controllers/user').supprimerComptesNonVerifies();
+setInterval(() => require('./controllers/user').supprimerComptesNonVerifies(), 24*60*60*1000);
 
 
 app.use('/api/auth', userRoutes);

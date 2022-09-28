@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const db = require('../models/index');
+const { Op } = require('sequelize');
 const jsonwebtoken = require('jsonwebtoken');
 const crypto = require('crypto');
 const randomUUID = crypto.randomUUID;
@@ -628,4 +629,29 @@ exports.supprimerTheme = (req, res, next) => {
         .catch(() => {
             return res.status(500).json({message: "Une erreur est survenue."});
         });
+}
+
+exports.supprimerComptesNonVerifies = (req, res) => {
+    db.user.findAll({where : {
+        [Op.and]: [
+            {droitsUser: -1},
+            {expirationCodeVerification: {
+                [Op.lt]: Date.now()
+            }}
+        ]
+    }})
+    .then(users => {
+        let promesses = [];
+
+        for(let user of users){
+            promesses.push(user.destroy().catch(() => {
+                throw new Error("Une erreur est survenue lors de la suppression du compte " + user.emailUser);
+            }));
+        }
+
+        return promise.all(promesses);
+    })
+    .catch(error => {
+        console.error(error.message);
+    })
 }
