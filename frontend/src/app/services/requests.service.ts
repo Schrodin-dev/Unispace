@@ -230,9 +230,8 @@ export class RequestsService{
 			});
 	}
 
-	modifierUserInfos(email: String, nom: String, prenom:String, mdp: String, groupe: String, annonces: boolean): Promise<String>{
+	modifierUserInfos(nom: String, prenom:String, mdp: String, groupe: String, annonces: boolean): Promise<String>{
 		return this.httpClient.post(backend.url + '/api/auth/modify', {
-			email: email,
 			nom: nom,
 			prenom: prenom,
 			password: mdp,

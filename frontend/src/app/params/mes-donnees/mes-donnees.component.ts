@@ -37,7 +37,6 @@ export class MesDonneesComponent implements OnInit {
 	  this.form = this.formBuilder.group({
 		  prenom: [this.userInfos.prenom, Validators.maxLength(40)],
 		  nom: [this.userInfos.nom, Validators.maxLength(40)],
-		  email: [this.userInfos.email, [Validators.email, Validators.pattern(/^[a-zA-Z]+\.[a-zA-Z]+@etu\.umontpellier\.fr$/i), Validators.maxLength(128)]],
 		  classe: [null],
 		  groupe: [this.userInfos.groupe],
 		  mdp: [null],
@@ -90,25 +89,24 @@ export class MesDonneesComponent implements OnInit {
 
   private updateClasse(nomClasse: String){
 	  for(const classe of this.classes){
-			  if(classe.nomClasse === nomClasse){
-				  this.classe = classe;
-				  this.form.patchValue({'classe': classe.nomClasse});
-				  return;
-			  }
+		  if(classe.nomClasse === nomClasse){
+			  this.classe = classe;
+			  this.form.patchValue({'classe': classe.nomClasse});
+			  return;
+		  }
 	  }
   }
 
 	modifierCompte() {
-		this.requestsService.modifierUserInfos(this.form.value.email, this.form.value.nom, this.form.value.prenom, this.form.value.mdp, this.form.value.groupe, (this.form.value.annonces as boolean))
+		this.requestsService.modifierUserInfos(this.form.value.nom, this.form.value.prenom, this.form.value.mdp, this.form.value.groupe, (this.form.value.annonces as boolean))
 			.then(message => {
 				this.errorParametres = '';
 				this.messageParametres = message;
 
-				if(this.form.value.email) localStorage.setItem("email", this.form.value.email);
-				if(this.form.value.nom) localStorage.setItem("nom", this.form.value.nom);
+				/*if(this.form.value.nom) localStorage.setItem("nom", this.form.value.nom);
 				if(this.form.value.prenom) localStorage.setItem("prenom", this.form.value.prenom);
-				if(this.form.value.groupe) localStorage.setItem("groupe", this.form.value.groupe);
-
+				if(this.form.value.groupe) localStorage.setItem("groupe", this.form.value.groupe);*/
+				this.authService.disconnect();
 				window.location.reload();
 			})
 			.catch(error => {
