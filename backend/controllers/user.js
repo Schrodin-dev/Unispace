@@ -261,6 +261,12 @@ exports.validerCompte = (req, res, next) => {
 exports.renvoyerCodeVerification = (req, res, next) => {
   db.user.findOne({where: {emailUser: req.body.email}})
       .then(user => {
+          //vérification du délai depuis le dernier envoie
+          const timeout = 5; //délai en minutes
+          if(Date.now() - (new Date(user.expirationCodeVerification).getTime() - 24*60*60*1000) < timeout*60*1000){
+              throw new Error("Vous devez attendre au moins " + timeout + " minutes avant d'envoyer un nouveau code de vérification.");
+          }
+
           //création du nouveau code de vérification
           const uuid = randomUUID()
           user.set({codeVerification: uuid, expirationCodeVerification: new Date(Date.now()).getTime() + 24*60*60*1000})
@@ -287,7 +293,7 @@ exports.renvoyerCodeVerification = (req, res, next) => {
       })
       .catch(error => {
           console.error(error);
-          res.status(500).json({message: "Une erreur s'est produite lors de l'envoie du nouveau code de vérification."});
+          res.status(500).json({message: error.message});
       });
 };
 
