@@ -12,7 +12,6 @@ frontend/app/**/*.js.map
 # dependencies
 backend/node_modules
 backend/bower_components/
-backend/config/mail.json
 
 # IDEs and editors
 .idea/
