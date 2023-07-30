@@ -392,3 +392,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,linux,windows,webstorm+all,visualstudiocode,sublimetext,notepadpp,node,angular
+/docker/mysql-datas/

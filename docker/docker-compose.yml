@@ -1,0 +1,35 @@
+name: unispace
+version: "3.8"
+services:
+  mysql:
+    container_name: unispace-mysql
+    build: mysql
+    volumes:
+      - ./mysql-datas:/var/lib/mysql
+    ports:
+      - "4201:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_SSL_MODE=DISABLED
+      - MYSQL_ROOT_HOST=%
+
+  backend:
+    container_name: unispace-backend
+    build: backend
+    working_dir: /home/node/app
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - ../backend:/home/node/app
+      - /home/node/app/node_modules/ #don't copy the node_modules folder in order to recreate it directly with the docker image
+    ports:
+      - "4202:3002"
+
+  frontend:
+    container_name: unispace-frontend
+    build: frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ../frontend:/home/node/app
+      - /home/node/app/node_modules/ #don't copy the node_modules folder in order to recreate it directly with the docker image
