@@ -3,6 +3,9 @@ Unispace est un projet permettant de centraliser plusieurs outils utils à la sc
 permet notamment de retrouver son emploi du temps, calculer la moyenne pour ses UE, retrouver les devoirs ou le contenu
 des ressources (cours), etc.
 
+Sa première version a été testée au département informatique de l'[IUT de Montpellier-Sète](https://iut-montpellier-sete.edu.umontpellier.fr/) 
+par 55 étudiants lors de l'année universitaire 2022-2023.
+
 ## Installer le projet
 Ces instructions vont vous permettre d'installer une copie du projet sur votre machine local, dans un but de
 développement et de test. Voir la section déploiement pour connaitre la marche à suivre lors du déploiement en production.
