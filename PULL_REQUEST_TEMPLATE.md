@@ -10,7 +10,7 @@ et incluez une liste des dépendances qui doivent êre ajoutées au projet.*
 - [ ] Correction de bug (modification ne cassant pas le code et existant corrigeant un bug)
 - [ ] Nouvelle fonctionnalité (modification ne cassant pas le code existant et apportant une nouvelle fonctionnalité)
 - [ ] Modification cassant le code existant (correction ou fonctionnalité qui amènerait du code existant à ne plus fonctionner)
-- [ ] Cette modification nécessaite une mise à jour de la documentation
+- [ ] Cette modification nécessite une mise à jour de la documentation
 
 ### Informations complémentaires
 
