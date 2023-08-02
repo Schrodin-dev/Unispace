@@ -3,6 +3,8 @@
 *Merci d'inclure une description des changements que vous avez apportés. Détaillez également le contexte de cette modification 
 et incluez une liste des dépendances qui doivent êre ajoutées au projet.*
 
+Numéro du ticket correspondant : *insérer le numéro*
+
 ### Type de modification
 
 *Merci de cocher les cases correspondantes à votre modification*
