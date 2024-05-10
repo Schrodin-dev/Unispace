@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Utilisateur non authentifié" as noAuth
+actor "Administrateur" as admin
+actor "Responsable d'établissement" as resp
+
+noAuth -> admin : Formulaire de demande :\n  * Nom de l'établissement\n  * Logo de l'établissement\n  * Email de l'utilisateur
+admin -> noAuth : Validation (retour par email)
+noAuth -> resp : Connexion via un mot de passe temporaire tramsmis par email
+resp -> resp : Configuration :\n  * système(s) d'authentification\n  * Création des départements :\n    + nom\n    + logo\n  * Création de son compte via le système d'authentification choisi
+@enduml
