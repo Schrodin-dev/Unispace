@@ -14,7 +14,7 @@ backend/node_modules
 backend/bower_components/
 
 # IDEs and editors
-.idea/
+**/.idea/
 
 # misc
 .sass-cache/
