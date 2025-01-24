@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 public class EnregistrementDemandeCreationEtablissement {
     private final EtablissementRepository repository;
-    private final Pattern emailPattern = Pattern.compile("^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,}$");
+    private final Pattern emailPattern = Pattern.compile("^[\\w\\-.]+@([\\w-]+\\.)+[\\w-]{2,}$");
 
     public EnregistrementDemandeCreationEtablissement(EtablissementRepository repository) {
         this.repository = repository;
@@ -20,7 +20,7 @@ public class EnregistrementDemandeCreationEtablissement {
         if (inputDto.nom.length() > 100) {
             throw new IllegalArgumentException("Le nom ne doit pas dépasser 100 caractères.");
         }
-        if (inputDto.imageBase64.isEmpty()) {
+        if (inputDto.imageBase64 == null || inputDto.imageBase64.isEmpty()) {
             throw new IllegalArgumentException("Veuillez ajouter une image d'établissement.");
         }
         if (inputDto.emailContact == null || inputDto.emailContact.isBlank()) {
