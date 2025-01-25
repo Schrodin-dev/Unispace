@@ -42,5 +42,5 @@ public class EnregistrementDemandeCreationEtablissement {
         repository.insert(etablissement);
     }
 
-    protected record InputDto(String nom, String imageBase64, String emailContact){}
+    public record InputDto(String nom, String imageBase64, String emailContact){}
 }
