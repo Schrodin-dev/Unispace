@@ -1,7 +1,7 @@
 {
-  "frontend": "http://localhost:4200",
-  "lienVerification": "http://localhost:4200/verifyAccount/",
-  "lienMdpOublie": "http://localhost:4200/resetPassword/",
-  "lienInvitationGroupe": "https://localhost:4200/joinGroup/",
-  "token": "tokenMagique"
+  "frontend": "https://noobnote.onirisme.net",
+  "lienVerification": "https://noobnote.onirisme.net/verifyAccount/",
+  "lienMdpOublie": "https://noobnote.onirisme.net/resetPassword/",
+  "lienInvitationGroupe": "https://noobnote.onirisme.net/joinGroup/",
+  "token": "FfsEdCdw3aAIcEJG42mW4K9hTUT0REffquKLbJeFOkg8cUNjWKJsTS/iWZqpgDSU\nh+NYkglcvKJxx7RqOS7pGAvLl9X2d1GjpQ21D3l3o/DiOyqkofboS5J1p5ncRA/s\nvAUThqJ2nmrivnvtZ8ZC2J5OMIZOdXmcVVBikchdbjwqaTfXCENDGKWZ4lWUplrO\n2kY6quF1wn15jMROJirzNRuphJ8d1CY+5sZxQph7BWI0RFzUvYYWOKEBg3IEGroP\nM0jbCZ4XqOkyKK2XvfVT2GmYeye5/twxI4Lnkw7hLlcGXEKAeGlv+OCuuAgAFNPD\nwhvV2R3rNaQ5kF1S0Vy2aGWJlhnlfE/WkDUtR+XrQhnCgPCt9IyChxU+pNrODx65\nTvj0qJpcU+9V+x7KPUqvE8UAv1rIUw76n13494EQ1UkO2AtN64DHlDng5JM8cp/k\nC11UJ5kkMSI8DzCIhhKRMJhjOfWmTXs/4pyUWnXjl0b5Mw1BXhZWxHPMZ7L/hPWk\nAcY55NVvR+K7kmAsQDJ8PbCGpkVUs/s/6bnkQrkleonRh303kPWbystOUMiwMoei\ncxsMQWzujxIg3G4yiRtn3hWXeDOxfsbaA+VcLMevTkXv3KIT781tJ5XiBkRck4tJ\nUJeJ+zgkKmTGs8kjTDCbXRrYWjsS6VaOhmqQ3wHKuEI=\n"
 }

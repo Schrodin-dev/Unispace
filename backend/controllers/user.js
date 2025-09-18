@@ -20,7 +20,7 @@ exports.register = async (req, res, next) => {
     if (await db.user.findOne({where: {emailUser: req.body.email}}) !== null) {
         return res.status(500).json({message: "Vous êtes déjà inscrit, veuillez vous connecter."});
     }
-    if (!req.body.email.toString().includes('@etu.umontpellier.fr')) {
+    if (!req.body.email.toString().includes('@grenoble-inp.org')) {
         return res.status(500).json({message: "Vous devez utiliser un email étudiant universitaire de Montpellier afin de vous inscrire."});
     }
     // vérification du format des données fournies par l'utilisateur

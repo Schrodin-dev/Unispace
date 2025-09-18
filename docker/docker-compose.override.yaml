@@ -1,0 +1,44 @@
+name: unispace
+version: "3.8"
+
+networks:
+  external:
+    external: true
+  unispace:
+
+services:
+  backend:
+    networks:
+      - external
+      - unispace
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api-noobnote-http.rule=Host(`api.noobnote.onirisme.net`)"
+      - "traefik.http.routers.api-noobnote-http.entrypoints=http"
+      - "traefik.http.routers.api-noobnote-https.rule=Host(`api.noobnote.onirisme.net`)"
+      - "traefik.http.routers.api-noobnote-https.entrypoints=https"
+      - "traefik.http.routers.api-noobnote-https.tls=true"
+      - "traefik.http.routers.api-noobnote-https.tls.certresolver=letsencrypt"
+      - "traefik.http.services.api-noobnote.loadbalancer.server.port=3002"
+      - "traefik.docker.network=external"
+      - "traefik.http.routers.api-noobnote-http.middlewares=https-redirect@file"
+
+  frontend:
+    networks:
+      - external
+      - unispace
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.noobnote-http.rule=Host(`noobnote.onirisme.net`)"
+      - "traefik.http.routers.noobnote-http.entrypoints=http"
+      - "traefik.http.routers.noobnote-https.rule=Host(`noobnote.onirisme.net`)"
+      - "traefik.http.routers.noobnote-https.entrypoints=https"
+      - "traefik.http.routers.noobnote-https.tls=true"
+      - "traefik.http.routers.noobnote-https.tls.certresolver=letsencrypt"
+      - "traefik.http.services.noobnote.loadbalancer.server.port=4200"
+      - "traefik.docker.network=external"
+      - "traefik.http.routers.noobnote-http.middlewares=https-redirect@file"
+
+  mysql:
+    networks:
+      - unispace
